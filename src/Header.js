@@ -14,7 +14,7 @@ class Header extends Component {
     render() {
         return (
             <header className="App-header">
-                <Navbar bg="light" expand="lg">
+                <Navbar bg="dark" variant="dark" expand="lg">
                   <Navbar.Brand href="#home">Stocker</Navbar.Brand>
                   <Form onSubmit={this.handleSubmit}>
                     <FormControl
