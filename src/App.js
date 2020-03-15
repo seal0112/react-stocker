@@ -1,28 +1,28 @@
-import React from 'react';
+import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { Button } from 'react-bootstrap';
+import Header from './Header';
+import { Button, Container } from 'react-bootstrap';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-      <Button color="primary">primary</Button>
-    </div>
-  );
+class StockerApp extends Component {
+  state = {
+    stockNum: 2330
+  }
+
+  handleStockNumChange = (stockNum) => {
+    this.setState({
+        stockNum
+    })
+  }
+
+  render() {
+    return (
+        <div className="App">
+            <Header handleStockNumChange={this.handleStockNumChange}/>
+            <p>{this.state.stockNum}</p>
+        </div>
+    )
+  };
 }
 
-export default App;
+export default StockerApp;
