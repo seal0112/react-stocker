@@ -1,0 +1,17 @@
+.App-header{
+    background-color: var(--dark);
+}
+
+.App-header > .navbar > .navbar-brand {
+    font-weight: 500;
+}
+
+.App-header form {
+    width: 40%;
+}
+
+@media screen and (max-width: 768px) {
+    .App-header{
+        background-color: var(--main-header-green);
+    }
+}

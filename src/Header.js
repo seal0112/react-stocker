@@ -14,13 +14,14 @@ class Header extends Component {
     render() {
         return (
             <header className="App-header">
-                <Navbar bg="dark" variant="dark" expand="lg">
+                <Navbar variant="dark" expand="md">
                   <Navbar.Brand href="#home">Stocker</Navbar.Brand>
-                  <Form onSubmit={this.handleSubmit}>
+                  <Form className="mr-auto" onSubmit={this.handleSubmit}>
                     <FormControl
                       type="text"
                       placeholder="Search"
-                      className="mr-sm-2" />
+                      className="mr-sm-2"
+                      size="sm"/>
                   </Form>
                   <Navbar.Toggle aria-controls="basic-navbar-nav" />
                   <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">

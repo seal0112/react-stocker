@@ -1,9 +1,16 @@
-.App {
-  width: 100%;
+:root {
+  --dark: #343a40;
+  --main-header-green: #2cc185;
+  --main-header-hover-green: #27ac77;
+  --gray-font: #545454;
+  --light-gray-font: #a2a2a2;
 }
 
-.App-link {
-  color: #61dafb;
+@import "NaviBar.css";
+@import "Header.css";
+
+.App {
+  width: 100%;
 }
 
 .main {
