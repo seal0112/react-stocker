@@ -1,0 +1,28 @@
+.Daily-info .row>div {
+    padding: 0 10px;
+}
+
+.Daily-info .card {
+    margin-bottom: 12px;
+    box-shadow: 0px 0px 4px 1px #dddddd;
+    padding: 0 10px;
+}
+
+.Daily-info .card>.card-header {
+    padding: 4px 10px 0px 10px;
+    background-color: #FFFFFF;
+    border-style: none;
+    font-size: 14px;
+}
+
+.Daily-info .card>.card-body {
+    font-size: 24px;
+    padding: 0 0 4px 0;
+    text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+    .Daily-info .card>.card-body {
+        font-size: 20px;
+    }
+}
