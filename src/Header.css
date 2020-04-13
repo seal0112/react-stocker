@@ -4,6 +4,7 @@
 
 .App-header > .navbar > .navbar-brand {
     font-weight: 500;
+    font-size: 24px;
 }
 
 .App-header form {
