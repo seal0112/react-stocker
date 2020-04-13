@@ -94,6 +94,9 @@
     }
     .App-navbar>.container {
         padding-top: 0px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
     }
 
     .App-navbar .navbar-toggler {
@@ -102,6 +105,10 @@
         color: var(--light-gray-font) !important;
         border-style: none;
         padding: 0 12px;
+    }
+
+    .App-navbar .navbar-collapse {
+        z-index: 999;
     }
 
     .App-navbar .navbar-nav>.nav-item>.parent.nav-link {
