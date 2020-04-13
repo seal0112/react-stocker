@@ -16,3 +16,17 @@
 .main {
   width: 100%;
 }
+
+.container {
+    padding-top: 20px;
+}
+
+.container hr {
+    margin-bottom: 24px;
+}
+
+@media screen and (max-width: 768px) {
+    .container hr {
+        margin-bottom: 16px;
+    }
+}
