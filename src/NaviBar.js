@@ -5,12 +5,12 @@ import {
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    faListAlt, faClipboardList, faBalanceScale,
-    faInfoCircle, faNewspaper, faCommentAlt, faAngleDoubleDown
+    faListAlt, faClipboardList, faBalanceScale, faInfoCircle,
+    faNewspaper, faCommentAlt, faAngleDoubleDown, faCoins,
+    faHandHoldingUsd, faFileInvoiceDollar, faFunnelDollar, faSearchDollar
 } from '@fortawesome/free-solid-svg-icons';
 import {
-  Link,
-  useRouteMatch
+  Link, useRouteMatch
 } from "react-router-dom";
 
 function SelectLink({ label, to, activeOnlyWhenExact, icon }) {
@@ -73,17 +73,27 @@ class NaviBar extends Component {
                 {
                     "title": "營收資訊",
                     "href": "/revenue",
-                    "icon": faInfoCircle
+                    "icon": faCoins
                 },
                 {
                     "title": "每股盈餘",
                     "href": "/eps",
-                    "icon": faInfoCircle
+                    "icon": faHandHoldingUsd
                 },
                 {
                     "title": "損益表",
                     "href": "/income-sheet",
-                    "icon": faInfoCircle
+                    "icon": faFileInvoiceDollar
+                },
+                {
+                    "title": "利潤分析",
+                    "href": "/profit-analysis",
+                    "icon": faFunnelDollar
+                },
+                {
+                    "title": "營業費用分析",
+                    "href": "/operating-expenses-analysis",
+                    "icon": faSearchDollar
                 }
             ]
         },{
