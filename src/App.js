@@ -3,7 +3,11 @@ import logo from './logo.svg';
 import './App.css';
 import Header from './Header';
 import NaviBar from './NaviBar';
-import DailyInfo from './DailyInfo'
+import DailyInfo from './DailyInfo';
+import Revenue from './Revenue';
+import Eps from './Eps';
+import IncomeSheet from './IncomeSheet';
+import ProfitAnalysis from './ProfitAnalysis';
 import { Route, Switch } from "react-router-dom";
 import { Container } from 'react-bootstrap';
 
@@ -43,6 +47,18 @@ class StockerApp extends Component {
                     </Route>
                     <Route key="comment" path="/comment">
                         <p>comment</p>
+                    </Route>
+                    <Route key="revenue" path="/revenue">
+                        <Revenue />
+                    </Route>
+                    <Route key="eps" path="/eps">
+                        <Eps />
+                    </Route>
+                    <Route key="income-sheet" path="/income-sheet">
+                        <IncomeSheet />
+                    </Route>
+                    <Route key="profit-analysis" path="/profit-analysis">
+                        <ProfitAnalysis />
                     </Route>
                     <Route path="*">
                         <p>no match</p>
