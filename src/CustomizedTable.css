@@ -1,0 +1,11 @@
+.table-scroller {
+    overflow: scroll;
+    width: 100%;
+}
+
+th.head-col {
+    position:sticky;
+    left: 0;
+    background-color: white;
+    border: 1px solid #dee2e6;
+}
