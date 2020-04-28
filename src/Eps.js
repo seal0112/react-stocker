@@ -20,12 +20,12 @@ class Eps extends Component {
                 <Chart
                     chartType="ColumnChart"
                     width="100%"
-                    height="500px"
+                    height="400px"
                     loader={<div>Loading Chart</div>}
                     options={{
                         title: 'EPS',
                         legend: {
-                          position: "in"
+                          position: "top"
                         },
                         chartArea: { width: '80%' },
                         colors: ['#2cc185'],

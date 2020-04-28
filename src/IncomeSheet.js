@@ -24,7 +24,7 @@ class IncomeSheet extends Component {
                 <Chart
                     chartType="ComboChart"
                     width="100%"
-                    height="500px"
+                    height="400px"
                     loader={<div>Loading Chart</div>}
                     options={{
                         chart: {

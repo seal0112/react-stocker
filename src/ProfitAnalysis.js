@@ -28,12 +28,12 @@ class ProfitAnalysis extends Component {
                 <Chart
                     chartType="ComboChart"
                     width="100%"
-                    height="500px"
+                    height="400px"
                     loader={<div>Loading Chart</div>}
                     options={{
                         title: '利潤分析',
                         legend: {
-                          position: "in"
+                          position: "top"
                         },
                         chartArea: { width: '75%' },
                         seriesType: 'line',

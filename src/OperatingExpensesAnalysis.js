@@ -40,7 +40,7 @@ class OperatingExpensesAnalysis extends Component {
                         <Chart
                             chartType="ComboChart"
                             width="100%"
-                            height="500px"
+                            height="400px"
                             loader={<div>Loading Chart</div>}
                             options={{
                                 title: '營業費用比例',
