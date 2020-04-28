@@ -47,7 +47,7 @@ class OperatingExpensesAnalysis extends Component {
                                 legend: {
                                   position: "top"
                                 },
-                                chartArea: { width: '75%' },
+                                chartArea: { width: '80%' },
                                 seriesType: 'line',
                                 series: {
                                   0:{visibleInLegend: true},

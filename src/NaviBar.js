@@ -19,13 +19,9 @@ function SelectLink({ label, to, activeOnlyWhenExact, icon }) {
     exact: activeOnlyWhenExact
   });
 
-  let hello = () => {
-    console.log("hello")
-  }
-
   return (
     <div className={match ? "sub-nav-link active" : "sub-nav-link"}>
-        <Link to={to} onClick={hello}>
+        <Link to={to}>
             <FontAwesomeIcon className="icon" icon={icon} size="sm"/>
             <span> {label}</span>
         </Link>

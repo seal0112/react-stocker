@@ -33,7 +33,7 @@ class IncomeSheet extends Component {
                         legend: {
                           position: "top"
                         },
-                        chartArea: { width: '75%' },
+                        chartArea: { width: '80%' },
                         series: {
                           0:{visibleInLegend: true},
                           1:{visibleInLegend: true},
