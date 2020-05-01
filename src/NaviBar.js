@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import {
     Navbar, Nav, Container
 } from 'react-bootstrap';
@@ -31,8 +30,8 @@ function SelectLink({ label, to, activeOnlyWhenExact, icon }) {
 
 class NaviBar extends Component {
     state = {
-
-    };
+        naviParentType: null
+    }
 
     naviTabParent = [
         {
@@ -63,7 +62,7 @@ class NaviBar extends Component {
             ]
         },{
             "title": "財報分析",
-            "href": "financial-Stat",
+            "href": "financial-stat",
             "icon": faClipboardList,
             "naviTabSub": [
                 {
@@ -98,37 +97,72 @@ class NaviBar extends Component {
             "icon": faBalanceScale,
             "naviTabSub": []
         }]
+
+    handleNaviParentTypeChange = (naviParentType) => {
+        this.setState({
+            naviParentType
+        })
+    }
+
+    clickNaviParent = (event) => {
+        if (event.target.dataset.navipar) {
+            this.handleNaviParentTypeChange(event.target.dataset.navipar)
+        } else {
+            this.handleNaviParentTypeChange(event.target.parentNode.dataset.navipar)
+        }
+    }
+
+    checkPathnameWithNaviParent = () => {
+        if(this.state.naviParentType==null){
+            let location = window.location.pathname.split("/");
+            if(location[1]){
+                this.handleNaviParentTypeChange(location[1]);
+            } else {
+                this.handleNaviParentTypeChange('basic-info');
+            }
+
+        }
+    }
+
+    componentDidMount = () => {
+        this.checkPathnameWithNaviParent();
+    }
+
     render() {
+        const naviParentType = this.state.naviParentType;
         return (
             <Navbar className="App-navbar" expand="md">
                 <Container>
-                        <Navbar.Toggle children={
-                            <FontAwesomeIcon className="icon" icon={faAngleDoubleDown} size="lg"/>
-                        } aria-controls="App-navbar-content" />
-                        <Navbar.Collapse id="App-navbar-content">
-                            <Nav variant="tabs" defaultActiveKey="#basic-info" as="ul">
-                                {this.naviTabParent.map(naviTabPar=>(
-                                    <Nav.Item as="li">
-                                        <Nav.Link className="parent" href={`#${naviTabPar.href}`}>
-                                            <FontAwesomeIcon className="icon" icon={naviTabPar.icon} size="lg"/>
-                                            <span>{naviTabPar.title}</span>
-                                        </Nav.Link>
-                                        <ul className="navi-tab-sub">
-                                            {naviTabPar["naviTabSub"].map(naviTabSub=>(
-                                                <Nav.Item as="li">
-                                                    <SelectLink
-                                                        to={naviTabSub.href}
-                                                        icon={naviTabSub.icon}
-                                                        label={naviTabSub.title}
-                                                        activeOnlyWhenExact={true}
-                                                    />
-                                                </Nav.Item>
-                                            ))}
-                                        </ul>
-                                    </Nav.Item>
-                                ))}
-                            </Nav>
-                        </Navbar.Collapse>
+                    <Navbar.Toggle children={
+                        <FontAwesomeIcon className="icon" icon={faAngleDoubleDown} size="lg"/>
+                    } aria-controls="App-navbar-content" />
+                    <Navbar.Collapse id="App-navbar-content">
+                        <Nav variant="tabs" as="ul">
+                            {this.naviTabParent.map(naviTabPar=>(
+                                <Nav.Item as="li" key={naviTabPar.href}>
+                                    <Nav.Link
+                                      className={naviParentType===naviTabPar.href ? "parent active" : "parent"}
+                                      onClick={this.clickNaviParent}
+                                      data-navipar={naviTabPar.href}>
+                                        <FontAwesomeIcon className="icon" icon={naviTabPar.icon} size="lg"/>
+                                        <span>{naviTabPar.title}</span>
+                                    </Nav.Link>
+                                    <ul className="navi-tab-sub">
+                                        {naviTabPar["naviTabSub"].map(naviTabSub=>(
+                                            <Nav.Item as="li" key={naviTabSub.href}>
+                                                <SelectLink
+                                                    to={`/${naviTabPar.href}${naviTabSub.href}/${this.props.stockNum}`}
+                                                    icon={naviTabSub.icon}
+                                                    label={naviTabSub.title}
+                                                    activeOnlyWhenExact={true}
+                                                />
+                                            </Nav.Item>
+                                        ))}
+                                    </ul>
+                                </Nav.Item>
+                            ))}
+                        </Nav>
+                    </Navbar.Collapse>
                 </Container>
             </Navbar>
         )

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Header from './Header';
 import NaviBar from './NaviBar';
@@ -13,26 +12,40 @@ import { Route, Switch } from "react-router-dom";
 import { Container } from 'react-bootstrap';
 
 class StockerApp extends Component {
-  state = {
-    stockNum: 2330
-  }
+    state = {
+        stockNum: "2330"
+    }
 
-  handleStockNumChange = (stockNum) => {
-    this.setState({
-        stockNum
-    })
-  }
+    handleStockNumChange = (stockNum) => {
+        this.setState({
+            stockNum
+        })
+    }
+
+    checkPathnameStockNum = () => {
+        let location = window.location.pathname.split("/");
+        if(location[3]){
+            if(this.state.stockNum !== location[3]){
+                this.handleStockNumChange(location[3]);
+            }
+        }
+    }
+
+    componentDidMount = () => {
+        this.checkPathnameStockNum();
+    }
 
   render() {
+    const stockNum = this.state.stockNum;
     return (
         <div className="App">
             <Header handleStockNumChange={this.handleStockNumChange} />
-            <NaviBar />
+            <NaviBar stockNum={stockNum}/>
             <Container>
                 <h3>{this.state.stockNum} 台積電</h3>
                 <hr />
                 <Switch>
-                    {["/", "/daily-info"].map(path => (
+                    {["/", `/basic-info/daily-info/:stockNum`].map(path => (
                         <Route
                           key={path}
                           exact
@@ -40,28 +53,28 @@ class StockerApp extends Component {
                             <DailyInfo />
                         </Route>
                       ))}
-                    <Route path="/company-data">
+                    <Route path="/basic-info/company-data">
                         <p>company data</p>
                     </Route>
-                    <Route key="news" path="/news">
+                    <Route key="news" path="/basic-info/news">
                         <p>news</p>
                     </Route>
-                    <Route key="comment" path="/comment">
+                    <Route key="comment" path="/basic-info/comment">
                         <p>comment</p>
                     </Route>
-                    <Route key="revenue" path="/revenue">
+                    <Route key="revenue" path="/financial-stat/revenue">
                         <Revenue />
                     </Route>
-                    <Route key="eps" path="/eps">
+                    <Route key="eps" path="/financial-stat/eps">
                         <Eps />
                     </Route>
-                    <Route key="income-sheet" path="/income-sheet">
+                    <Route key="income-sheet" path="/financial-stat/income-sheet">
                         <IncomeSheet />
                     </Route>
-                    <Route key="profit-analysis" path="/profit-analysis">
+                    <Route key="profit-analysis" path="/financial-stat/profit-analysis">
                         <ProfitAnalysis />
                     </Route>
-                    <Route key="operating-expenses-analysis" path="/operating-expenses-analysis">
+                    <Route key="operating-expenses-analysis" path="/financial-stat/operating-expenses-analysis">
                         <OperatingExpensesAnalysis />
                     </Route>
                     <Route path="*">
@@ -70,8 +83,7 @@ class StockerApp extends Component {
                 </Switch>
             </Container>
         </div>
-    )
-  };
+    )};
 }
 
 export default StockerApp;
