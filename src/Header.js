@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import {
     Nav, Navbar, NavDropdown,
-    Button, Form, FormControl
+    Form, FormControl
 } from 'react-bootstrap';
 
 class Header extends Component {
