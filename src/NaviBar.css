@@ -143,5 +143,8 @@
 
     .App-navbar ul.navi-tab-sub>.nav-item>.sub-nav-link>a {
         color: var(--light-gray-font);
+        display: block;
+        width: 100%;
+        height: 100%;
     }
 }
