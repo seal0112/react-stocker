@@ -30,7 +30,8 @@ function SelectLink({ label, to, activeOnlyWhenExact, icon }) {
 
 class NaviBar extends Component {
     state = {
-        naviParentType: null
+        naviParentType: null,
+        navExpanded: false,
     }
 
     naviTabParent = [
@@ -124,18 +125,30 @@ class NaviBar extends Component {
         }
     }
 
+    setNaviExpanded = (expanded) => {
+        this.setState({ navExpanded: expanded });
+    }
+
+    closeNavibar = () => {
+        this.setState({ navExpanded: false });
+    }
+
     componentDidMount = () => {
         this.checkPathnameWithNaviParent();
     }
 
     render() {
-        const naviParentType = this.state.naviParentType;
+        const {naviParentType, navExpanded} = this.state;
         return (
-            <Navbar className="App-navbar" expand="md">
+            <Navbar
+              className="App-navbar"
+              expand="md"
+              onToggle={this.setNaviExpanded}
+              expanded={navExpanded}>
                 <Container>
                     <Navbar.Toggle children={
                         <FontAwesomeIcon className="icon" icon={faAngleDoubleDown} size="lg"/>
-                    } aria-controls="App-navbar-content" />
+                    } aria-controls="App-navbar-content"/>
                     <Navbar.Collapse id="App-navbar-content">
                         <Nav variant="tabs" as="ul">
                             {this.naviTabParent.map(naviTabPar=>(
@@ -149,7 +162,7 @@ class NaviBar extends Component {
                                     </Nav.Link>
                                     <ul className="navi-tab-sub">
                                         {naviTabPar["naviTabSub"].map(naviTabSub=>(
-                                            <Nav.Item as="li" key={naviTabSub.href}>
+                                            <Nav.Item as="li" key={naviTabSub.href} onClick={this.closeNavibar}>
                                                 <SelectLink
                                                     to={`/${naviTabPar.href}${naviTabSub.href}/${this.props.stockNum}`}
                                                     icon={naviTabSub.icon}
