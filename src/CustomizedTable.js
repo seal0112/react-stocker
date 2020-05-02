@@ -23,7 +23,7 @@ class CustomizedTable extends Component {
                         </tr>
                       </thead>
                       <tbody>
-                        {this.props.data[0].forEach((d, index) => {
+                        {this.props.data[0].map((d, index) => {
                             if (index!==0) {
                                 return (
                                 <tr key={`${d}`}>
