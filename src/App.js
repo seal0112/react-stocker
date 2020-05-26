@@ -8,6 +8,7 @@ import Eps from './Eps';
 import IncomeSheet from './IncomeSheet';
 import ProfitAnalysis from './ProfitAnalysis';
 import OperatingExpensesAnalysis from './OperatingExpensesAnalysis';
+import Login from './Login';
 import { Route, Switch } from "react-router-dom";
 import { Container } from 'react-bootstrap';
 
@@ -76,6 +77,9 @@ class StockerApp extends Component {
                     </Route>
                     <Route key="operating-expenses-analysis" path="/financial-stat/operating-expenses-analysis">
                         <OperatingExpensesAnalysis />
+                    </Route>
+                    <Route key="login" path="/login">
+                        <Login />
                     </Route>
                     <Route path="*">
                         <p>no match</p>
