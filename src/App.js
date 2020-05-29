@@ -1,93 +1,50 @@
 import React, { Component } from 'react';
-import './App.css';
-import Header from './Header';
-import NaviBar from './NaviBar';
-import DailyInfo from './DailyInfo';
-import Revenue from './Revenue';
-import Eps from './Eps';
-import IncomeSheet from './IncomeSheet';
-import ProfitAnalysis from './ProfitAnalysis';
-import OperatingExpensesAnalysis from './OperatingExpensesAnalysis';
+import StockerLayout from './StockerLayout';
 import Login from './Login';
-import { Route, Switch } from "react-router-dom";
-import { Container } from 'react-bootstrap';
+import PrivateRoute from './PrivateRoute';
+import { Switch, Route, withRouter } from "react-router-dom";
+import * as StockerAPI from './utils/StockerAPI';
+
 
 class StockerApp extends Component {
-    state = {
-        stockNum: "2330"
-    }
-
-    handleStockNumChange = (stockNum) => {
-        this.setState({
-            stockNum
-        })
-    }
-
-    checkPathnameStockNum = () => {
-        let location = window.location.pathname.split("/");
-        if(location[3]){
-            if(this.state.stockNum !== location[3]){
-                this.handleStockNumChange(location[3]);
-            }
+    constructor (props) {
+        super(props)
+        this.state = {
+            isAuth: false
         }
     }
 
     componentDidMount = () => {
-        this.checkPathnameStockNum();
+        StockerAPI.checkAuth()
+            .then(res => res.data)
+            .then(data => this.handleAuthenticated(data.isAuth))
     }
 
-  render() {
-    const stockNum = this.state.stockNum;
-    return (
-        <div className="App">
-            <Header handleStockNumChange={this.handleStockNumChange} />
-            <NaviBar stockNum={stockNum}/>
-            <Container>
-                <h3>{this.state.stockNum} 台積電</h3>
-                <hr />
+    handleAuthenticated = (isAuth) => {
+        this.setState({isAuth})
+        if(isAuth) {
+            let { from } = this.props.history.location.state || { from: { pathname: "/" } };
+            this.props.history.replace(from);
+        }
+    }
+
+    render() {
+        return (
+            <div className="App">
                 <Switch>
-                    {["/", `/basic-info/daily-info/:stockNum`].map(path => (
-                        <Route
-                          key={path}
-                          exact
-                          path={path}>
-                            <DailyInfo />
-                        </Route>
-                      ))}
-                    <Route path="/basic-info/company-data">
-                        <p>company data</p>
+                    <Route
+                        exact path="/login"
+                        handleAuthenticated={this.handleAuthenticated}>
+                        <Login handleAuthenticated={this.handleAuthenticated}/>
                     </Route>
-                    <Route key="news" path="/basic-info/news">
-                        <p>news</p>
-                    </Route>
-                    <Route key="comment" path="/basic-info/comment">
-                        <p>comment</p>
-                    </Route>
-                    <Route key="revenue" path="/financial-stat/revenue">
-                        <Revenue />
-                    </Route>
-                    <Route key="eps" path="/financial-stat/eps">
-                        <Eps />
-                    </Route>
-                    <Route key="income-sheet" path="/financial-stat/income-sheet">
-                        <IncomeSheet />
-                    </Route>
-                    <Route key="profit-analysis" path="/financial-stat/profit-analysis">
-                        <ProfitAnalysis />
-                    </Route>
-                    <Route key="operating-expenses-analysis" path="/financial-stat/operating-expenses-analysis">
-                        <OperatingExpensesAnalysis />
-                    </Route>
-                    <Route key="login" path="/login">
-                        <Login />
-                    </Route>
-                    <Route path="*">
-                        <p>no match</p>
-                    </Route>
+                    <PrivateRoute
+                        path="/"
+                        isAuth={this.state.isAuth}
+                        component={StockerLayout} />
                 </Switch>
-            </Container>
-        </div>
-    )};
+            </div>
+        )
+    };
 }
 
-export default StockerApp;
+export default withRouter(StockerApp);
