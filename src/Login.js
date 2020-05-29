@@ -1,65 +1,57 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import { withRouter } from "react-router-dom";
 import './Login.css';
 import GoogleLogin from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import * as StockerAPI from './utils/StockerAPI';
-import axios from "axios";
 
-const componentClicked = () => {
-  console.log( "Clicked!" )
-}
 
 class Login extends Component {
-    config = {
-
-    }
     responseGoogle = (googleUser) => {
         console.log(googleUser);
         let id_token = googleUser.getAuthResponse().id_token;
-        // StockerAPI.login(id_token)
-        //     .then(res=>res.json())
-        //     .then(res=>console.log(res))
-        //     .catch(err=>console.log(err));
-        axios.post("http://localhost:5001/api/auth/login", {
-            token: id_token,
-            external_type: 'google'
-          },{
-             withCredentials: true
-          })
-          .then((res) => {
-            console.log(res.data);
-            localStorage.setItem("access_token", res.data.access);
-            localStorage.setItem("refresh_token", res.data.refresh);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        const data = {
+            external_type: 'google',
+            token: id_token
+        }
+        StockerAPI.login(data)
+            .then(res=>res.data)
+            .then(res=>this.handleAuthenticated(res))
+            .catch(err=>console.log(err));
     }
 
     responseFacebook = (response) => {
         console.log(response);
         const access_token = response.accessToken;
         console.log(access_token)
-        axios.post("http://localhost:5001/api/auth/login", {
-            token: access_token,
-            external_type: 'facebook'
-          },{
-             withCredentials: true
-          })
-          .then((res) => {
-            console.log(res.data);
-            localStorage.setItem("access_token", res.data.access);
-            localStorage.setItem("refresh_token", res.data.refresh);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        const data = {
+            external_type: 'facebook',
+            token: access_token
+        }
+        StockerAPI.login(data)
+            .then(res=>res.data)
+            .then(res=>this.handleAuthenticated(res))
+            .catch(err=>console.log(err));
+    }
+
+    handleAuthenticated = (res) => {
+        this.props.handleAuthenticated(res['isAuth'])
+        if(res['isAuth']) {
+            let { from } = this.props.history.location.state || { from: { pathname: "/" } };
+            this.props.history.replace(from);
+        }
+    }
+
+    handleClick = (event) => {
+        event.preventDefault();
+        let { from } = this.props.history.location.state || { from: { pathname: "/" } };
+        this.props.history.replace(from);
     }
 
     render() {
         return (
             <div style={{textAlign: 'center'}}>
+                <button onClick={this.handleClick} />
                 <div className="login-btn-area">
                     <GoogleLogin
                         className="oauth-login-btn"
@@ -74,7 +66,6 @@ class Login extends Component {
                         appId="2670950613176820"
                         autoLoad={false}
                         fields="name,email,picture"
-                        onClick={componentClicked}
                         callback={this.responseFacebook} />
                 </div>
             </div>
@@ -82,4 +73,4 @@ class Login extends Component {
     }
 }
 
-export default Login;
+export default withRouter(Login);
