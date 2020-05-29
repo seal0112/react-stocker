@@ -5,7 +5,7 @@ import CustomizedTable from './CustomizedTable';
 class Eps extends Component {
     state = {
         epsData: [
-          ["Season", "EPS"],
+          ["Year/Season", "EPS"],
           ["2010Q1", 3.4],
           ["2010Q2", 1.6],
           ["2010Q3", 7.5],
