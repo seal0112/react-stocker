@@ -10,7 +10,8 @@ class StockerApp extends Component {
     constructor (props) {
         super(props)
         this.state = {
-            isAuth: false
+            isAuth: false,
+            isLoading: true
         }
     }
 
@@ -21,7 +22,10 @@ class StockerApp extends Component {
     }
 
     handleAuthenticated = (isAuth) => {
-        this.setState({isAuth})
+        this.setState({
+            isAuth: isAuth,
+            isLoading: false
+        })
         if(isAuth) {
             let { from } = this.props.history.location.state || { from: { pathname: "/" } };
             this.props.history.replace(from);
@@ -40,6 +44,7 @@ class StockerApp extends Component {
                     <PrivateRoute
                         path="/"
                         isAuth={this.state.isAuth}
+                        isLoading={this.state.isLoading}
                         component={StockerLayout} />
                 </Switch>
             </div>
