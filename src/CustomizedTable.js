@@ -5,20 +5,33 @@ import {
 } from 'react-bootstrap';
 
 class CustomizedTable extends Component {
+    constructor(props) {
+        super(props);
+        // 產生一個可以儲存 textInput DOM element 的 ref
+        this.tableScroller = React.createRef();
+    }
 
     numberWithCommas = (x) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
+    componentDidUpdate = () => {
+        this.tableScroller.current.scrollLeft = this.tableScroller.current.scrollWidth;
+    }
+
     render() {
-        return (
+        const data = this.props.data;
+        return data.length===0?(<div className="Customized-table">
+                <div className="table-scroller" ref={this.tableScroller}>
+                </div>
+            </div>):(
             <div className="Customized-table">
-                <div className="table-scroller">
+                <div className="table-scroller" ref={this.tableScroller}>
                     <Table striped bordered hover responsive="md">
                       <thead>
                         <tr key="time">
-                            {this.props.data.map((data, index)=>
-                                (<th className={index===0?"head-col":""} key={`time-${data[0]}`}>{data[0]}</th>)
+                            {this.props.data.map((d, index)=>
+                                (<th className={index===0?"head-col":""} key={`time-${d[0]}`}>{d[0]}</th>)
                             )}
                         </tr>
                       </thead>

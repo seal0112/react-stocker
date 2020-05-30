@@ -13,6 +13,8 @@ import { Route, Switch } from "react-router-dom";
 import { Container } from 'react-bootstrap';
 
 class StockerLayout extends Component {
+    _isMounted = false;
+
     state = {
         stockNum: "2330"
     }
@@ -33,7 +35,13 @@ class StockerLayout extends Component {
     }
 
     componentDidMount = () => {
+        this._isMounted = true;
+
         this.checkPathnameStockNum();
+    }
+
+    componentWillUnmount = () => {
+        this._isMounted = false;
     }
 
   render() {
@@ -79,18 +87,21 @@ class StockerLayout extends Component {
                     <Route
                         key="profit-analysis"
                         path="/financial-stat/profit-analysis/:stockNum">
-                            <ProfitAnalysis />
+                            <ProfitAnalysis stockNum={stockNum}/>
                     </Route>
                     <Route
                         key="operating-expenses-analysis"
                         path="/financial-stat/operating-expenses-analysis/:stockNum">
-                            <OperatingExpensesAnalysis />
+                            <OperatingExpensesAnalysis stockNum={stockNum}/>
                     </Route>
                     <Route key="login" path="/login">
                         <Login />
                     </Route>
                     <Route path="*">
                         <p>no match</p>
+                    </Route>
+                    <Route path="/not-found">
+                        <p>Can not find this stock: {this.state.stockNum}</p>
                     </Route>
                 </Switch>
             </Container>

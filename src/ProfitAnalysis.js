@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import { Chart } from "react-google-charts";
 import CustomizedTable from './CustomizedTable';
+import * as StockerAPI from './utils/StockerAPI';
+import * as StockerTool from './utils/StockerTool';
 
 class ProfitAnalysis extends Component {
+    _isMounted = false;
+
     state = {
-        epsData: [
+        profitData: [
           ["Year/Season", "營業毛利率", "營業利益率", "稅前淨利率", "本期淨利率"],
           ["2017Q1", 51.94, 40.76, 41.82, 37.46],
           ["2017Q2", 50.85, 38.93, 40.27, 30.99],
@@ -21,8 +25,35 @@ class ProfitAnalysis extends Component {
         ],
     }
 
+    handleProfitState = (profitData) => {
+        this.setState({profitData})
+    }
+
+    getProfitData = (stockNum) => {
+        StockerAPI.getProfit(stockNum)
+            .then(res => res.data)
+            .then(StockerTool.formatDataForGoogleChart)
+            .then(this.handleProfitState)
+    }
+
+    componentDidUpdate = (prevProps) => {
+        if (this.props.stockNum !== prevProps.stockNum) {
+            this.getProfitData(this.props.stockNum)
+        }
+    }
+
+    componentDidMount = () => {
+        this._isMounted = true;
+
+        this.getProfitData(this.props.stockNum)
+    }
+
+    componentWillUnmount = () => {
+        this._isMounted = false;
+    }
+
     render() {
-        const data = this.state.epsData;
+        const data = this.state.profitData;
         return (
             <div className="Profit-Analysis">
                 <Chart
@@ -48,6 +79,9 @@ class ProfitAnalysis extends Component {
                         pointSize: 7,
                         vAxes: {
                             0: {},
+                        },
+                        hAxis: {
+                            direction: -1,
                         },
                         explorer: {
                             actions: ['dragToZoom', 'rightClickToReset']

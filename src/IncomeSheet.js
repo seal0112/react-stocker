@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import { Chart } from "react-google-charts";
 import CustomizedTable from './CustomizedTable';
+import * as StockerAPI from './utils/StockerAPI';
+import * as StockerTool from './utils/StockerTool';
 
 class IncomeSheet extends Component {
+    _isMounted = false;
+
     state = {
-        epsData: [
+        incomeSheetData: [
           ["Year/Season", "營業收入合計", "營業毛利", "營業利益", "稅前淨利", "本期淨利", "母公司業主淨利"],
           ["2017Q4", 277570284, 138715365, 108894999, 111674900, 99306060, 99286122],
           ["2018Q1", 248078671, 124974694, 96826946, 99943621, 89787574, 89784622],
@@ -17,8 +21,36 @@ class IncomeSheet extends Component {
           ["2019Q4", 317237065, 159240985, 124243722, 128781973, 116078194, 116035081]
         ],
     }
+
+    handleIncomeSheetState = (incomeSheetData) => {
+        this.setState({incomeSheetData})
+    }
+
+    getIncomeSheetData = (stockNum) => {
+        StockerAPI.getIncomeSheet(stockNum)
+            .then(res => res.data)
+            .then(StockerTool.formatDataForGoogleChart)
+            .then(this.handleIncomeSheetState)
+    }
+
+    componentDidUpdate = (prevProps) => {
+        if (this.props.stockNum !== prevProps.stockNum) {
+            this.getIncomeSheetData(this.props.stockNum)
+        }
+    }
+
+    componentDidMount = () => {
+        this._isMounted = true;
+
+        this.getIncomeSheetData(this.props.stockNum)
+    }
+
+    componentWillUnmount = () => {
+        this._isMounted = false;
+    }
+
     render() {
-        const data = this.state.epsData;
+        const data = this.state.incomeSheetData;
         return (
             <div className="IncomeSheet">
                 <Chart
@@ -46,6 +78,9 @@ class IncomeSheet extends Component {
                         vAxes: {
                           // Adds labels to each axis; they don't have to match the axis names.
                             0: {baseline: 0},
+                        },
+                        hAxis: {
+                            direction: -1,
                         },
                         explorer: {
                             actions: ['dragToZoom', 'rightClickToReset']

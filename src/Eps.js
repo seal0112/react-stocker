@@ -1,20 +1,60 @@
 import React, { Component } from 'react';
 import { Chart } from "react-google-charts";
 import CustomizedTable from './CustomizedTable';
+import * as StockerAPI from './utils/StockerAPI';
+import * as StockerTool from './utils/StockerTool';
 
 class Eps extends Component {
+    _isMounted = false;
+
     state = {
-        epsData: [
-          ["Year/Season", "EPS"],
-          ["2010Q1", 3.4],
-          ["2010Q2", 1.6],
-          ["2010Q3", 7.5],
-          ["2010Q4", 5.6],
-          ["2011Q1", 6.7]
-        ],
+        epsData: [],
     }
+
+    handleEpsState = (epsData) => {
+        if (this._isMounted) {
+            this.setState({epsData})
+        }
+    }
+
+    getEpsData = (stockNum) => {
+        StockerAPI.getEps(stockNum)
+            .then(res => res.data)
+            .then(StockerTool.formatDataForGoogleChart)
+            .then(this.handleEpsState)
+    }
+
+    componentDidUpdate = (prevProps) => {
+        if (this.props.stockNum !== prevProps.stockNum) {
+            this.getEpsData(this.props.stockNum)
+        }
+    }
+
+    componentDidMount = () => {
+        this._isMounted = true;
+
+        this.getEpsData(this.props.stockNum)
+    }
+
+    componentWillUnmount = () => {
+        this._isMounted = false;
+    }
+
     render() {
         const data = this.state.epsData;
+        console.log(data)
+        // let chartData = data.map((d, idx)=>{
+        //     console.log(d)
+        //     if(idx===0){
+        //         return d;
+        //     }
+        //     const date = d[0].split("-")
+        //     d[0] = Date(date[0], date[1]);
+        //     return d;
+        // })
+        // console.log(data)
+        // console.log(chartData)
+        console.log(this.state.epsData)
         return (
             <div className="Eps">
                 <Chart
@@ -29,9 +69,21 @@ class Eps extends Component {
                         },
                         chartArea: { width: '80%' },
                         colors: ['#2cc185'],
+                        vAxis: {
+                            title: 'EPS',
+                            minValue: 0
+                        },
+                        hAxis: {
+                            direction: -1,
+                            gridlines: {
+                                count: 4,
+                                color: 'green'
+                            },
+                            format: 'yy'
+                        },
                     }}
                     data={data} />
-                <CustomizedTable data={data}/>
+                <CustomizedTable data={this.state.epsData}/>
             </div>
         );
     }

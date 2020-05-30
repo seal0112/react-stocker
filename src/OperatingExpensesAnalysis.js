@@ -2,8 +2,12 @@ import React, { Component } from 'react';
 import { Chart } from "react-google-charts";
 import CustomizedTable from './CustomizedTable';
 import { Tabs, Tab } from 'react-bootstrap';
+import * as StockerAPI from './utils/StockerAPI';
+import * as StockerTool from './utils/StockerTool';
 
 class OperatingExpensesAnalysis extends Component {
+    _isMounted = false;
+
     state = {
         operatingExpensesData: [
           ["Year/Season", "營業費用率", "推銷費用率", "管理費用率", "研究發展費用率", "營業費用", "推銷費用", "管理費用", "研究發展費用"],
@@ -27,6 +31,33 @@ class OperatingExpensesAnalysis extends Component {
         this.setState({
          activeKey: key
         })
+    }
+
+    handleOperatingExpensesState = (operatingExpensesData) => {
+        this.setState({operatingExpensesData})
+    }
+
+    getOperatingExpensesData = (stockNum) => {
+        StockerAPI.getOperatingExpenses(stockNum)
+            .then(res => res.data)
+            .then(StockerTool.formatDataForGoogleChart)
+            .then(this.handleOperatingExpensesState)
+    }
+
+    componentDidUpdate = (prevProps) => {
+        if (this.props.stockNum !== prevProps.stockNum) {
+            this.getOperatingExpensesData(this.props.stockNum)
+        }
+    }
+
+    componentDidMount = () => {
+        this._isMounted = true;
+
+        this.getOperatingExpensesData(this.props.stockNum)
+    }
+
+    componentWillUnmount = () => {
+        this._isMounted = false;
     }
 
     render() {
@@ -58,6 +89,9 @@ class OperatingExpensesAnalysis extends Component {
                                 pointSize: 7,
                                 vAxes: {
                                     0: {},
+                                },
+                                hAxis: {
+                                    direction: -1,
                                 }
                             }}
                             data={precentageOperExp} />
@@ -84,7 +118,10 @@ class OperatingExpensesAnalysis extends Component {
                                 pointSize: 7,
                                 vAxes: {
                                     0: {},
-                                }
+                                },
+                                hAxis: {
+                                    direction: -1,
+                                },
                             }}
                             data={rowOperExp} />
                     </Tab>
