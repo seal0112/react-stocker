@@ -18,16 +18,17 @@ class StockerApp extends Component {
     componentDidMount = () => {
         StockerAPI.checkAuth()
             .then(res => res.data)
-            .then(data => this.handleAuthenticated(data.isAuth))
+            .then(data => this.handleAuthenticated(data));
     }
 
-    handleAuthenticated = (isAuth) => {
+    handleAuthenticated = (res) => {
         this.setState({
-            isAuth: isAuth,
+            isAuth: res.isAuth,
             isLoading: false
         })
-        if(isAuth) {
-            let { from } = this.props.history.location.state || { from: { pathname: "/" } };
+        if(res.isAuth) {
+            console.log(this.props.history.location)
+            const { from } = this.props.history.location.state || { from: { pathname: "/" } };
             this.props.history.replace(from);
         }
     }

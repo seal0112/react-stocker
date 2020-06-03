@@ -16,7 +16,7 @@ class Login extends Component {
         }
         StockerAPI.login(data)
             .then(res=>res.data)
-            .then(res=>this.handleAuthenticated(res))
+            .then(this.props.handleAuthenticated)
             .catch(err=>console.log(err));
     }
 
@@ -30,28 +30,13 @@ class Login extends Component {
         }
         StockerAPI.login(data)
             .then(res=>res.data)
-            .then(res=>this.handleAuthenticated(res))
+            .then(this.props.handleAuthenticated)
             .catch(err=>console.log(err));
-    }
-
-    handleAuthenticated = (res) => {
-        this.props.handleAuthenticated(res['isAuth'])
-        if(res['isAuth']) {
-            let { from } = this.props.history.location.state || { from: { pathname: "/" } };
-            this.props.history.replace(from);
-        }
-    }
-
-    handleClick = (event) => {
-        event.preventDefault();
-        let { from } = this.props.history.location.state || { from: { pathname: "/" } };
-        this.props.history.replace(from);
     }
 
     render() {
         return (
             <div style={{textAlign: 'center'}}>
-                <button onClick={this.handleClick} />
                 <div className="login-btn-area">
                     <GoogleLogin
                         className="oauth-login-btn"
