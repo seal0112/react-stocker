@@ -1,0 +1,13 @@
+#stockName, #stockCommodity {
+    display: inline;
+}
+#stockName {
+    margin-right: 8px;
+}
+
+@media screen and (max-width: 768px) {
+    #stockName, #stockCommodity {
+        display: block;
+    }
+}
+

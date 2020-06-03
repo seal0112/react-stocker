@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './StockerLayout.css';
 import Header from './Header';
 import NaviBar from './NaviBar';
+import StockInfoAndCommodity from './StockInfoAndCommodity';
 import DailyInfo from './DailyInfo';
 import Revenue from './Revenue';
 import Eps from './Eps';
@@ -51,7 +52,7 @@ class StockerLayout extends Component {
             <Header handleStockNumChange={this.handleStockNumChange} />
             <NaviBar stockNum={stockNum}/>
             <Container>
-                <h3>{this.state.stockNum} 台積電</h3>
+                <StockInfoAndCommodity stockNum={this.state.stockNum}/>
                 <hr />
                 <Switch>
                     {["/", `/basic-info/daily-info/:stockNum`].map(path => (

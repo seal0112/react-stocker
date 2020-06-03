@@ -24,6 +24,8 @@ export const login = (data) => authRequest.post('/login', data);
 export const logout = () => authRequest.get('/logout');
 export const checkAuth = () => authRequest.get('/check_auth');
 
+export const getStockInfoAndCommodity = (stock_id) => frontendDataRequest.get(`/stock_info_commodity/${stock_id}`)
+export const getStockCommodity = (stock_id) => frontendDataRequest.get(`/stock_commodity/${stock_id}`)
 export const getDailyInfo = (stock_id) => frontendDataRequest.get(`/daily_info/${stock_id}`)
 export const getRevenue = (stock_id) => frontendDataRequest.get(`/month_revenue/${stock_id}`)
 export const getEps = (stock_id) => frontendDataRequest.get(`/eps/${stock_id}`)
