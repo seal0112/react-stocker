@@ -15,8 +15,16 @@ class CustomizedTable extends Component {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
-    componentDidUpdate = () => {
+    controlScrollToEnd = () => {
         this.tableScroller.current.scrollLeft = this.tableScroller.current.scrollWidth;
+    }
+
+    componentDidMount = () => {
+        this.controlScrollToEnd()
+    }
+
+    componentDidUpdate = () => {
+        this.controlScrollToEnd()
     }
 
     render() {
