@@ -4,6 +4,13 @@ import CustomizedTable from './CustomizedTable';
 import * as StockerAPI from './utils/StockerAPI';
 import * as StockerTool from './utils/StockerTool';
 
+
+/* EPS Data example for google chart
+ * epsData: [
+ *     ["Year/Season", "基本每股盈餘"],
+ *     ["2017Q4", 2.1]
+ * ]
+ */
 class Eps extends Component {
     _isMounted = false;
 
@@ -41,20 +48,7 @@ class Eps extends Component {
     }
 
     render() {
-        const data = this.state.epsData;
-        console.log(data)
-        // let chartData = data.map((d, idx)=>{
-        //     console.log(d)
-        //     if(idx===0){
-        //         return d;
-        //     }
-        //     const date = d[0].split("-")
-        //     d[0] = Date(date[0], date[1]);
-        //     return d;
-        // })
-        // console.log(data)
-        // console.log(chartData)
-        console.log(this.state.epsData)
+        const epsData = this.state.epsData;
         return (
             <div className="Eps">
                 <Chart
@@ -74,16 +68,12 @@ class Eps extends Component {
                             minValue: 0
                         },
                         hAxis: {
-                            direction: -1,
-                            gridlines: {
-                                count: 4,
-                                color: 'green'
-                            },
-                            format: 'yy'
+                            showTextEvery: 4,
                         },
                     }}
-                    data={data} />
-                <CustomizedTable data={this.state.epsData}/>
+                    data={epsData}
+                    />
+                <CustomizedTable data={epsData}/>
             </div>
         );
     }

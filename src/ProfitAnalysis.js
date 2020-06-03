@@ -4,6 +4,14 @@ import CustomizedTable from './CustomizedTable';
 import * as StockerAPI from './utils/StockerAPI';
 import * as StockerTool from './utils/StockerTool';
 
+
+/*
+ * profit Data example for google chart
+ * profitData: [
+ *     ["Year/Season", "營業毛利率", "營業利益率", "稅前淨利率", "本期淨利率"],
+ *     ["2017Q1", 51.94, 40.76, 41.82, 37.46],
+ * ]
+ */
 class ProfitAnalysis extends Component {
     _isMounted = false;
 
@@ -81,7 +89,7 @@ class ProfitAnalysis extends Component {
                             0: {},
                         },
                         hAxis: {
-                            direction: -1,
+                            showTextEvery: 4,
                         },
                         explorer: {
                             actions: ['dragToZoom', 'rightClickToReset']

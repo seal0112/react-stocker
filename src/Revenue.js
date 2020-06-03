@@ -5,18 +5,19 @@ import CustomizedTable from './CustomizedTable';
 import * as StockerAPI from './utils/StockerAPI';
 import * as StockerTool from './utils/StockerTool';
 
+
+/*
+ * Revenue Data example for google chart
+ * revenueData: [
+ *     ["Year/Month", "營收", "年增率"],
+ *     ["2013/1", 733,044, 22.6],
+ * ]
+ */
 class Revenue extends Component {
     _isMounted = false;
 
     state = {
-        revenueData: [
-          ["Year", "營收", "年增率"],
-          ["2010", 10, 22.6],
-          ["2020", 14, 70.7],
-          ["2030", 16, 62.8],
-          ["2040", 22, -14.6],
-          ["2050", 28, -22]
-        ],
+        revenueData: [],
         activeKey: "precentageOperExp"
     }
 
@@ -81,7 +82,7 @@ class Revenue extends Component {
                                     0: {},
                                 },
                                 hAxis: {
-                                    direction: -1,
+                                    showTextEvery: 12,
                                 },
                             }}
                             data={revenue} />
@@ -107,7 +108,7 @@ class Revenue extends Component {
                                     0: {},
                                 },
                                 hAxis: {
-                                    direction: -1,
+
                                 },
                             }}
                             data={annualIncrease} />
