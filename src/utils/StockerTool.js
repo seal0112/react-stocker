@@ -1,7 +1,7 @@
 
-export const formatDataForGoogleChart = (data, stateSetter) => {
-    let title = Object.keys(data[0])
-    let formatData = data.map(d=>Object.values(d))
+export const formatDataForGoogleChart = (data, keyOrder) => {
+    let title = keyOrder
+    let formatData = data.map(e=>keyOrder.map(k=>e[k]))
     formatData.unshift(title)
     return formatData
 }

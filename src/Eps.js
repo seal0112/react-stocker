@@ -18,6 +18,8 @@ class Eps extends Component {
         epsData: [],
     }
 
+    epsKeysOrder = ["Year/Season", "基本每股盈餘"];
+
     handleEpsState = (epsData) => {
         if (this._isMounted) {
             this.setState({epsData})
@@ -27,7 +29,7 @@ class Eps extends Component {
     getEpsData = (stockNum) => {
         StockerAPI.getEps(stockNum)
             .then(res => res.data)
-            .then(StockerTool.formatDataForGoogleChart)
+            .then(data => StockerTool.formatDataForGoogleChart(data, this.epsKeysOrder))
             .then(this.handleEpsState)
     }
 

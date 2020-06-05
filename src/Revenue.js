@@ -9,7 +9,7 @@ import * as StockerTool from './utils/StockerTool';
 /*
  * Revenue Data example for google chart
  * revenueData: [
- *     ["Year/Month", "營收", "年增率"],
+ *     ["Year/Month", "當月營收", "去年同月增減"],
  *     ["2013/1", 733,044, 22.6],
  * ]
  */
@@ -20,6 +20,8 @@ class Revenue extends Component {
         revenueData: [],
         activeKey: "precentageOperExp"
     }
+
+    revenueKeysOrder = ["Year/Month", "當月營收", "去年同月增減"];
 
     handleCount = (key) => {
         this.setState({
@@ -34,7 +36,7 @@ class Revenue extends Component {
     getRevenueData = (stockNum) => {
         StockerAPI.getRevenue(stockNum)
             .then(res => res.data)
-            .then(StockerTool.formatDataForGoogleChart)
+            .then(data => StockerTool.formatDataForGoogleChart(data, this.revenueKeysOrder))
             .then(this.handleRevenueData)
     }
 
@@ -56,8 +58,8 @@ class Revenue extends Component {
 
     render() {
         const data = this.state.revenueData;
-        const revenue = data.map(d=>[].concat(d.slice(0,1), d.slice(2)))
-        const annualIncrease = data.map(d=>[].concat(d.slice(0,2)))
+        const revenue = data.map(d=>[].concat(d.slice(0,2)))
+        const annualIncrease = data.map(d=>[].concat(d.slice(0,1), d.slice(2)))
         return (
             <div className="revenue">
                 <Tabs defaultActiveKey="revenue" id="Revenue-Analysis-tab" onSelect={this.handleCount}>

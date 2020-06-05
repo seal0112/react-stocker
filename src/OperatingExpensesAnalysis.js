@@ -21,6 +21,10 @@ class OperatingExpensesAnalysis extends Component {
         activeKey: "precentageOperExp"
     }
 
+    operatingExpensesKeysOrder = [
+        "Year/Season", "營業費用率", "推銷費用率", "管理費用率", "研究發展費用率",
+        "營業費用", "推銷費用", "管理費用", "研究發展費用"]
+
     handleCount = (key) => {
         this.setState({
          activeKey: key
@@ -34,7 +38,8 @@ class OperatingExpensesAnalysis extends Component {
     getOperatingExpensesData = (stockNum) => {
         StockerAPI.getOperatingExpenses(stockNum)
             .then(res => res.data)
-            .then(StockerTool.formatDataForGoogleChart)
+            .then(data => StockerTool.formatDataForGoogleChart(
+                data, this.operatingExpensesKeysOrder))
             .then(this.handleOperatingExpensesState)
     }
 
@@ -56,20 +61,8 @@ class OperatingExpensesAnalysis extends Component {
 
     render() {
         const data = this.state.operatingExpensesData;
-        const precentageOperExp = data.map(d=>{
-              let arr = d.slice(0,1);
-              for(let i=2; i<d.length; i+=2){
-                  arr.push(d[i])
-              }
-              return arr
-        })
-        const rowOperExp = data.map(d=>{
-              let arr = d.slice(0,1);
-              for(let i=1; i<d.length; i+=2){
-                  arr.push(d[i])
-              }
-              return arr
-        })
+        const precentageOperExp = data.map(d=>[].concat(d.slice(0,5)))
+        const rowOperExp = data.map(d=>[].concat(d.slice(0,1), d.slice(5)))
         return (
             <div className="Operating-Expenses-Analysis">
                 <Tabs defaultActiveKey="precentageOperExp" id="Operating-Expenses-tab" onSelect={this.handleCount}>

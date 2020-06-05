@@ -19,6 +19,9 @@ class IncomeSheet extends Component {
         incomeSheetData: [],
     }
 
+    incomeSheetKeysOrder = [
+            "Year/Season", "營業收入合計", "營業毛利", "營業利益", "稅前淨利", "本期淨利", "母公司業主淨利"]
+
     handleIncomeSheetState = (incomeSheetData) => {
         this.setState({incomeSheetData})
     }
@@ -26,7 +29,7 @@ class IncomeSheet extends Component {
     getIncomeSheetData = (stockNum) => {
         StockerAPI.getIncomeSheet(stockNum)
             .then(res => res.data)
-            .then(StockerTool.formatDataForGoogleChart)
+            .then(data => StockerTool.formatDataForGoogleChart(data, this.incomeSheetKeysOrder))
             .then(this.handleIncomeSheetState)
     }
 
