@@ -16,7 +16,10 @@ class ProfitAnalysis extends Component {
     _isMounted = false;
 
     state = {
-        profitData: [],
+        profitData: [
+            ["Year/Season", "營業毛利率", "營業利益率", "稅前淨利率", "本期淨利率"],
+            ["", 0, 0, 0, 0],
+        ],
     }
 
     profitKeysOrder = ["Year/Season", "營業毛利率", "營業利益率", "稅前淨利率", "本期淨利率"];

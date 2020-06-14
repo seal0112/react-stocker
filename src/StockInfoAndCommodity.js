@@ -39,7 +39,9 @@ class StockInfoAndCommodity extends Component {
         StockerAPI.getStockInfoAndCommodity(this.props.stockNum)
             .then(res=>res.data)
             .then(this.handleStockInfoAndCommodity)
-            .catch(err=>console.log(err))
+            .catch(err=>{
+                console.log(err)
+            })
     }
 
     componentDidUpdate = (prevProps) => {

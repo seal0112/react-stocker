@@ -16,7 +16,10 @@ class IncomeSheet extends Component {
     _isMounted = false;
 
     state = {
-        incomeSheetData: [],
+        incomeSheetData: [
+            ["Year/Season", "營業收入合計", "營業毛利", "營業利益", "稅前淨利", "本期淨利", "母公司業主淨利"],
+            ["", 0, 0, 0, 0, 0, 0]
+        ],
     }
 
     incomeSheetKeysOrder = [

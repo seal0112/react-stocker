@@ -17,7 +17,10 @@ class OperatingExpensesAnalysis extends Component {
     _isMounted = false;
 
     state = {
-        operatingExpensesData: [],
+        operatingExpensesData: [
+            ["Year/Season", "營業費用率", "推銷費用率", "管理費用率", "研究發展費用率", "營業費用", "推銷費用", "管理費用", "研究發展費用"],
+            ["", 0, 0, 0, 0, 0, 0, 0, 0]
+        ],
         activeKey: "precentageOperExp"
     }
 

@@ -15,7 +15,10 @@ class Eps extends Component {
     _isMounted = false;
 
     state = {
-        epsData: [],
+        epsData: [
+            ["Year/Season", "基本每股盈餘"],
+            ["", 0]
+        ],
     }
 
     epsKeysOrder = ["Year/Season", "基本每股盈餘"];

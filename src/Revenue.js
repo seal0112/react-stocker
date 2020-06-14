@@ -10,14 +10,17 @@ import * as StockerTool from './utils/StockerTool';
  * Revenue Data example for google chart
  * revenueData: [
  *     ["Year/Month", "當月營收", "去年同月增減"],
- *     ["2013/1", 733,044, 22.6],
+ *     ["2013/1", 733.044, 22.6],
  * ]
  */
 class Revenue extends Component {
     _isMounted = false;
 
     state = {
-        revenueData: [],
+        revenueData: [
+            ["Year/Month", "當月營收", "去年同月增減"],
+            ["", 0, 0]
+        ],
         activeKey: "precentageOperExp"
     }
 

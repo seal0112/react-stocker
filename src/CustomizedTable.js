@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import './CustomizedTable.css';
-import {
-    Table
-} from 'react-bootstrap';
+import { Table, Spinner } from 'react-bootstrap';
 
 class CustomizedTable extends Component {
     constructor(props) {
@@ -31,6 +29,7 @@ class CustomizedTable extends Component {
         const data = this.props.data;
         return data.length===0?(<div className="Customized-table">
                 <div className="table-scroller" ref={this.tableScroller}>
+                    <Spinner animation="border" variant="success" style={{position: "relative", left: "50%"}}/>
                 </div>
             </div>):(
             <div className="Customized-table">
