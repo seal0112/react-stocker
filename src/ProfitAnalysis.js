@@ -30,7 +30,6 @@ class ProfitAnalysis extends Component {
 
     getProfitData = (stockNum) => {
         StockerAPI.getProfit(stockNum)
-            .then(res => res.data)
             .then(data => StockerTool.formatDataForGoogleChart(data, this.profitKeysOrder))
             .then(this.handleProfitState)
     }

@@ -31,7 +31,6 @@ class Eps extends Component {
 
     getEpsData = (stockNum) => {
         StockerAPI.getEps(stockNum)
-            .then(res => res.data)
             .then(data => StockerTool.formatDataForGoogleChart(data, this.epsKeysOrder))
             .then(this.handleEpsState)
     }

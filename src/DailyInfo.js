@@ -30,8 +30,9 @@ class DailyInfo extends PureComponent {
 
     getDailyInfo = (stockNum) => {
         StockerAPI.getDailyInfo(stockNum)
-            .then(res => res.data)
-            .then(res => this.handleDailyInfo(res))
+            .then(res => {
+                console.log(res)
+                this.handleDailyInfo(res)})
     }
 
     render() {

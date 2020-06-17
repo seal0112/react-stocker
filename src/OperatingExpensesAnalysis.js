@@ -40,7 +40,6 @@ class OperatingExpensesAnalysis extends Component {
 
     getOperatingExpensesData = (stockNum) => {
         StockerAPI.getOperatingExpenses(stockNum)
-            .then(res => res.data)
             .then(data => StockerTool.formatDataForGoogleChart(
                 data, this.operatingExpensesKeysOrder))
             .then(this.handleOperatingExpensesState)

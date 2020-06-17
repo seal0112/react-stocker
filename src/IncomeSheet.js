@@ -31,7 +31,6 @@ class IncomeSheet extends Component {
 
     getIncomeSheetData = (stockNum) => {
         StockerAPI.getIncomeSheet(stockNum)
-            .then(res => res.data)
             .then(data => StockerTool.formatDataForGoogleChart(data, this.incomeSheetKeysOrder))
             .then(this.handleIncomeSheetState)
     }

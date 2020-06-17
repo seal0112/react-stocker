@@ -25,6 +25,7 @@ class StockInfoAndCommodity extends Component {
     }
 
     handleStockInfoAndCommodity = (data) => {
+        console.log(data)
         this.setState({
             companyName: data.stockInformation['公司簡稱'],
             exchangeType: this.exchType[data.stockInformation.exchangeType],
@@ -37,7 +38,6 @@ class StockInfoAndCommodity extends Component {
 
     getStockInfoAndCommodity = () => {
         StockerAPI.getStockInfoAndCommodity(this.props.stockNum)
-            .then(res=>res.data)
             .then(this.handleStockInfoAndCommodity)
             .catch(err=>{
                 console.log(err)

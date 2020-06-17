@@ -38,7 +38,6 @@ class Revenue extends Component {
 
     getRevenueData = (stockNum) => {
         StockerAPI.getRevenue(stockNum)
-            .then(res => res.data)
             .then(data => StockerTool.formatDataForGoogleChart(data, this.revenueKeysOrder))
             .then(this.handleRevenueData)
     }

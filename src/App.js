@@ -28,6 +28,7 @@ class StockerApp extends Component {
         })
         if(res.isAuth) {
             console.log(this.props.history.location)
+
             const { from } = this.props.history.location.state || { from: { pathname: "/" } };
             this.props.history.replace(from);
         }
