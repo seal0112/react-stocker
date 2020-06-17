@@ -50,13 +50,11 @@ class StockerLayout extends Component {
     checkStockExist = () => {
         StockerAPI.checkStockExist(this.state.stockNum)
             .then(res=>{
-                console.log(res.status)
                 if(res.status===200){
                     this.handleStockExistChange(true)
                 }
             })
             .catch(err=>{
-                console.log(err)
                 if(err.response.status===404){
                     this.handleStockExistChange(false)
                 }

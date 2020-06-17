@@ -8,6 +8,7 @@
 
 @import "NaviBar.css";
 @import "Header.css";
+@import url("css/UserInfo.css");
 
 .App {
   width: 100%;

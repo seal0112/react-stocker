@@ -1,0 +1,44 @@
+.user-info .dropdown .btn{
+    background-color: var(--dark);
+    border-style: hidden;
+}
+
+.user-info {
+    padding-left: 18px;
+}
+
+.user-picture {
+    width: 30px;
+    margin-right: 10px;
+}
+
+.user-name {
+    margin-right: 10px;
+}
+
+.user-info .dropdown .dropdown-menu {
+    min-width: 184px;
+    background-color: var(--dark);
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: unset;
+}
+
+.user-info .dropdown .dropdown-menu .dropdown-item {
+    color: #fff;
+}
+
+.user-info .dropdown .dropdown-menu .dropdown-item:hover{
+    background-color: var(--main-header-green);
+}
+
+@media screen and (max-width: 768px) {
+    .user-info .dropdown .btn{
+        background-color: var(--main-header-green);
+    }
+
+    .user-name {
+        display: none;
+    }
+}

@@ -25,7 +25,6 @@ class StockInfoAndCommodity extends Component {
     }
 
     handleStockInfoAndCommodity = (data) => {
-        console.log(data)
         this.setState({
             companyName: data.stockInformation['公司簡稱'],
             exchangeType: this.exchType[data.stockInformation.exchangeType],

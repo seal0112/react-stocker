@@ -12,7 +12,7 @@ class Login extends Component {
     account: '',
     password: '',
     alertShow: false,
-    alertContent: "ccc",
+    alertContent: "",
   }
 
   responseGoogle = googleUser => {
@@ -82,7 +82,7 @@ class Login extends Component {
                 onClose={() => this.setAlertShow(false)}
                 dismissible>
               <Alert.Heading>You got problem!</Alert.Heading>
-              <p>
+              <p style={{fontWeight: '400', fontSize: '18px',}}>
                 {this.state.alertContent}
               </p>
             </Alert>

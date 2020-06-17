@@ -24,7 +24,12 @@ export const login = (data) =>
   authRequest.post('/login', data).then((res) => res.data);
 
 export const logout = () => authRequest.get('/logout');
-export const checkAuth = () => authRequest.get('/check_auth');
+
+export const checkAuth = () =>
+  authRequest.get('/check_auth').then((res) => res.data);
+
+export const getUserInfo = () =>
+  authRequest.get('/user_info').then((res) => res.data);
 
 
 // for front-end data request

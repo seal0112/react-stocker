@@ -13,7 +13,7 @@
 
 .alert-login {
     animation-name: alertfadein;
-    animation-duration: 0.7s;
+    animation-duration: 0.5s;
     animation-fill-mode: forwards;
     margin: auto;
 }
