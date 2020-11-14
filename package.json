@@ -14,6 +14,7 @@
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "minimist": "^1.2.3",
+    "pm2": "^4.5.0",
     "react": "^16.13.0",
     "react-bootstrap": "^1.0.0-beta.17",
     "react-dom": "^16.13.0",
@@ -22,10 +23,10 @@
     "react-google-charts": "^3.0.15",
     "react-google-login": "^5.1.20",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.0"
+    "react-scripts": "4.0.0"
   },
   "scripts": {
-    "start": "HTTPS=true react-scripts start",
+    "start": "PORT=8000 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
