@@ -1,89 +1,87 @@
-import React, { Component } from 'react';
-import { withRouter } from "react-router-dom";
-import './css/Login.css';
-import GoogleLogin from 'react-google-login';
-import FacebookLogin from 'react-facebook-login';
-import * as StockerAPI from './utils/StockerAPI';
-import { Form, Button, Alert } from 'react-bootstrap';
+import React, { Component } from 'react'
+import { withRouter } from 'react-router-dom'
+import './css/Login.css'
+import GoogleLogin from 'react-google-login'
+import FacebookLogin from 'react-facebook-login'
+import * as StockerAPI from './utils/StockerAPI'
+import { Form, Button, Alert } from 'react-bootstrap'
 
 class Login extends Component {
-
   state = {
     account: '',
     password: '',
     alertShow: false,
-    alertContent: "ccc",
+    alertContent: 'ccc'
   }
 
   responseGoogle = googleUser => {
-    let id_token = googleUser.getAuthResponse().id_token;
+    const idToken = googleUser.getAuthResponse().id_token
     const data = {
       external_type: 'google',
-      token: id_token
+      token: idToken
     }
     StockerAPI.login(data)
       .then(this.props.handleAuthenticated)
-      .catch(err=>this.setAlertShow(true, err.response.data));
-  };
+      .catch(err => this.setAlertShow(true, err.response.data))
+  }
 
   responseFacebook = response => {
-    const access_token = response.accessToken;
+    const accessToken = response.accessToken
     const data = {
       external_type: 'facebook',
-      token: access_token
+      token: accessToken
     }
     StockerAPI.login(data)
       .then(this.props.handleAuthenticated)
-      .catch(err=>this.setAlertShow(true, err.response.data));
-  };
-
+      .catch(err => this.setAlertShow(true, err.response.data))
+  }
 
   loginWithAccount = event => {
-    event.preventDefault();
+    event.preventDefault()
     const data = {
       external_type: 'internal',
       data: {
         account: this.state.account,
-        password: this.state.password,
+        password: this.state.password
       }
     }
     console.log(data)
-    this.setAlertShow(true, "QQ 沒工作")
+    this.setAlertShow(true, '帳號登入尚未完成')
     // StockerAPI.login(query)
     //  .then(this.props.handleAuthenticated)
     //  .catch(err=>this.setAlertShow(true, err.response.data));
-  };
+  }
 
   handleAccountInput = event => {
-    const value = event.target.value;
-    this.setState(()=>({account: value}));
-  };
+    const value = event.target.value
+    this.setState(() => ({ account: value }))
+  }
 
   handlePasswordInput = event => {
-    const value = event.target.value;
-    this.setState(()=>({password: value}));
-  };
+    const value = event.target.value
+    this.setState(() => ({ password: value }))
+  }
 
   setAlertShow = (toggle, content) => {
     this.setState({
-        alertShow: toggle,
-        alertContent: content
+      alertShow: toggle,
+      alertContent: content
     })
   }
 
-  render() {
+  render () {
     return (
       <div className="login-component text-center">
         <Form className="form-signin login-title" onSubmit={this.loginWithAccount}>
-          {this.state.alertShow
-            && <Alert
+          {this.state.alertShow &&
+            <Alert
                 className="alert-login"
                 variant="danger"
                 onClose={() => this.setAlertShow(false)}
                 dismissible>
               <Alert.Heading>You got problem!</Alert.Heading>
               <p>
-                {this.state.alertContent}
+                { this.state.alertContent }
               </p>
             </Alert>
           }
@@ -125,8 +123,8 @@ class Login extends Component {
           </div>
         </Form>
       </div>
-    );
+    )
   }
 }
 
-export default withRouter(Login);
+export default withRouter(Login)
