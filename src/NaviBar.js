@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import {
   Navbar, Nav, Container
 } from 'react-bootstrap'
@@ -26,7 +27,18 @@ function SelectLink ({ label, to, activeOnlyWhenExact, icon }) {
   )
 }
 
+SelectLink.propTypes = {
+  label: PropTypes.string.isRequired,
+  to: PropTypes.string.isRequired,
+  activeOnlyWhenExact: PropTypes.string.isRequired,
+  icon: PropTypes.string.isRequired
+}
+
 class NaviBar extends Component {
+  static propTypes = {
+    stockNum: PropTypes.string.isRequired
+  }
+
   state = {
     naviParentType: null,
     navExpanded: false
@@ -144,9 +156,9 @@ class NaviBar extends Component {
           onToggle={this.setNaviExpanded}
           expanded={navExpanded}>
         <Container>
-          <Navbar.Toggle children={
-            <FontAwesomeIcon className="icon" icon={ faAngleDoubleDown } size="lg"/>
-          } aria-controls="App-navbar-content" />
+          <Navbar.Toggle aria-controls="App-navbar-content">
+            <FontAwesomeIcon className="icon" icon={ faAngleDoubleDown } size="lg" />
+          </Navbar.Toggle>
           <Navbar.Collapse id="App-navbar-content">
             <Nav variant="tabs" as="ul">
               {this.naviTabParent.map(naviTabPar => (

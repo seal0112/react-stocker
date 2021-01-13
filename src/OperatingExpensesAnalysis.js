@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Chart } from 'react-google-charts'
 import CustomizedTable from './CustomizedTable'
 import { Tabs, Tab } from 'react-bootstrap'
@@ -14,6 +15,10 @@ import * as StockerTool from './utils/StockerTool'
  */
 class OperatingExpensesAnalysis extends Component {
   _isMounted = false;
+
+  static propTypes = {
+    stockNum: PropTypes.string.isRequired
+  }
 
   state = {
     operatingExpensesData: [

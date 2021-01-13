@@ -1,8 +1,13 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import './CustomizedTable.css'
 import { Table, Spinner } from 'react-bootstrap'
 
 class CustomizedTable extends Component {
+  static propTypes = {
+    data: PropTypes.array.isRequired
+  }
+
   constructor (props) {
     super(props)
     // 產生一個可以儲存 textInput DOM element 的 ref

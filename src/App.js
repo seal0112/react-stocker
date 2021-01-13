@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import StockerLayout from './StockerLayout'
 import Login from './Login'
 import PrivateRoute from './PrivateRoute'
@@ -19,6 +20,10 @@ class StockerApp extends Component {
       isAuth: false,
       isLoading: true
     }
+  }
+
+  static propTypes = {
+    history: PropTypes.object.isRequired
   }
 
   componentDidMount = () => {

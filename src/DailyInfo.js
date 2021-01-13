@@ -1,9 +1,14 @@
 import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
 import './DailyInfo.css'
 import { Row, Col, Card } from 'react-bootstrap'
 import * as StockerAPI from './utils/StockerAPI'
 
 class DailyInfo extends PureComponent {
+  static propTypes = {
+    stockNum: PropTypes.string.isRequired
+  }
+
   state = {
     本日收盤價: 0,
     本日漲跌: 0,

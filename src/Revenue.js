@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Chart } from 'react-google-charts'
 import { Tabs, Tab } from 'react-bootstrap'
 import CustomizedTable from './CustomizedTable'
@@ -13,7 +14,11 @@ import * as StockerTool from './utils/StockerTool'
  * ]
  */
 class Revenue extends Component {
-  _isMounted = false;
+  _isMounted = false
+
+  static propTypes = {
+    stockNum: PropTypes.string.isRequired
+  }
 
   state = {
     revenueData: [

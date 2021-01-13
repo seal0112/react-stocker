@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import './css/Login.css'
 import GoogleLogin from 'react-google-login'
@@ -7,6 +8,10 @@ import * as StockerAPI from './utils/StockerAPI'
 import { Form, Button, Alert } from 'react-bootstrap'
 
 class Login extends Component {
+  propTypes = {
+    handleAuthenticated: PropTypes.bool.isRequired
+  }
+
   state = {
     account: '',
     password: '',

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Chart } from 'react-google-charts'
 import CustomizedTable from './CustomizedTable'
 import * as StockerAPI from './utils/StockerAPI'
@@ -14,11 +15,15 @@ import * as StockerTool from './utils/StockerTool'
 class ProfitAnalysis extends Component {
   _isMounted = false;
 
-  state = {
+  static state = {
     profitData: [
       ['Year/Season', '營業毛利率', '營業利益率', '稅前淨利率', '本期淨利率'],
       ['', 0, 0, 0, 0]
     ]
+  }
+
+  propTypes = {
+    stockNum: PropTypes.string.isRequired
   }
 
   profitKeysOrder = ['Year/Season', '營業毛利率', '營業利益率', '稅前淨利率', '本期淨利率']

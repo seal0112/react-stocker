@@ -1,7 +1,12 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Alert, Container } from 'react-bootstrap'
 
 class NoThisStock extends Component {
+  propTypes = {
+    stockNum: PropTypes.string.isRequired
+  }
+
   render () {
     return (
       <Container>

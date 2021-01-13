@@ -1,9 +1,14 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import './css/StockInfoAndCommodity.css'
 import * as StockerAPI from './utils/StockerAPI'
 
 class StockInfoAndCommodity extends Component {
   _isMounted = false;
+
+  static propTypes = {
+    stockNum: PropTypes.string.isRequired
+  }
 
   constructor (props) {
     super(props)

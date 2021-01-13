@@ -1,10 +1,15 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import {
   Nav, Navbar, NavDropdown,
   Form, FormControl
 } from 'react-bootstrap'
 
 class Header extends Component {
+  static propTypes = {
+    handleStockNumChange: PropTypes.func
+  }
+
   handleSubmit = (event) => {
     event.preventDefault()
     this.props.handleStockNumChange(event.target[0].value)
