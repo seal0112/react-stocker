@@ -30,8 +30,8 @@ function SelectLink ({ label, to, activeOnlyWhenExact, icon }) {
 SelectLink.propTypes = {
   label: PropTypes.string.isRequired,
   to: PropTypes.string.isRequired,
-  activeOnlyWhenExact: PropTypes.string.isRequired,
-  icon: PropTypes.string.isRequired
+  activeOnlyWhenExact: PropTypes.bool.isRequired,
+  icon: PropTypes.object.isRequired
 }
 
 class NaviBar extends Component {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Alert, Container } from 'react-bootstrap'
 
 class NoThisStock extends Component {
-  propTypes = {
+  static propTypes = {
     stockNum: PropTypes.string.isRequired
   }
 
