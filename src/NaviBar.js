@@ -9,16 +9,13 @@ import {
   faNewspaper, faCommentAlt, faAngleDoubleDown, faCoins,
   faHandHoldingUsd, faFileInvoiceDollar, faFunnelDollar, faSearchDollar
 } from '@fortawesome/free-solid-svg-icons'
-import { Link, useRouteMatch } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 function SelectLink ({ label, to, activeOnlyWhenExact, icon }) {
-  const match = useRouteMatch({
-    path: to,
-    exact: activeOnlyWhenExact
-  })
+  const { pathname } = useLocation()
 
   return (
-    <div className={match ? 'sub-nav-link active' : 'sub-nav-link'}>
+    <div className={pathname === to ? 'sub-nav-link active' : 'sub-nav-link'}>
       <Link to={to}>
         <FontAwesomeIcon className="icon" icon={icon} size="sm" />
         <span> {label}</span>

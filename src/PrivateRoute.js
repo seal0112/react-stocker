@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Route, Redirect } from 'react-router-dom'
+import { Route, Navigate } from 'react-router-dom'
 import { Spinner } from 'react-bootstrap'
 
 class PrivateRoute extends Component {
@@ -23,11 +23,9 @@ class PrivateRoute extends Component {
             render={({ location }) =>
               isAuth
                 ? (<Component />)
-                : (<Redirect
-                  to={{
-                    pathname: '/login',
-                    state: { from: location }
-                  }}
+                : (<Navigate
+                  replace
+                  to= '/login'
                 />)
             }
           />

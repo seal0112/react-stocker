@@ -14,7 +14,7 @@ import * as StockerTool from './utils/StockerTool'
  * ]
  */
 class OperatingExpensesAnalysis extends Component {
-  _isMounted = false;
+  _isMounted = false
 
   static propTypes = {
     stockNum: PropTypes.string.isRequired

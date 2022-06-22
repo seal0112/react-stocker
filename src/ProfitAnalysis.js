@@ -13,7 +13,7 @@ import * as StockerTool from './utils/StockerTool'
  * ]
  */
 class ProfitAnalysis extends Component {
-  _isMounted = false;
+  _isMounted = false
 
   static state = {
     profitData: [

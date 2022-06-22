@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
 import './css/Login.css'
 import GoogleLogin from 'react-google-login'
 import FacebookLogin from 'react-facebook-login'
@@ -132,4 +131,4 @@ class Login extends Component {
   }
 }
 
-export default withRouter(Login)
+export default Login

@@ -4,7 +4,7 @@ import './css/StockInfoAndCommodity.css'
 import * as StockerAPI from './utils/StockerAPI'
 
 class StockInfoAndCommodity extends Component {
-  _isMounted = false;
+  _isMounted = false
 
   static propTypes = {
     stockNum: PropTypes.string.isRequired

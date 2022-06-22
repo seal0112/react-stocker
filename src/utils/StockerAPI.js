@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const api = 'https://tw-stocker.com'
+const api = `https://${process.env.REACT_APP_HOST_DOMAIN}`
 const headers = {
   Accept: 'application/json'
 }
