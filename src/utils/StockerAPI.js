@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const api = 'http://localhost:5001'
+const api = 'https://tw-stocker.com'
 const headers = {
   Accept: 'application/json'
 }
