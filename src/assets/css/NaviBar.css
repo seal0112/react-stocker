@@ -121,7 +121,7 @@
         border-style: none;
     }
 
-    App-navbar .App-navbar-content {
+    .App-navbar .App-navbar-content {
         position: static;
     }
 

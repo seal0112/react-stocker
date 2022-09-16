@@ -1,20 +1,20 @@
 import axios from 'axios'
 
 const api = `https://${process.env.REACT_APP_HOST_DOMAIN}`
-const headers = {
+const header = {
   Accept: 'application/json'
 }
 
 const authRequest = axios.create({
+  headers: header,
   baseURL: api + '/api/auth',
-  headers: headers,
   withCredentials: true,
   mode: 'no-cors'
 })
 
 const frontendDataRequest = axios.create({
+  headers: header,
   baseURL: api + '/api/v0/f',
-  headers: headers,
   withCredentials: true,
   mode: 'no-cors'
 })

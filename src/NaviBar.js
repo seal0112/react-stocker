@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState, useContext } from 'react'
 import PropTypes from 'prop-types'
 import {
   Navbar, Nav, Container
@@ -9,6 +9,7 @@ import {
   faNewspaper, faCommentAlt, faAngleDoubleDown, faCoins,
   faHandHoldingUsd, faFileInvoiceDollar, faFunnelDollar, faSearchDollar
 } from '@fortawesome/free-solid-svg-icons'
+import { StockContext } from './StockContext'
 import { Link, useLocation } from 'react-router-dom'
 
 function SelectLink ({ label, to, activeOnlyWhenExact, icon }) {
@@ -31,17 +32,13 @@ SelectLink.propTypes = {
   icon: PropTypes.object.isRequired
 }
 
-class NaviBar extends Component {
-  static propTypes = {
-    stockNum: PropTypes.string.isRequired
-  }
+const NaviBar = () => {
+  const [naviParentType, setNaviParentType] = useState(null)
+  const [navExpanded, setNavExpanded] = useState(false)
 
-  state = {
-    naviParentType: null,
-    navExpanded: false
-  }
+  const stock = useContext(StockContext)
 
-  naviTabParent = [
+  const naviTabParent = [
     {
       title: '個股資訊',
       href: 'basic-info',
@@ -107,86 +104,77 @@ class NaviBar extends Component {
     }
   ]
 
-  handleNaviParentTypeChange = (naviParentType) => {
-    this.setState({
-      naviParentType
-    })
+  const handleNaviParentTypeChange = (naviParentType) => {
+    setNaviParentType(naviParentType)
   }
 
-  clickNaviParent = (event) => {
+  const clickNaviParent = (event) => {
     if (event.target.dataset.navipar) {
-      this.handleNaviParentTypeChange(event.target.dataset.navipar)
+      handleNaviParentTypeChange(event.target.dataset.navipar)
     } else {
-      this.handleNaviParentTypeChange(event.target.parentNode.dataset.navipar)
+      handleNaviParentTypeChange(event.target.parentNode.dataset.navipar)
     }
   }
 
-  checkPathnameWithNaviParent = () => {
-    if (this.state.naviParentType == null) {
-      const location = window.location.pathname.split('/')
-      if (location[1]) {
-        this.handleNaviParentTypeChange(location[1])
-      } else {
-        this.handleNaviParentTypeChange('basic-info')
-      }
-    }
+  // const checkPathnameWithNaviParent = () => {
+  //   if (naviParentType == null) {
+  //     const location = window.location.pathname.split('/')
+  //     if (location[1]) {
+  //       handleNaviParentTypeChange(location[1])
+  //     } else {
+  //       handleNaviParentTypeChange('basic-info')
+  //     }
+  //   }
+  // }
+
+  const setNaviExpanded = (expanded) => {
+    setNavExpanded(expanded)
   }
 
-  setNaviExpanded = (expanded) => {
-    this.setState({ navExpanded: expanded })
+  const closeNavibar = () => {
+    setNavExpanded(false)
   }
 
-  closeNavibar = () => {
-    this.setState({ navExpanded: false })
-  }
-
-  componentDidMount = () => {
-    this.checkPathnameWithNaviParent()
-  }
-
-  render () {
-    const { naviParentType, navExpanded } = this.state
-    return (
-      <Navbar
-          className="App-navbar"
-          expand="md"
-          onToggle={this.setNaviExpanded}
-          expanded={navExpanded}>
-        <Container>
-          <Navbar.Toggle aria-controls="App-navbar-content">
-            <FontAwesomeIcon className="icon" icon={ faAngleDoubleDown } size="lg" />
-          </Navbar.Toggle>
-          <Navbar.Collapse id="App-navbar-content">
-            <Nav variant="tabs" as="ul">
-              {this.naviTabParent.map(naviTabPar => (
-                <Nav.Item as="li" key={naviTabPar.href}>
-                  <Nav.Link
-                      className={ naviParentType === naviTabPar.href ? 'parent active' : 'parent'}
-                      onClick={ this.clickNaviParent }
-                      data-navipar={ naviTabPar.href }>
-                    <FontAwesomeIcon className="icon" icon={naviTabPar.icon} size="lg"/>
-                    <span>{naviTabPar.title}</span>
-                  </Nav.Link>
-                  <ul className="navi-tab-sub">
-                    {naviTabPar.naviTabSub.map(naviTabSub => (
-                      <Nav.Item as="li" key={naviTabSub.href} onClick={this.closeNavibar}>
-                        <SelectLink
-                          to={`/${naviTabPar.href}${naviTabSub.href}/${this.props.stockNum}`}
-                          icon={naviTabSub.icon}
-                          label={naviTabSub.title}
-                          activeOnlyWhenExact={true}
-                        />
-                      </Nav.Item>
-                    ))}
-                  </ul>
-                </Nav.Item>
-              ))}
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-    )
-  }
+  return (
+    <Navbar
+        className="App-navbar"
+        expand="md"
+        onToggle={setNaviExpanded}
+        expanded={navExpanded}>
+      <Container>
+        <Navbar.Toggle aria-controls="App-navbar-content">
+          <FontAwesomeIcon className="icon" icon={ faAngleDoubleDown } size="lg" />
+        </Navbar.Toggle>
+        <Navbar.Collapse id="App-navbar-content">
+          <Nav variant="tabs" as="ul">
+            {naviTabParent.map(naviTabPar => (
+              <Nav.Item as="li" key={naviTabPar.href}>
+                <Nav.Link
+                    className={ naviParentType === naviTabPar.href ? 'parent active' : 'parent'}
+                    onClick={ clickNaviParent }
+                    data-navipar={ naviTabPar.href }>
+                  <FontAwesomeIcon className="icon" icon={naviTabPar.icon} size="lg"/>
+                  <span>{naviTabPar.title}</span>
+                </Nav.Link>
+                <ul className="navi-tab-sub">
+                  {naviTabPar.naviTabSub.map(naviTabSub => (
+                    <Nav.Item as="li" key={naviTabSub.href} onClick={ closeNavibar }>
+                      <SelectLink
+                        to={`/${naviTabPar.href}${naviTabSub.href}/${stock.stockNum}`}
+                        icon={naviTabSub.icon}
+                        label={naviTabSub.title}
+                        activeOnlyWhenExact={true}
+                      />
+                    </Nav.Item>
+                  ))}
+                </ul>
+              </Nav.Item>
+            ))}
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+  )
 }
 
 export default NaviBar

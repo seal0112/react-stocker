@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import './CustomizedTable.css'
+import './assets/css/CustomizedTable.css'
 import { Table, Spinner } from 'react-bootstrap'
 
 class CustomizedTable extends Component {
