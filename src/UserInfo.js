@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dropdown, Image} from 'react-bootstrap';
+import { Dropdown, Image } from 'react-bootstrap';
 import { withRouter } from "react-router-dom";
 import * as StockerAPI from './utils/StockerAPI';
 

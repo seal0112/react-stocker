@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState, useEffect, useContext } from 'react'
 import { Chart } from 'react-google-charts'
 import CustomizedTable from './CustomizedTable'
+import { StockContext } from './StockContext'
 import { Tabs, Tab } from 'react-bootstrap'
 import * as StockerAPI from './utils/StockerAPI'
 import * as StockerTool from './utils/StockerTool'
@@ -13,69 +13,45 @@ import * as StockerTool from './utils/StockerTool'
  *     ["2017Q1", 11.18, 0.64, 2.24, 8.3, 26156483, 1496487, 5247603, 19412393]
  * ]
  */
-class OperatingExpensesAnalysis extends Component {
-  _isMounted = false;
-
-  static propTypes = {
-    stockNum: PropTypes.string.isRequired
-  }
-
-  state = {
-    operatingExpensesData: [
-      [
-        'Year/Season', '營業費用率', '推銷費用率', '管理費用率',
-        '研究發展費用率', '營業費用', '推銷費用', '管理費用', '研究發展費用'
-      ],
-      ['', 0, 0, 0, 0, 0, 0, 0, 0]
+const OperatingExpensesAnalysis = () => {
+  const [operatingExpensesData, setOperatingExpensesData] = useState([
+    [
+      'Year/Season', '營業費用率', '推銷費用率', '管理費用率',
+      '研究發展費用率', '營業費用', '推銷費用', '管理費用', '研究發展費用'
     ],
-    activeKey: 'precentageOperExp'
-  }
+    ['', 0, 0, 0, 0, 0, 0, 0, 0]
+  ])
+  const [activeKey, setActiveKey] = useState('precentageOperExp')
+  const stock = useContext(StockContext)
 
-  operatingExpensesKeysOrder = [
+  const operatingExpensesKeysOrder = [
     'Year/Season', '營業費用率', '推銷費用率', '管理費用率',
     '研究發展費用率', '營業費用', '推銷費用', '管理費用', '研究發展費用']
 
-  handleCount = key => {
-    this.setState({
-      activeKey: key
-    })
+  const handleCount = key => {
+    setActiveKey(key)
+    console.log(activeKey)
   }
 
-  handleOperatingExpensesState = operatingExpensesData => {
-    this.setState({ operatingExpensesData })
+  const handleOperatingExpensesState = operatingExpensesData => {
+    setOperatingExpensesData(operatingExpensesData)
   }
 
-  getOperatingExpensesData = (stockNum) => {
-    StockerAPI.getOperatingExpenses(stockNum)
+  useEffect(() => {
+    StockerAPI.getOperatingExpenses(stock.stockNum)
       .then(data => StockerTool.formatDataForGoogleChart(
-        data, this.operatingExpensesKeysOrder))
-      .then(this.handleOperatingExpensesState)
-  }
+        data, operatingExpensesKeysOrder))
+      .then(handleOperatingExpensesState)
+  }, [stock.stockNum])
 
-  componentDidUpdate = (prevProps) => {
-    if (this.props.stockNum !== prevProps.stockNum) {
-      this.getOperatingExpensesData(this.props.stockNum)
-    }
-  }
+  const precentageOperExp = operatingExpensesData.map(d => [].concat(d.slice(0, 5)))
+  const rowOperExp = operatingExpensesData.map(d => [].concat(d.slice(0, 1), d.slice(5)))
 
-  componentDidMount = () => {
-    this._isMounted = true
-    this.getOperatingExpensesData(this.props.stockNum)
-  }
-
-  componentWillUnmount = () => {
-    this._isMounted = false
-  }
-
-  render () {
-    const data = this.state.operatingExpensesData
-    const precentageOperExp = data.map(d => [].concat(d.slice(0, 5)))
-    const rowOperExp = data.map(d => [].concat(d.slice(0, 1), d.slice(5)))
-    return (
-      <div className="Operating-Expenses-Analysis">
-        <Tabs defaultActiveKey="precentageOperExp" id="Operating-Expenses-tab" onSelect={this.handleCount}>
-          <Tab eventKey="precentageOperExp" title="營業費用比例">
-            <Chart
+  return (
+    <div className="Operating-Expenses-Analysis">
+      <Tabs defaultActiveKey="precentageOperExp" id="Operating-Expenses-tab" onSelect={handleCount}>
+        <Tab eventKey="precentageOperExp" title="營業費用比例">
+          <Chart
               chartType="ComboChart"
               width="100%"
               height="400px"
@@ -98,9 +74,9 @@ class OperatingExpensesAnalysis extends Component {
                 hAxis: {}
               }}
               data={precentageOperExp} />
-          </Tab>
-          <Tab eventKey="rowOperExp" title="營業費用資料">
-            <Chart
+        </Tab>
+        <Tab eventKey="rowOperExp" title="營業費用資料">
+          <Chart
               chartType="ComboChart"
               width="100%"
               height="500px"
@@ -125,12 +101,11 @@ class OperatingExpensesAnalysis extends Component {
                 }
               }}
               data={rowOperExp} />
-          </Tab>
-        </Tabs>
-        <CustomizedTable data={data} />
-      </div>
-    )
-  }
+        </Tab>
+      </Tabs>
+      <CustomizedTable data={operatingExpensesData} />
+    </div>
+  )
 }
 
 export default OperatingExpensesAnalysis

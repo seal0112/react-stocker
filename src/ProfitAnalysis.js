@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState, useEffect, useContext } from 'react'
 import { Chart } from 'react-google-charts'
 import CustomizedTable from './CustomizedTable'
+import { StockContext } from './StockContext'
 import * as StockerAPI from './utils/StockerAPI'
 import * as StockerTool from './utils/StockerTool'
 
@@ -12,52 +12,34 @@ import * as StockerTool from './utils/StockerTool'
  *     ["2017Q1", 51.94, 40.76, 41.82, 37.46],
  * ]
  */
-class ProfitAnalysis extends Component {
-  _isMounted = false;
+const ProfitAnalysis = () => {
+  const [profitData, setProfitData] = useState([
+    ['Year/Season', '營業毛利率', '營業利益率', '稅前淨利率', '本期淨利率'],
+    ['', 0, 0, 0, 0]
+  ])
+  const stock = useContext(StockContext)
 
-  static state = {
-    profitData: [
-      ['Year/Season', '營業毛利率', '營業利益率', '稅前淨利率', '本期淨利率'],
-      ['', 0, 0, 0, 0]
-    ]
+  const profitKeysOrder = [
+    'Year/Season',
+    '營業毛利率',
+    '營業利益率',
+    '稅前淨利率',
+    '本期淨利率'
+  ]
+
+  const handleProfitState = (profitData) => {
+    setProfitData(profitData)
   }
 
-  propTypes = {
-    stockNum: PropTypes.string.isRequired
-  }
+  useEffect(() => {
+    StockerAPI.getProfit(stock.stockNum)
+      .then(data => StockerTool.formatDataForGoogleChart(data, profitKeysOrder))
+      .then(handleProfitState)
+  }, [stock.stockNum])
 
-  profitKeysOrder = ['Year/Season', '營業毛利率', '營業利益率', '稅前淨利率', '本期淨利率']
-
-  handleProfitState = (profitData) => {
-    this.setState({ profitData })
-  }
-
-  getProfitData = (stockNum) => {
-    StockerAPI.getProfit(stockNum)
-      .then(data => StockerTool.formatDataForGoogleChart(data, this.profitKeysOrder))
-      .then(this.handleProfitState)
-  }
-
-  componentDidUpdate = (prevProps) => {
-    if (this.props.stockNum !== prevProps.stockNum) {
-      this.getProfitData(this.props.stockNum)
-    }
-  }
-
-  componentDidMount = () => {
-    this._isMounted = true
-    this.getProfitData(this.props.stockNum)
-  }
-
-  componentWillUnmount = () => {
-    this._isMounted = false
-  }
-
-  render () {
-    const data = this.state.profitData
-    return (
-      <div className="Profit-Analysis">
-        <Chart
+  return (
+    <div className="Profit-Analysis">
+      <Chart
           chartType="ComboChart"
           width="100%"
           height="400px"
@@ -86,11 +68,10 @@ class ProfitAnalysis extends Component {
               actions: ['dragToZoom', 'rightClickToReset']
             }
           }}
-          data={data} />
-        <CustomizedTable data={data}/>
-      </div>
-    )
-  }
+          data={profitData} />
+      <CustomizedTable data={profitData}/>
+    </div>
+  )
 }
 
 export default ProfitAnalysis

@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState, useEffect, useContext } from 'react'
 import { Chart } from 'react-google-charts'
 import CustomizedTable from './CustomizedTable'
+import { StockContext } from './StockContext'
 import * as StockerAPI from './utils/StockerAPI'
 import * as StockerTool from './utils/StockerTool'
 
@@ -12,53 +12,35 @@ import * as StockerTool from './utils/StockerTool'
  *     ["2017Q4", 277570284, 138715365, 108894999, 111674900, 99306060, 99286122]
  * ]
  */
-class IncomeSheet extends Component {
-  _isMounted = false
+const IncomeSheet = () => {
+  const [incomeSheetData, setIncomeSheetData] = useState([
+    ['Year/Season', '營業收入合計', '營業毛利', '營業利益', '稅前淨利', '本期淨利', '母公司業主淨利'],
+    ['', 0, 0, 0, 0, 0, 0]
+  ])
+  const stock = useContext(StockContext)
 
-  static propTypes = {
-    stockNum: PropTypes.string.isRequired
+  const incomeSheetKeysOrder = [
+    'Year/Season',
+    '營業收入合計',
+    '營業毛利',
+    '營業利益',
+    '稅前淨利',
+    '本期淨利',
+    '母公司業主淨利']
+
+  const handleIncomeSheetState = (incomeSheetData) => {
+    setIncomeSheetData(incomeSheetData)
   }
 
-  state = {
-    incomeSheetData: [
-      ['Year/Season', '營業收入合計', '營業毛利', '營業利益', '稅前淨利', '本期淨利', '母公司業主淨利'],
-      ['', 0, 0, 0, 0, 0, 0]
-    ]
-  }
+  useEffect(() => {
+    StockerAPI.getIncomeSheet(stock.stockNum)
+      .then(data => StockerTool.formatDataForGoogleChart(data, incomeSheetKeysOrder))
+      .then(handleIncomeSheetState)
+  }, [stock.stockNum])
 
-  incomeSheetKeysOrder = [
-    'Year/Season', '營業收入合計', '營業毛利', '營業利益', '稅前淨利', '本期淨利', '母公司業主淨利']
-
-  handleIncomeSheetState = (incomeSheetData) => {
-    this.setState({ incomeSheetData })
-  }
-
-  getIncomeSheetData = (stockNum) => {
-    StockerAPI.getIncomeSheet(stockNum)
-      .then(data => StockerTool.formatDataForGoogleChart(data, this.incomeSheetKeysOrder))
-      .then(this.handleIncomeSheetState)
-  }
-
-  componentDidUpdate = (prevProps) => {
-    if (this.props.stockNum !== prevProps.stockNum) {
-      this.getIncomeSheetData(this.props.stockNum)
-    }
-  }
-
-  componentDidMount = () => {
-    this._isMounted = true
-    this.getIncomeSheetData(this.props.stockNum)
-  }
-
-  componentWillUnmount = () => {
-    this._isMounted = false
-  }
-
-  render () {
-    const data = this.state.incomeSheetData
-    return (
-      <div className="IncomeSheet">
-        <Chart
+  return (
+    <div className="IncomeSheet">
+      <Chart
           chartType="ComboChart"
           width="100%"
           height="400px"
@@ -91,11 +73,10 @@ class IncomeSheet extends Component {
               actions: ['dragToZoom', 'rightClickToReset']
             }
           }}
-          data={data} />
-        <CustomizedTable data={data}/>
-      </div>
-    )
-  }
+          data={incomeSheetData} />
+      <CustomizedTable data={incomeSheetData}/>
+    </div>
+  )
 }
 
 export default IncomeSheet

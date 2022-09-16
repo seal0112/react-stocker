@@ -1,90 +1,57 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import './css/StockInfoAndCommodity.css'
+import React, { useState, useEffect, useContext } from 'react'
+import './assets/css/StockInfoAndCommodity.css'
+import { StockContext } from './StockContext'
 import * as StockerAPI from './utils/StockerAPI'
 
-class StockInfoAndCommodity extends Component {
-  _isMounted = false;
+const StockInfoAndCommodity = () => {
+  const [companyName, setCompanyName] = useState('')
+  const [exchangeType, setExchangeType] = useState('')
+  const [industryCategory, setIndustryCategory] = useState('')
+  const [stockCommodity, setStockCommodity] = useState({
+    stockFuture: false,
+    stockOption: false,
+    smallStockFuture: false
+  })
 
-  static propTypes = {
-    stockNum: PropTypes.string.isRequired
-  }
+  const stock = useContext(StockContext)
 
-  constructor (props) {
-    super(props)
-    this.state = {
-      companyName: '',
-      exchangeType: '',
-      industryCategory: '',
-      stockFuture: true,
-      stockOption: true,
-      smallStockFuture: true
-    }
-  }
-
-  exchType = {
+  const exchType = {
     sii: '上市',
     otc: '上櫃',
     rotc: '興櫃',
     pub: '公開發行'
   }
 
-  handleStockInfoAndCommodity = (data) => {
-    console.log(data)
-    this.setState({
-      companyName: data.stockInformation['公司簡稱'],
-      exchangeType: this.exchType[data.stockInformation.exchangeType],
-      industryCategory: data.stockInformation['產業類別'],
-      stockFuture: data.stockCommodity.stock_future,
-      stockOption: data.stockCommodity.stock_option,
-      smallStockFuture: data.stockCommodity.small_stock_future
-    })
+  const handleStockInfoAndCommodity = (data) => {
+    setCompanyName(data.stockInformation['公司簡稱'])
+    setExchangeType(exchType[data.stockInformation.exchangeType])
+    setIndustryCategory(data.stockInformation['產業類別'])
+    setStockCommodity(data.stockCommodity)
   }
 
-  getStockInfoAndCommodity = () => {
-    StockerAPI.getStockInfoAndCommodity(this.props.stockNum)
-      .then(this.handleStockInfoAndCommodity)
+  const getStockInfoAndCommodity = () => {
+    StockerAPI.getStockInfoAndCommodity(stock.stockNum)
+      .then(handleStockInfoAndCommodity)
       .catch(err => {
+        stock.handleStockExist(false)
         console.log(err)
       })
   }
 
-  componentDidUpdate = (prevProps) => {
-    if (this.props.stockNum !== prevProps.stockNum) {
-      this.getStockInfoAndCommodity(this.props.stockNum)
-    }
-  }
+  useEffect(() => {
+    getStockInfoAndCommodity()
+  }, [stock.stockNum])
 
-  componentDidMount = () => {
-    this._isMounted = true
-    this.getStockInfoAndCommodity(this.props.stockNum)
-  }
+  const stockInfoAndCommodity = [exchangeType, industryCategory]
+  if (stockCommodity.stockFuture) stockInfoAndCommodity.push('股票期貨')
+  if (stockCommodity.stockOption) stockInfoAndCommodity.push('股票選擇權')
+  if (stockCommodity.smallStockFuture) stockInfoAndCommodity.push('小型股票期貨')
 
-  componentWillUnmount = () => {
-    this._isMounted = false
-  }
-
-  render () {
-    const {
-      companyName,
-      exchangeType,
-      industryCategory,
-      stockFuture,
-      stockOption,
-      smallStockFuture
-    } = this.state
-
-    const stockInfoAndCommodity = [exchangeType, industryCategory]
-    if (stockFuture) stockInfoAndCommodity.push('股票期貨')
-    if (stockOption) stockInfoAndCommodity.push('股票選擇權')
-    if (smallStockFuture) stockInfoAndCommodity.push('小型股票期貨')
-
-    return (
-      <div className="StockInfoAndCommodity">
-        <h3 id="stockName">{this.props.stockNum} {companyName}</h3>
-        <p id="stockCommodity">{`${stockInfoAndCommodity.join(', ')}`}</p>
-      </div>)
-  }
+  return (
+    <div className="StockInfoAndCommodity">
+      <h3 id="stockName">{stock.stockNum} {companyName}</h3>
+      <p id="stockCommodity">{`${stockInfoAndCommodity.join(', ')}`}</p>
+    </div>)
 }
 
 export default StockInfoAndCommodity

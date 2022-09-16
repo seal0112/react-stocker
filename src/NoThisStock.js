@@ -1,20 +1,16 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { useContext } from 'react'
 import { Alert, Container } from 'react-bootstrap'
+import { StockContext } from './StockContext'
 
-class NoThisStock extends Component {
-  static propTypes = {
-    stockNum: PropTypes.string.isRequired
-  }
+const NoThisStock = () => {
+  const stock = useContext(StockContext)
 
-  render () {
-    return (
-      <Container>
-        <Alert variant="danger" dismissible>
-          <Alert.Heading>查不到 {this.props.stockNum} 這支股票</Alert.Heading>
-        </Alert>
-      </Container>)
-  }
+  return (
+    <Container>
+      <Alert variant="danger" dismissible>
+        <Alert.Heading>查不到 {stock.stockNum} 這支股票</Alert.Heading>
+      </Alert>
+    </Container>)
 }
 
 export default NoThisStock

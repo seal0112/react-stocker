@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState, useEffect, useContext } from 'react'
 import { Chart } from 'react-google-charts'
 import CustomizedTable from './CustomizedTable'
+import { StockContext } from './StockContext'
 import * as StockerAPI from './utils/StockerAPI'
 import * as StockerTool from './utils/StockerTool'
 
@@ -11,54 +11,28 @@ import * as StockerTool from './utils/StockerTool'
  *     ['2017Q4', 2.1]
  * ]
  */
-class Eps extends Component {
-  _isMounted = false
+const Eps = () => {
+  const [epsData, setEpsdata] = useState([
+    ['Year/Season', '基本每股盈餘'],
+    ['', 0]
+  ])
+  const stock = useContext(StockContext)
 
-  static propTypes = {
-    stockNum: PropTypes.string.isRequired
+  const epsKeysOrder = ['Year/Season', '基本每股盈餘']
+
+  const handleEpsState = (epsData) => {
+    setEpsdata(epsData)
   }
 
-  state = {
-    epsData: [
-      ['Year/Season', '基本每股盈餘'],
-      ['', 0]
-    ]
-  }
+  useEffect(() => {
+    StockerAPI.getEps(stock.stockNum)
+      .then(data => StockerTool.formatDataForGoogleChart(data, epsKeysOrder))
+      .then(handleEpsState)
+  }, [stock.stockNum])
 
-  epsKeysOrder = ['Year/Season', '基本每股盈餘']
-
-  handleEpsState = (epsData) => {
-    if (this._isMounted) {
-      this.setState({ epsData })
-    }
-  }
-
-  getEpsData = (stockNum) => {
-    StockerAPI.getEps(stockNum)
-      .then(data => StockerTool.formatDataForGoogleChart(data, this.epsKeysOrder))
-      .then(this.handleEpsState)
-  }
-
-  componentDidUpdate = (prevProps) => {
-    if (this.props.stockNum !== prevProps.stockNum) {
-      this.getEpsData(this.props.stockNum)
-    }
-  }
-
-  componentDidMount = () => {
-    this._isMounted = true
-    this.getEpsData(this.props.stockNum)
-  }
-
-  componentWillUnmount = () => {
-    this._isMounted = false
-  }
-
-  render () {
-    const epsData = this.state.epsData
-    return (
-      <div className="Eps">
-        <Chart
+  return (
+    <div className="Eps">
+      <Chart
           chartType="ColumnChart"
           width="100%"
           height="400px"
@@ -79,10 +53,9 @@ class Eps extends Component {
             }
           }}
           data={epsData} />
-        <CustomizedTable data={epsData}/>
-      </div>
-    )
-  }
+      <CustomizedTable data={epsData} />
+    </div>
+  )
 }
 
 export default Eps
