@@ -1,15 +1,15 @@
-import React, { useState, useContext } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import {
   Navbar, Nav, Container
 } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faListAlt, faClipboardList, faBalanceScale, faInfoCircle,
+  faGlobe, faListAlt, faClipboardList, faBalanceScale, faInfoCircle,
   faNewspaper, faCommentAlt, faAngleDoubleDown, faCoins,
   faHandHoldingUsd, faFileInvoiceDollar, faFunnelDollar, faSearchDollar
 } from '@fortawesome/free-solid-svg-icons'
-import { StockContext } from './StockContext'
+import { useStock } from '../hooks/StockContext'
 import { Link, useLocation } from 'react-router-dom'
 
 function SelectLink ({ label, to, activeOnlyWhenExact, icon }) {
@@ -36,10 +36,21 @@ const NaviBar = () => {
   const [naviParentType, setNaviParentType] = useState(null)
   const [navExpanded, setNavExpanded] = useState(false)
 
-  const stock = useContext(StockContext)
+  const stock = useStock()
 
   const naviTabParent = [
     {
+      title: '大盤資訊',
+      href: 'taiwan-stock',
+      icon: faGlobe,
+      naviTabSub: [
+        {
+          title: '相關新聞',
+          href: '/news',
+          icon: faNewspaper
+        }
+      ]
+    }, {
       title: '個股資訊',
       href: 'basic-info',
       icon: faListAlt,
@@ -115,17 +126,6 @@ const NaviBar = () => {
       handleNaviParentTypeChange(event.target.parentNode.dataset.navipar)
     }
   }
-
-  // const checkPathnameWithNaviParent = () => {
-  //   if (naviParentType == null) {
-  //     const location = window.location.pathname.split('/')
-  //     if (location[1]) {
-  //       handleNaviParentTypeChange(location[1])
-  //     } else {
-  //       handleNaviParentTypeChange('basic-info')
-  //     }
-  //   }
-  // }
 
   const setNaviExpanded = (expanded) => {
     setNavExpanded(expanded)

@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Chart } from 'react-google-charts'
-import CustomizedTable from './CustomizedTable'
-import { StockContext } from './StockContext'
-import * as StockerAPI from './utils/StockerAPI'
-import * as StockerTool from './utils/StockerTool'
+import CustomizedTable from '../components/CustomizedTable'
+import { useStock } from '../hooks/StockContext'
+import * as StockerAPI from '../utils/StockerAPI'
+import * as StockerTool from '../utils/StockerTool'
 
 /*
  * profit Data example for google chart
@@ -17,7 +17,7 @@ const ProfitAnalysis = () => {
     ['Year/Season', '營業毛利率', '營業利益率', '稅前淨利率', '本期淨利率'],
     ['', 0, 0, 0, 0]
   ])
-  const stock = useContext(StockContext)
+  const stock = useStock()
 
   const profitKeysOrder = [
     'Year/Season',

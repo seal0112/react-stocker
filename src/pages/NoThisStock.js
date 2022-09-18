@@ -1,9 +1,9 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Alert, Container } from 'react-bootstrap'
-import { StockContext } from './StockContext'
+import { useStock } from '../hooks/StockContext'
 
 const NoThisStock = () => {
-  const stock = useContext(StockContext)
+  const stock = useStock()
 
   return (
     <Container>

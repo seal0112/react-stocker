@@ -1,41 +1,38 @@
-import React, { useState, createContext } from 'react'
+import React, { useState, createContext, useContext } from 'react'
 import PropTypes from 'prop-types'
-import * as StockerAPI from './utils/StockerAPI'
+import * as StockerAPI from '../utils/StockerAPI'
 
 const AuthContext = createContext()
 
-const AuthProvider = ({ children }) => {
-  let [user, setUser] = useState(null)
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null)
   const [checkIsLogin, setCheckIsLogin] = useState(false)
 
-  const login = (data, callback) => {
+  const login = (data) => {
     return StockerAPI.login(data).then(token => {
       sessionStorage.setItem('access', token.access)
       sessionStorage.setItem('refresh', token.refresh)
-      getAccountData(callback)
+      getAccountData()
     })
   }
 
-  const getAccountData = (callback) => {
+  const logout = () => {
+    return StockerAPI.logout(() => {
+      setUser({})
+      sessionStorage.removeItem('access')
+    })
+  }
+
+  const getAccountData = () => {
     if (user) {
       return user
     } else {
       return StockerAPI.checkAuth().then(data => {
         setUser(data)
-        callback()
       }).finally(() => {
         setCheckIsLogin(true)
       })
     }
-  }
-
-  const logout = () => {
-    sessionStorage.removeItem('access')
-    user = {}
-    return StockerAPI.logout(() => {
-      setUser({})
-      sessionStorage.removeItem('access')
-    })
   }
 
   const value = { user, checkIsLogin, login, logout, getAccountData }
@@ -51,4 +48,6 @@ AuthProvider.propTypes = {
   children: PropTypes.object.isRequired
 }
 
-export { AuthContext, AuthProvider }
+export const useAuth = () => {
+  return useContext(AuthContext)
+}

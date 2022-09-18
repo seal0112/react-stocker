@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Chart } from 'react-google-charts'
-import CustomizedTable from './CustomizedTable'
-import { StockContext } from './StockContext'
-import * as StockerAPI from './utils/StockerAPI'
-import * as StockerTool from './utils/StockerTool'
+import CustomizedTable from '../components/CustomizedTable'
+import { useStock } from '../hooks/StockContext'
+import * as StockerAPI from '../utils/StockerAPI'
+import * as StockerTool from '../utils/StockerTool'
 
 /*
  * Income Sheet Data example for google chart
@@ -17,7 +17,7 @@ const IncomeSheet = () => {
     ['Year/Season', '營業收入合計', '營業毛利', '營業利益', '稅前淨利', '本期淨利', '母公司業主淨利'],
     ['', 0, 0, 0, 0, 0, 0]
   ])
-  const stock = useContext(StockContext)
+  const stock = useStock()
 
   const incomeSheetKeysOrder = [
     'Year/Season',

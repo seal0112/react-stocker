@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Chart } from 'react-google-charts'
-import CustomizedTable from './CustomizedTable'
-import { StockContext } from './StockContext'
-import * as StockerAPI from './utils/StockerAPI'
-import * as StockerTool from './utils/StockerTool'
+import CustomizedTable from '../components/CustomizedTable'
+import { useStock } from '../hooks/StockContext'
+import * as StockerAPI from '../utils/StockerAPI'
+import * as StockerTool from '../utils/StockerTool'
 
 /* EPS Data example for google chart
  * epsData: [
@@ -16,7 +16,7 @@ const Eps = () => {
     ['Year/Season', '基本每股盈餘'],
     ['', 0]
   ])
-  const stock = useContext(StockContext)
+  const stock = useStock()
 
   const epsKeysOrder = ['Year/Season', '基本每股盈餘']
 

@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react'
-import './assets/css/DailyInfo.css'
+import React, { useState, useEffect } from 'react'
+import '../assets/css/DailyInfo.css'
 import { Row, Col, Card } from 'react-bootstrap'
-import { StockContext } from './StockContext'
-import * as StockerAPI from './utils/StockerAPI'
+import { useStock } from '../hooks/StockContext'
+import * as StockerAPI from '../utils/StockerAPI'
 
 const DailyInfo = () => {
-  const stock = useContext(StockContext)
+  const stock = useStock()
   const [dailyInfo, setDailyInfo] = useState({
     本日收盤價: 0,
     本日漲跌: 0,

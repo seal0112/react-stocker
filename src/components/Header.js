@@ -1,12 +1,12 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import {
   Nav, Navbar, NavDropdown,
   Form, FormControl
 } from 'react-bootstrap'
-import { StockContext } from './StockContext'
+import { useStock } from '../hooks/StockContext'
 
 const Header = () => {
-  const stock = useContext(StockContext)
+  const stock = useStock()
 
   const handleSubmit = (event) => {
     event.preventDefault()

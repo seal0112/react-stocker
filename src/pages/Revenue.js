@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Chart } from 'react-google-charts'
 import { Tabs, Tab } from 'react-bootstrap'
-import CustomizedTable from './CustomizedTable'
-import { StockContext } from './StockContext'
-import * as StockerAPI from './utils/StockerAPI'
-import * as StockerTool from './utils/StockerTool'
+import CustomizedTable from '../components/CustomizedTable'
+import { useStock } from '../hooks/StockContext'
+import * as StockerAPI from '../utils/StockerAPI'
+import * as StockerTool from '../utils/StockerTool'
 
 /*
  * Revenue Data example for google chart
@@ -19,7 +19,7 @@ const Revenue = () => {
     ['', 0, 0]
   ])
   const [activeKey, setActiveKey] = useState('precentageOperExp')
-  const stock = useContext(StockContext)
+  const stock = useStock()
   const revenueKeysOrder = ['Year/Month', '當月營收', '去年同月增減']
 
   const handleCount = (key) => {

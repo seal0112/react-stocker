@@ -1,17 +1,21 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
-import { AuthContext } from './AuthContext'
+import { useAuth } from '../hooks/AuthContext'
 
 const RequireAuth = ({ redirectPath = '/login' }) => {
-  const auth = useContext(AuthContext)
+  const { user } = useAuth()
   const location = useLocation()
 
-  if (!auth.user) {
+  if (!user) {
     return <Navigate to={redirectPath} state={{ from: location }} replace />
   }
 
-  return <Outlet />
+  return (
+    <>
+      <Outlet />
+    </>
+  )
 }
 
 RequireAuth.propTypes = {

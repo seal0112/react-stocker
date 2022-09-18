@@ -5,12 +5,18 @@ import App from './App'
 // import 'bootstrap/dist/css/bootstrap.min.css'
 // import * as serviceWorker from './serviceWorker'
 import reportWebVitals from './reportWebVitals'
+import { AuthProvider } from './hooks/AuthContext'
+import { StockProvider } from './hooks/StockContext'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
 root.render(
   <React.StrictMode>
-    <App />
+    <AuthProvider>
+      <StockProvider>
+        <App />
+      </StockProvider>
+    </AuthProvider>
   </React.StrictMode>
 )
 

@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react'
-import './assets/css/StockInfoAndCommodity.css'
-import { StockContext } from './StockContext'
-import * as StockerAPI from './utils/StockerAPI'
+import React, { useState, useEffect } from 'react'
+import '../assets/css/StockInfoAndCommodity.css'
+import { useStock } from '../hooks/StockContext'
+import * as StockerAPI from '../utils/StockerAPI'
 
 const StockInfoAndCommodity = () => {
   const [companyName, setCompanyName] = useState('')
@@ -13,7 +13,7 @@ const StockInfoAndCommodity = () => {
     smallStockFuture: false
   })
 
-  const stock = useContext(StockContext)
+  const stock = useStock()
 
   const exchType = {
     sii: '上市',

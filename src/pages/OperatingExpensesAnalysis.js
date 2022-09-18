@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Chart } from 'react-google-charts'
-import CustomizedTable from './CustomizedTable'
-import { StockContext } from './StockContext'
+import CustomizedTable from '../components/CustomizedTable'
+import { useStock } from '../hooks/StockContext'
 import { Tabs, Tab } from 'react-bootstrap'
-import * as StockerAPI from './utils/StockerAPI'
-import * as StockerTool from './utils/StockerTool'
+import * as StockerAPI from '../utils/StockerAPI'
+import * as StockerTool from '../utils/StockerTool'
 
 /*
  * Operating Expenses Data example for google chart
@@ -22,7 +22,7 @@ const OperatingExpensesAnalysis = () => {
     ['', 0, 0, 0, 0, 0, 0, 0, 0]
   ])
   const [activeKey, setActiveKey] = useState('precentageOperExp')
-  const stock = useContext(StockContext)
+  const stock = useStock()
 
   const operatingExpensesKeysOrder = [
     'Year/Season', '營業費用率', '推銷費用率', '管理費用率',

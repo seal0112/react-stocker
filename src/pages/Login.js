@@ -1,10 +1,10 @@
-import React, { useState, useContext } from 'react'
-import './assets/css/Login.css'
+import React, { useState } from 'react'
+import '../assets/css/Login.css'
 import { useNavigate, useLocation } from 'react-router-dom'
 import GoogleLogin from 'react-google-login'
 import FacebookLogin from 'react-facebook-login'
 import { Form, Button, Alert } from 'react-bootstrap'
-import { AuthContext } from './AuthContext'
+import { useAuth } from '../hooks/AuthContext'
 
 const Login = () => {
   const [account, setAccount] = useState('')
@@ -12,7 +12,7 @@ const Login = () => {
   const [alertShow, setAlertShow] = useState(false)
   const [alertContent, setAlertContent] = useState('')
 
-  const auth = useContext(AuthContext)
+  const auth = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state ? location.state.from.pathname : '/'
@@ -102,7 +102,7 @@ const Login = () => {
             className="form-btn"
             variant="primary"
             size="lg"
-            type="submit" block>
+            type="submit">
             Sign in
         </Button>
         <div className="login-btn-area">
