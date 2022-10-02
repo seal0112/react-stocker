@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import '../assets/css/Login.css'
 import { useNavigate, useLocation } from 'react-router-dom'
 import GoogleLogin from 'react-google-login'
@@ -67,6 +67,12 @@ const Login = () => {
     setAlertShow(toggle)
     setAlertContent(content)
   }
+
+  useEffect(() => {
+    auth.getAccountData().then(() => {
+      navigate(from, { replace: true })
+    })
+  }, [])
 
   return (
     <div className="login-component text-center">

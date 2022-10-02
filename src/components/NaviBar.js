@@ -66,7 +66,7 @@ const NaviBar = () => {
           icon: faInfoCircle
         },
         {
-          title: '最新新聞',
+          title: '個股新聞',
           href: '/news',
           icon: faNewspaper
         },
@@ -160,7 +160,11 @@ const NaviBar = () => {
                   {naviTabPar.naviTabSub.map(naviTabSub => (
                     <Nav.Item as="li" key={naviTabSub.href} onClick={ closeNavibar }>
                       <SelectLink
-                        to={`/${naviTabPar.href}${naviTabSub.href}/${stock.stockNum}`}
+                        to={
+                          naviTabPar.href === 'taiwan-stock'
+                            ? `/${naviTabPar.href}${naviTabSub.href}`
+                            : `/${naviTabPar.href}${naviTabSub.href}/${stock.stockNum}`
+                        }
                         icon={naviTabSub.icon}
                         label={naviTabSub.title}
                         activeOnlyWhenExact={true}

@@ -2,7 +2,7 @@
 .App-navbar {
     border: 0;
     border-radius: 0;
-    margin-bottom: 55px;
+    margin-bottom: 3rem;
     background-color: var(--main-header-green);
     height: 86px;
     padding: 0;

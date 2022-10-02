@@ -43,9 +43,9 @@ const StockInfoAndCommodity = () => {
   }, [stock.stockNum])
 
   const stockInfoAndCommodity = [exchangeType, industryCategory]
-  if (stockCommodity.stockFuture) stockInfoAndCommodity.push('股票期貨')
-  if (stockCommodity.stockOption) stockInfoAndCommodity.push('股票選擇權')
-  if (stockCommodity.smallStockFuture) stockInfoAndCommodity.push('小型股票期貨')
+  if (stockCommodity.stock_future) stockInfoAndCommodity.push('股票期貨')
+  if (stockCommodity.stock_option) stockInfoAndCommodity.push('股票選擇權')
+  if (stockCommodity.small_stock_future) stockInfoAndCommodity.push('小型股票期貨')
 
   return (
     <div className="StockInfoAndCommodity">

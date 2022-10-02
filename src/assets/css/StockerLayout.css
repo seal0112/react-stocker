@@ -31,3 +31,30 @@
         margin-bottom: 16px;
     }
 }
+
+.news-list {
+    list-style-type: none;
+    padding: 1rem;
+}
+
+.news-list * {
+    color: #000;
+}
+
+.news-card {
+    width: 100%;
+    border: 2px solid #6096FD;
+    box-sizing: border-box;
+    border-radius: 15px;
+    margin-bottom: 0.75rem;
+    padding: 0.75rem;
+    text-align: left;
+}
+
+.news-card * {
+    margin: 0.25rem;
+}
+
+.news-card-title {
+    font-size: 1rem;
+}

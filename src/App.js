@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import StockerLayout from './pages/StockerLayout'
+import StockMarketLayout from './pages/StockMarketLayout'
 import Login from './pages/Login'
 import DailyInfo from './pages/DailyInfo'
 import Revenue from './pages/Revenue'
@@ -8,6 +9,7 @@ import Eps from './pages/Eps'
 import IncomeSheet from './pages/IncomeSheet'
 import ProfitAnalysis from './pages/ProfitAnalysis'
 import OperatingExpensesAnalysis from './pages/OperatingExpensesAnalysis'
+import MarketNews from './pages/MarketNews'
 import RequireAuth from './components/RequireAuth'
 import { useAuth } from './hooks/AuthContext'
 
@@ -71,6 +73,15 @@ export default function App () {
                   path="/financial-stat/operating-expenses-analysis/:stockNum"
                   element={<OperatingExpensesAnalysis />} />
               <Route path="*" element={<p>no match</p>} />
+            </Route>
+            <Route
+                path=""
+                element={
+                  <StockMarketLayout />}>
+              <Route
+                  key="market-news"
+                  path="/taiwan-stock/news"
+                  element={<MarketNews />} />
             </Route>
           </Route>
         </Routes>

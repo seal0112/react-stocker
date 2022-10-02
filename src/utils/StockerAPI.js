@@ -61,3 +61,7 @@ export const getProfit = (stockId) =>
 export const getOperatingExpenses = (stockId) =>
   frontendDataRequest.get(`/op_expense_analysis/${stockId}`)
     .then((res) => res.data)
+
+export const getMarketFeed = (targetDate, feedType) =>
+  frontendDataRequest.get(`/feed?targetDate=${targetDate}&feedType=${feedType}`)
+    .then((res) => res.data)
