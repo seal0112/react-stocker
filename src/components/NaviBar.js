@@ -5,9 +5,10 @@ import {
 } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
-  faGlobe, faListAlt, faClipboardList, faBalanceScale, faInfoCircle,
-  faNewspaper, faCommentAlt, faAngleDoubleDown, faCoins,
-  faHandHoldingUsd, faFileInvoiceDollar, faFunnelDollar, faSearchDollar
+  faGlobe, faListAlt, faClipboardList, faBalanceScale,
+  faInfoCircle, faNewspaper, faCommentAlt, faAngleDoubleDown,
+  faCoins, faHandHoldingUsd, faFileInvoiceDollar, faFunnelDollar,
+  faSearchDollar, faToolbox
 } from '@fortawesome/free-solid-svg-icons'
 import { useStock } from '../hooks/StockContext'
 import { Link, useLocation } from 'react-router-dom'
@@ -48,6 +49,11 @@ const NaviBar = () => {
           title: '相關新聞',
           href: '/news',
           icon: faNewspaper
+        },
+        {
+          title: '財報公告拆解',
+          href: '/announcement-dismantling',
+          icon: faToolbox
         }
       ]
     }, {

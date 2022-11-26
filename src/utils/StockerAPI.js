@@ -14,7 +14,7 @@ const authRequest = axios.create({
 
 const frontendDataRequest = axios.create({
   headers: header,
-  baseURL: api + '/api/v0/f',
+  baseURL: api + '/api/v0',
   withCredentials: true,
   mode: 'no-cors'
 })
@@ -28,40 +28,44 @@ export const checkAuth = () => authRequest.get('/check_auth')
 
 // for front-end data request
 export const checkStockExist = (stockId) =>
-  frontendDataRequest.get(`/check_stock_exist/${stockId}`)
+  frontendDataRequest.get(`/f/check_stock_exist/${stockId}`)
 
 export const getStockInfoAndCommodity = (stockId) =>
-  frontendDataRequest.get(`/stock_info_commodity/${stockId}`)
+  frontendDataRequest.get(`/f/stock_info_commodity/${stockId}`)
     .then((res) => res.data)
 
 export const getStockCommodity = (stockId) =>
-  frontendDataRequest.get(`/stock_commodity/${stockId}`)
+  frontendDataRequest.get(`/f/stock_commodity/${stockId}`)
     .then((res) => res.data)
 
 export const getDailyInfo = (stockId) =>
-  frontendDataRequest.get(`/daily_info/${stockId}`)
+  frontendDataRequest.get(`/f/daily_info/${stockId}`)
     .then((res) => res.data)
 
 export const getRevenue = (stockId) =>
-  frontendDataRequest.get(`/month_revenue/${stockId}`)
+  frontendDataRequest.get(`/f/month_revenue/${stockId}`)
     .then((res) => res.data)
 
 export const getEps = (stockId) =>
-  frontendDataRequest.get(`/eps/${stockId}`)
+  frontendDataRequest.get(`/f/eps/${stockId}`)
     .then((res) => res.data)
 
 export const getIncomeSheet = (stockId) =>
-  frontendDataRequest.get(`/income_sheet/${stockId}`)
+  frontendDataRequest.get(`/f/income_sheet/${stockId}`)
     .then((res) => res.data)
 
 export const getProfit = (stockId) =>
-  frontendDataRequest.get(`/profit_analysis/${stockId}`)
+  frontendDataRequest.get(`/f/profit_analysis/${stockId}`)
     .then((res) => res.data)
 
 export const getOperatingExpenses = (stockId) =>
-  frontendDataRequest.get(`/op_expense_analysis/${stockId}`)
+  frontendDataRequest.get(`/f/op_expense_analysis/${stockId}`)
     .then((res) => res.data)
 
 export const getMarketFeed = (targetDate, feedType) =>
-  frontendDataRequest.get(`/feed?targetDate=${targetDate}&feedType=${feedType}`)
+  frontendDataRequest.get(`/f/feed?targetDate=${targetDate}&feedType=${feedType}`)
+    .then((res) => res.data)
+
+export const getAnnouncementDismantling = (announcementDate) =>
+  frontendDataRequest.post('/incomesheet_announce', announcementDate)
     .then((res) => res.data)

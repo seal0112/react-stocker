@@ -10,6 +10,7 @@ import IncomeSheet from './pages/IncomeSheet'
 import ProfitAnalysis from './pages/ProfitAnalysis'
 import OperatingExpensesAnalysis from './pages/OperatingExpensesAnalysis'
 import MarketNews from './pages/MarketNews'
+import AnnouncementDismantling from './pages/AnnouncementDismantling'
 import RequireAuth from './components/RequireAuth'
 import { useAuth } from './hooks/AuthContext'
 
@@ -82,6 +83,10 @@ export default function App () {
                   key="market-news"
                   path="/taiwan-stock/news"
                   element={<MarketNews />} />
+              <Route
+                  key="announcement-dismantling"
+                  path="/taiwan-stock/announcement-dismantling"
+                  element={<AnnouncementDismantling />} />
             </Route>
           </Route>
         </Routes>
