@@ -10,7 +10,9 @@ const DailyInfo = () => {
     本日收盤價: 0,
     本日漲跌: 0,
     本益比: 0,
-    近四季每股盈餘: 0
+    近四季每股盈餘: 0,
+    股價淨值比: 0,
+    殖利率: 0
   })
 
   useEffect(() => {
@@ -36,7 +38,7 @@ const DailyInfo = () => {
   return (
     <div className="Daily-info">
       <Row>
-        <Col md={3} xs={6}>
+        <Col md={4} xs={6}>
           <Card id="price">
             <Card.Header>本日收盤價</Card.Header>
             <Card.Body>
@@ -46,7 +48,7 @@ const DailyInfo = () => {
             </Card.Body>
           </Card>
         </Col>
-        <Col md={3} xs={6}>
+        <Col md={4} xs={6}>
           <Card id="upAndDown">
             <Card.Header>本日漲跌</Card.Header>
             <Card.Body>
@@ -54,7 +56,7 @@ const DailyInfo = () => {
             </Card.Body>
           </Card>
         </Col>
-        <Col md={3} xs={6}>
+        <Col md={4} xs={6}>
           <Card id="pe">
             <Card.Header>本益比</Card.Header>
             <Card.Body>
@@ -64,7 +66,27 @@ const DailyInfo = () => {
             </Card.Body>
           </Card>
         </Col>
-        <Col md={3} xs={6}>
+        <Col md={4} xs={6}>
+          <Card id="fourSeasonEPS">
+            <Card.Header>殖利率 (%)</Card.Header>
+            <Card.Body>
+              <Card.Text>
+                { dailyInfo['殖利率'] ? dailyInfo['殖利率'] : '--'}
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={4} xs={6}>
+          <Card id="fourSeasonEPS">
+            <Card.Header>股價淨值比</Card.Header>
+            <Card.Body>
+              <Card.Text>
+                { dailyInfo['股價淨值比'] ? dailyInfo['股價淨值比'] : '--'}
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={4} xs={6}>
           <Card id="fourSeasonEPS">
             <Card.Header>近四季每股盈餘</Card.Header>
             <Card.Body>
