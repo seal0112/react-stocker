@@ -11,11 +11,15 @@ const NewsCard = (props) => {
     },
     ctee: {
       text: '工商時報',
-      badgeColor: 'danger'
+      badgeColor: 'success'
     },
     cnyes: {
       text: '鉅亨網',
       badgeColor: 'warning'
+    },
+    money: {
+      text: '經濟日報',
+      badgeColor: 'danger'
     }
   }
 
