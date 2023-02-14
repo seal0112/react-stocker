@@ -12,7 +12,7 @@ const getCurrentSeason = () => {
 const AnnouncementDismantling = () => {
   const [link, setLink] = useState('')
   const [year, setYear] = useState(dayjs().year())
-  const [season, setSeason] = useState(getCurrentSeason())
+  const [season, setSeason] = useState(1)
   const [announceData, setAnnounceData] = useState()
   const [alertShow, setAlertShow] = useState(false)
 
@@ -43,8 +43,12 @@ const AnnouncementDismantling = () => {
   }
 
   useEffect(() => {
-    console.log(announceData)
-  }, [announceData])
+    const currentSeason = getCurrentSeason()
+    if (currentSeason === 4) {
+      setYear(year - 1)
+    }
+    setSeason(currentSeason)
+  }, [])
 
   return (
     <main>
