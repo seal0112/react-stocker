@@ -10,8 +10,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = (data) => {
     return StockerAPI.login(data).then(token => {
-      sessionStorage.setItem('access', token.access)
-      sessionStorage.setItem('refresh', token.refresh)
+      localStorage.setItem('access', token.access_token)
       getAccountData()
     })
   }
@@ -19,7 +18,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     return StockerAPI.logout(() => {
       setUser({})
-      sessionStorage.removeItem('access')
+      localStorage.removeItem('access')
     })
   }
 
@@ -27,7 +26,7 @@ export const AuthProvider = ({ children }) => {
     if (user) {
       return user
     } else {
-      return StockerAPI.checkAuth().then(data => {
+      return StockerAPI.userInfo().then(data => {
         setUser(data)
       }).finally(() => {
         setCheckIsLogin(true)

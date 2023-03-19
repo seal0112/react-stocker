@@ -1,3 +1,7 @@
+#stockInfoAndCommodity {
+    width: 90%;
+}
+
 #stockName, #stockCommodity {
     display: inline;
 }
@@ -9,5 +13,8 @@
     #stockName, #stockCommodity {
         display: block;
     }
-}
 
+    #stockInfoAndCommodity {
+        width: 75%;
+    }
+}

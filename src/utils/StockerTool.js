@@ -5,3 +5,6 @@ export const formatDataForGoogleChart = (data, keyOrder) => {
   formatData.unshift(title)
   return formatData
 }
+
+export const getToken = () =>
+  localStorage.getItem('access')

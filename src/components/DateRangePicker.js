@@ -11,20 +11,20 @@ const DateRangePicker = (props) => {
 
   return (
     <>
-      <Form>
-        <Form.Group
-            as={Row}
-            className="mb-3"
-            controlId="exampleForm.ControlInput1">
-          <Form.Label column sm="2">日期:</Form.Label>
-          <Col sm="10">
-            <Form.Control
-                type="date"
-                value={props.targetDate}
-                onInput={handleTargetDate} />
-          </Col>
-        </Form.Group>
-      </Form>
+      <Form.Group
+        as={Row}
+        className="mb-3"
+        controlId="exampleForm.ControlInput1"
+      >
+        <Form.Label column sm="2">日期:</Form.Label>
+        <Col sm="10">
+          <Form.Control
+            type="date"
+            value={props.targetDate}
+            onInput={handleTargetDate}
+          />
+        </Col>
+      </Form.Group>
     </>
   )
 }

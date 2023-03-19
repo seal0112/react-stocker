@@ -16,7 +16,7 @@ const AnnouncementDismantling = () => {
   const [announceData, setAnnounceData] = useState()
   const [alertShow, setAlertShow] = useState(false)
 
-  const handleLink = (e) => {
+  const handleLinkChange = (e) => {
     setLink(e.target.value)
   }
 
@@ -34,12 +34,14 @@ const AnnouncementDismantling = () => {
       link,
       year,
       season
-    }).then(data => setAnnounceData(data))
-      .catch(err => {
-        setAnnounceData(null)
-        console.log(err)
-        setAlertShow(true)
-      })
+    }).then(data => {
+      setAnnounceData(data)
+      setLink('')
+    }).catch(err => {
+      setAnnounceData(null)
+      console.log(err)
+      setAlertShow(true)
+    })
   }
 
   useEffect(() => {
@@ -63,7 +65,7 @@ const AnnouncementDismantling = () => {
                   type="text"
                   value={link}
                   name="link"
-                  onChange={handleLink} />
+                  onChange={handleLinkChange} />
             </Col>
           </Form.Group>
           <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
@@ -134,6 +136,10 @@ const AnnouncementDismantling = () => {
               <Col sm={9}>{announceData['本期淨利率']}</Col>
             </Row>
             <hr />
+            <Row>
+              <Col sm={3}>營收</Col>
+              <Col sm={9}>{announceData['營業收入合計']}</Col>
+            </Row>
             <Row>
               <Col sm={3}>毛利</Col>
               <Col sm={9}>{announceData['營業毛利']}</Col>

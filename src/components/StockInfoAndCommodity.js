@@ -48,7 +48,7 @@ const StockInfoAndCommodity = () => {
   if (stockCommodity.small_stock_future) stockInfoAndCommodity.push('小型股票期貨')
 
   return (
-    <div className="StockInfoAndCommodity">
+    <div id="stockInfoAndCommodity">
       <h3 id="stockName">{stock.stockNum} {companyName}</h3>
       <p id="stockCommodity">{`${stockInfoAndCommodity.join(', ')}`}</p>
     </div>)

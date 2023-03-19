@@ -48,11 +48,9 @@ const Login = () => {
         password
       }
     }
-    console.log(data)
-    setAlertShow(true, '帳號登入尚未完成')
-    // StockerAPI.login(query)
-    //  .then(() => { navigate(from, { replace: true }) })
-    //  .catch(err=>this.setAlertShow(true, err.response.data));
+    auth.login(data)
+      .then(() => { navigate(from, { replace: true }) })
+      .catch(err => this.setAlertShow(true, err.response.data))
   }
 
   const handleChangeAccount = event => {

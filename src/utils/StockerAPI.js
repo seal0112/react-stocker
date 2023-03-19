@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+import { getToken } from './StockerTool'
+
 const api = `https://${process.env.REACT_APP_HOST_DOMAIN}`
 const header = {
   Accept: 'application/json'
@@ -19,12 +21,22 @@ const frontendDataRequest = axios.create({
   mode: 'no-cors'
 })
 
+frontendDataRequest.interceptors.request.use((config) => {
+  config.headers.Authorization = `Bearer ${getToken()}`
+  return config
+})
+
 // for user authiciate
 export const login = (data) =>
   authRequest.post('/login', data).then((res) => res.data)
 
 export const logout = () => authRequest.get('/logout')
 export const checkAuth = () => authRequest.get('/check_auth')
+export const userInfo = () => authRequest.get('/user_info', {
+  headers: {
+    authorization: `Bearer ${getToken()}`
+  }
+})
 
 // for front-end data request
 export const checkStockExist = (stockId) =>
@@ -62,9 +74,14 @@ export const getOperatingExpenses = (stockId) =>
   frontendDataRequest.get(`/f/op_expense_analysis/${stockId}`)
     .then((res) => res.data)
 
-export const getMarketFeed = (targetDate, feedType) =>
-  frontendDataRequest.get(`/f/feed?targetDate=${targetDate}&feedType=${feedType}`)
-    .then((res) => res.data)
+export const getMarketFeed = (targetDate, feedType, page, pageSize) =>
+  frontendDataRequest.get(
+    '/f/feed?' +
+    `targetDate=${targetDate}&` +
+    `feedType=${feedType}&` +
+    `page=${page}&` +
+    `page_size=${pageSize}`
+  ).then((res) => res.data)
 
 export const getAnnouncementDismantling = (announcementDate) =>
   frontendDataRequest.post('/incomesheet_announce', announcementDate)
