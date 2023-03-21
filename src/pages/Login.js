@@ -25,7 +25,14 @@ const Login = () => {
     }
     auth.login(data)
       .then(() => { navigate(from, { replace: true }) })
-      .catch(err => this.setAlertShow(true, err.response.data))
+      .catch(err => {
+        if (err.response.status === 401) {
+          setAlertStatus(true, '帳號不存在')
+        }
+        if (err.response.status === 403) {
+          setAlertStatus(true, '帳號權限未開通')
+        }
+      })
   }
 
   const responseFacebook = response => {
@@ -36,7 +43,14 @@ const Login = () => {
     }
     auth.login(data)
       .then(() => { navigate(from, { replace: true }) })
-      .catch(err => this.setAlertShow(true, err.response.data))
+      .catch(err => {
+        if (err.response.status === 401) {
+          setAlertShow(true, '帳號不存在')
+        }
+        if (err.response.status === 403) {
+          setAlertShow(true, '帳號權限未開通')
+        }
+      })
   }
 
   const loginWithAccount = event => {
@@ -50,7 +64,14 @@ const Login = () => {
     }
     auth.login(data)
       .then(() => { navigate(from, { replace: true }) })
-      .catch(err => this.setAlertShow(true, err.response.data))
+      .catch(err => {
+        if (err.response.status === 401) {
+          setAlertStatus(true, '帳號或密碼錯誤')
+        }
+        if (err.response.status === 403) {
+          setAlertStatus(true, '帳號權限未開通')
+        }
+      })
   }
 
   const handleChangeAccount = event => {
@@ -62,8 +83,9 @@ const Login = () => {
   }
 
   const setAlertStatus = (toggle, content) => {
-    setAlertShow(toggle)
+    console.log(content)
     setAlertContent(content)
+    setAlertShow(toggle)
   }
 
   useEffect(() => {
