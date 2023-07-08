@@ -1,5 +1,5 @@
 import React from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
 
 import '../assets/css/StockerLayout.css'
@@ -14,13 +14,16 @@ import { useStock } from '../hooks/StockContext'
 
 const StockerLayout = () => {
   const stock = useStock()
+  const { pathname } = useLocation()
 
   return (
     <div className="Stocker">
       <Header />
       <NaviBar />
-      {stock.stockNum
-        ? <Container>
+      {new Set(['taiwan-stock', 'user']).has(pathname.split('/')[1])
+        ? <Outlet />
+        : stock.stockNum
+          ? <Container>
             <div id="stock-banner">
               <StockInfoAndCommodity />
               <FollowStock />
@@ -28,7 +31,7 @@ const StockerLayout = () => {
             <hr />
             <Outlet />
             </Container>
-        : <NoThisStock />
+          : <NoThisStock />
       }
     </div>
   )

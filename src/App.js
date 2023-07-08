@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
+
 import StockerLayout from './pages/StockerLayout'
-import StockMarketLayout from './pages/StockMarketLayout'
 import Login from './pages/Login'
 import DailyInfo from './pages/DailyInfo'
 import Revenue from './pages/Revenue'
@@ -12,6 +12,7 @@ import ProfitAnalysis from './pages/ProfitAnalysis'
 import OperatingExpensesAnalysis from './pages/OperatingExpensesAnalysis'
 import MarketNews from './pages/MarketNews'
 import AnnouncementDismantling from './pages/AnnouncementDismantling'
+import FollowStockList from './pages/FollowStockList'
 import RequireAuth from './components/RequireAuth'
 import { useAuth } from './hooks/AuthContext'
 
@@ -29,65 +30,98 @@ export default function App () {
       <BrowserRouter>
         <Routes>
           <Route
-              exact path="/login"
-              element={<Login />} />
+            exact path="/login"
+            element={<Login />}
+          />
           <Route element={<RequireAuth />}>
             <Route
-                path="/"
-                element={
-                  <StockerLayout />}>
+              path="/"
+              element={
+                <StockerLayout />
+              }
+            >
               {['/', '/basic-info/daily-info/:stockNum'].map(path => (
                 <Route
-                    key={path}
-                    exact
-                    path={path}
-                    element={<DailyInfo />} />
+                  key={path}
+                  exact
+                  path={path}
+                  element={<DailyInfo />}
+                />
               ))}
               <Route
-                  path="/basic-info/company-data/:stockNum"
-                  element={<p>company data</p>} />
+                path="/basic-info/company-data/:stockNum"
+                element={<p>company data</p>}
+              />
               <Route
-                  key="news"
-                  path="/basic-info/news/:stockNum"
-                  element={<p>news</p>} />
+                key="news"
+                path="/basic-info/news/:stockNum"
+                element={<p>news</p>}
+              />
               <Route
-                  key="comment"
-                  path="/basic-info/comment/:stockNum"
-                  element={<p>comment</p>} />
+                key="comment"
+                path="/basic-info/comment/:stockNum"
+                element={<p>comment</p>}
+              />
               <Route
-                  key="revenue"
-                  path="/financial-stat/revenue/:stockNum"
-                  element={<Revenue />} />
+                key="revenue"
+                path="/financial-stat/revenue/:stockNum"
+                element={<Revenue />}
+              />
               <Route
-                  key="eps"
-                  path="/financial-stat/eps/:stockNum"
-                  element={<Eps />} />
+                key="eps"
+                path="/financial-stat/eps/:stockNum"
+                element={<Eps />}
+              />
               <Route
-                  key="income-sheet"
-                  path="/financial-stat/income-sheet/:stockNum"
-                  element={<IncomeSheet />} />
+                key="income-sheet"
+                path="/financial-stat/income-sheet/:stockNum"
+                element={<IncomeSheet />}
+              />
               <Route
-                  key="profit-analysis"
-                  path="/financial-stat/profit-analysis/:stockNum"
-                  element={<ProfitAnalysis />} />
+                key="profit-analysis"
+                path="/financial-stat/profit-analysis/:stockNum"
+                element={<ProfitAnalysis />}
+              />
               <Route
-                  key="operating-expenses-analysis"
-                  path="/financial-stat/operating-expenses-analysis/:stockNum"
-                  element={<OperatingExpensesAnalysis />} />
+                key="operating-expenses-analysis"
+                path="/financial-stat/operating-expenses-analysis/:stockNum"
+                element={<OperatingExpensesAnalysis />}
+              />
               <Route path="*" element={<p>no match</p>} />
             </Route>
             <Route
-                path=""
-                element={
-                  <StockMarketLayout />}>
+              path=""
+              element={
+                <StockerLayout />
+              }
+            >
               <Route
-                  key="market-news"
-                  path="/taiwan-stock/news"
-                  element={<MarketNews />} />
+                key="market-news"
+                path="/taiwan-stock/news"
+                element={<MarketNews />}
+              />
               <Route
-                  key="announcement-dismantling"
-                  path="/taiwan-stock/announcement-dismantling"
-                  element={<AnnouncementDismantling />} />
+                key="announcement-dismantling"
+                path="/taiwan-stock/announcement-dismantling"
+                element={<AnnouncementDismantling />}
+              />
+            </Route>
+            <Route
+              path=""
+              element={
+                <StockerLayout />
+              }
+            >
+              <Route
+                key="follow-stock-list"
+                path="/user"
+                element={<FollowStockList />}
+              />
+              <Route
+                key="follow-stock-list"
+                path="/user/follow-stocks"
+                element={<FollowStockList />}
+              />
             </Route>
           </Route>
         </Routes>

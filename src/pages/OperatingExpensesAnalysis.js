@@ -40,7 +40,8 @@ const OperatingExpensesAnalysis = () => {
   useEffect(() => {
     StockerAPI.getOperatingExpenses(stock.stockNum)
       .then(data => StockerTool.formatDataForGoogleChart(
-        data, operatingExpensesKeysOrder))
+        data, operatingExpensesKeysOrder)
+      )
       .then(handleOperatingExpensesState)
   }, [stock.stockNum])
 

@@ -1,6 +1,5 @@
 import React, { useState, createContext, useContext } from 'react'
 import PropTypes from 'prop-types'
-// import * as StockerAPI from './utils/StockerAPI'
 
 const StockContext = createContext()
 

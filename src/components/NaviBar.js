@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import {
   Navbar, Nav, Container
@@ -8,12 +8,12 @@ import {
   faGlobe, faListAlt, faClipboardList, faBalanceScale,
   faInfoCircle, faNewspaper, faCommentAlt, faAngleDoubleDown,
   faCoins, faHandHoldingUsd, faFileInvoiceDollar, faFunnelDollar,
-  faSearchDollar, faToolbox
+  faSearchDollar, faToolbox, faUser, faCircleInfo, faList
 } from '@fortawesome/free-solid-svg-icons'
 import { useStock } from '../hooks/StockContext'
 import { Link, useLocation } from 'react-router-dom'
 
-function SelectLink ({ label, to, activeOnlyWhenExact, icon }) {
+function SelectLink ({ label, to, icon }) {
   const { pathname } = useLocation()
 
   return (
@@ -38,6 +38,7 @@ const NaviBar = () => {
   const [navExpanded, setNavExpanded] = useState(false)
 
   const stock = useStock()
+  const { pathname } = useLocation()
 
   const naviTabParent = [
     {
@@ -118,19 +119,35 @@ const NaviBar = () => {
       href: 'balance-Stat',
       icon: faBalanceScale,
       naviTabSub: []
+    }, {
+      title: '個人資訊',
+      href: 'user',
+      icon: faUser,
+      naviTabSub: [
+        {
+          title: '帳號資料',
+          href: '/user-info',
+          icon: faCircleInfo
+        },
+        {
+          title: '追蹤個股',
+          href: '/follow-stocks',
+          icon: faList
+        }
+      ]
     }
   ]
 
-  const handleNaviParentTypeChange = (naviParentType) => {
-    setNaviParentType(naviParentType)
-  }
-
   const clickNaviParent = (event) => {
     if (event.target.dataset.navipar) {
-      handleNaviParentTypeChange(event.target.dataset.navipar)
+      handleNaviParentType(event.target.dataset.navipar)
     } else {
-      handleNaviParentTypeChange(event.target.parentNode.dataset.navipar)
+      handleNaviParentType(event.target.parentNode.dataset.navipar)
     }
+  }
+
+  const handleNaviParentType = (naviParentType) => {
+    setNaviParentType(naviParentType)
   }
 
   const setNaviExpanded = (expanded) => {
@@ -140,6 +157,10 @@ const NaviBar = () => {
   const closeNavibar = () => {
     setNavExpanded(false)
   }
+
+  useEffect(() => {
+    handleNaviParentType(pathname.split('/')[1])
+  }, [])
 
   return (
     <Navbar
@@ -156,9 +177,10 @@ const NaviBar = () => {
             {naviTabParent.map(naviTabPar => (
               <Nav.Item as="li" key={naviTabPar.href}>
                 <Nav.Link
-                    className={ naviParentType === naviTabPar.href ? 'parent active' : 'parent'}
-                    onClick={ clickNaviParent }
-                    data-navipar={ naviTabPar.href }>
+                  className={ naviParentType === naviTabPar.href ? 'parent active' : 'parent'}
+                  onClick={ clickNaviParent }
+                  data-navipar={ naviTabPar.href }
+                >
                   <FontAwesomeIcon className="icon" icon={naviTabPar.icon} size="lg"/>
                   <span>{naviTabPar.title}</span>
                 </Nav.Link>
@@ -167,7 +189,7 @@ const NaviBar = () => {
                     <Nav.Item as="li" key={naviTabSub.href} onClick={ closeNavibar }>
                       <SelectLink
                         to={
-                          naviTabPar.href === 'taiwan-stock'
+                          new Set(['taiwan-stock', 'user']).has(naviTabPar.href)
                             ? `/${naviTabPar.href}${naviTabSub.href}`
                             : `/${naviTabPar.href}${naviTabSub.href}/${stock.stockNum}`
                         }

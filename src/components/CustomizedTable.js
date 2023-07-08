@@ -61,8 +61,9 @@ class CustomizedTable extends Component {
                           if (rowIdx === 0) {
                             return (
                               <th
-                                  className="head-col"
-                                  key={`${d}-${rowData[0]}`}>
+                                className="head-col"
+                                key={`${d}-${rowData[0]}`}
+                              >
                                 {rowData[index]}
                               </th>)
                           } else {
