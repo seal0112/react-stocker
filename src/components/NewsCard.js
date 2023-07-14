@@ -2,6 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Badge } from 'react-bootstrap'
 import dayjs from 'dayjs'
+import timezone from 'dayjs/plugin/timezone'
+
+dayjs.extend(timezone)
 
 const NewsCard = (props) => {
   const feedSource = {
@@ -30,7 +33,7 @@ const NewsCard = (props) => {
           {feedSource[props.source].text}
         </Badge>
         <h5 className="news-card-title">{props.title}</h5>
-        <p>{dayjs(props.releaseTime).format('YYYY/MM/DD HH:mm')}</p>
+        <p>{dayjs(props.releaseTime).format('YYYY/MM/DD HH:mm')} {dayjs.tz.guess()}</p>
       </li>
     </a>
   )
