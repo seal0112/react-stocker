@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Container } from 'react-bootstrap'
+import FollowStockCard from '../components/FollowStockCard'
 
 import * as followStockApi from '../utils/FollowStockAPI'
 
@@ -18,11 +19,15 @@ const FollowStockList = () => {
       <ul>
         {
           followStocks.map(followStock => (
-            <li key={`${followStock.id}`}>
-              {
-                `${followStock.stock_id} ${followStock.long_or_short}`
-              }
-            </li>
+            <FollowStockCard
+              key={followStock.id}
+              id={followStock.id}
+              stock={followStock.stock}
+              longOrShort={followStock.long_or_short}
+              lastUpdateTime={followStock.last_update_time}
+              comment={followStock.comment}
+            ></FollowStockCard>
+
           ))
         }
       </ul>

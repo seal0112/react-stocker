@@ -6,7 +6,6 @@ import dayjs from 'dayjs'
 
 const getCurrentSeason = () => {
   const season = Math.ceil((dayjs().month() + 1) / 3) - 1
-  console.log(season)
   return season === 0 ? 4 : season
 }
 

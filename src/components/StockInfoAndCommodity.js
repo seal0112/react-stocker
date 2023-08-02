@@ -24,7 +24,7 @@ const StockInfoAndCommodity = () => {
 
   const handleStockInfoAndCommodity = (data) => {
     setCompanyName(data.stockInformation['公司簡稱'])
-    setExchangeType(exchType[data.stockInformation.exchangeType])
+    setExchangeType(exchType[data.stockInformation.exchange_type])
     setIndustryCategory(data.stockInformation['產業類別'])
     setStockCommodity(data.stockCommodity)
   }
