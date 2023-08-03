@@ -16,7 +16,7 @@ const FollowStockList = () => {
   return (
     <Container>
       <h2>追蹤個股清單</h2>
-      <ul>
+      <ul style={{ listStyle: 'none', paddingLeft: 0 }}>
         {
           followStocks.map(followStock => (
             <FollowStockCard

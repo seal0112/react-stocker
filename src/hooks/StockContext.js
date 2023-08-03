@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 const StockContext = createContext()
 
 export const StockProvider = ({ children }) => {
-  const [stockNum, setStockNum] = useState('2330')
+  const [stockNum, setStockNum] = useState()
 
   const handleStockNum = (stockNum) => {
     setStockNum(stockNum)

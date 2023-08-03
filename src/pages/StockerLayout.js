@@ -1,5 +1,5 @@
-import React from 'react'
-import { Outlet, useLocation } from 'react-router-dom'
+import React, { useLayoutEffect } from 'react'
+import { Outlet, useLocation, useParams } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
 
 import '../assets/css/StockerLayout.css'
@@ -15,6 +15,11 @@ import { useStock } from '../hooks/StockContext'
 const StockerLayout = () => {
   const stock = useStock()
   const { pathname } = useLocation()
+  const { stockNum } = useParams()
+
+  useLayoutEffect(() => {
+    stock.handleStockNum(stockNum || '2330')
+  }, [stockNum])
 
   return (
     <div className="Stocker">
