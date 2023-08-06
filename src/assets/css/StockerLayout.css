@@ -59,31 +59,6 @@
     font-size: 1rem;
 }
 
-.follow-stock-card {
-    width: 100%;
-    border: 2px solid #6096FD;
-    box-sizing: border-box;
-    border-radius: 15px;
-    margin-bottom: 0.75rem;
-    padding: 0.5rem;
-    text-align: left;
-    height: 6rem;
-}
-
-.follow-stock-card div .follow-stock-long {
-    padding: 0.5rem;
-    border-radius: 15px;
-    background-color: #198754;
-    color: white;
-}
-
-.follow-stock-card div .follow-stock-short {
-    padding: 0.5rem;
-    border-radius: 15px;
-    background-color: #dc3545;
-    color: white;
-}
-
 #stock-banner {
     display: flex;
     justify-content: space-between

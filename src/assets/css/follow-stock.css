@@ -1,3 +1,91 @@
 #follow-stock {
     margin: auto;
 }
+
+.follow-stock-card {
+    width: 100%;
+    border: 2px solid #6096FD;
+    box-sizing: border-box;
+    border-radius: 15px;
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    text-align: left;
+    height: 6rem;
+}
+
+
+.follow-stock-card-header {
+    display: flex;
+    vertical-align: middle;
+}
+
+.follow-stock-header-time {
+    padding-left: 0.5rem;
+}
+
+.follow-stock-long, .follow-stock-short {
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 15px;
+    width: 3.25rem;
+    text-align: center;
+    color: white;
+}
+
+.follow-stock-card div .follow-stock-long {
+    background-color: #198754;
+}
+
+.follow-stock-card div .follow-stock-short {
+    background-color: #dc3545;
+}
+
+.follow-stock-hearder-container {
+    display: flex;
+    padding: 0.5rem;
+}
+
+.follow-stock-card-content {
+    padding-left: 0.5rem;
+    margin-top: 0;
+    width: 100%;
+    margin-bottom: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 576px) {
+    .follow-stock-card {
+        height: 6.25rem;
+    }
+
+    .follow-stock-card-header {
+        height: 3rem;
+    }
+
+    .follow-stock-long, .follow-stock-short {
+        width: 3rem;
+        margin: auto 0;
+        font-size: 14px;
+    }
+
+    .follow-stock-hearder-container {
+        flex-direction: column;
+        padding: 0 0.5rem;
+    }
+
+    .follow-stock-header-title {
+        font-size: 18px;
+        margin-bottom: 2px;
+    }
+
+    .follow-stock-header-time {
+        font-size: 14px;
+        padding: 0;
+    }
+
+    .follow-stock-card-content {
+        margin-top: 0.5rem;
+    }
+}

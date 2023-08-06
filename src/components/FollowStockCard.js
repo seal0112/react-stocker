@@ -10,34 +10,25 @@ dayjs.extend(timezone)
 const FollowStockCard = ({ id, stock, longOrShort, comment, lastUpdateTime }) => {
   return (
     <li className="follow-stock-card" id={id}>
-      <div style={{ display: 'flex' }}>
-        <div
-          className={`follow-stock-${longOrShort}`}
-          style={{
-            padding: '0.5rem',
-            marginBottom: '0.5rem'
-          }}
-        >
+      <div className="follow-stock-card-header">
+        <div className={`follow-stock-${longOrShort}`}>
           { longOrShort === 'long' ? '偏多' : '偏空' }
         </div>
-        <div style={{ padding: '0.5rem', display: 'flex' }}>
-          <a href={`/basic-info/daily-info/${stock.id}`} target="_blank" rel="noreferrer">
-            <h5 className="follow-stock-title">{`${stock.id} ${stock.公司簡稱}`}</h5>
+        <div className="follow-stock-hearder-container">
+          <a
+            className="follow-stock-header-title"
+            href={`/basic-info/daily-info/${stock.id}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {`${stock.id} ${stock.公司簡稱}`}
           </a>
-          <span style={{ paddingLeft: '0.5rem' }}>
+          <span className="follow-stock-header-time">
             { dayjs.tz(lastUpdateTime, 'utc').tz('Asia/Taipei').format('YYYY/MM/DD HH:mm') } 台灣時間
           </span>
         </div>
       </div>
-      <p
-        style={{
-          paddingLeft: '0.5rem',
-          width: '100%',
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
-          textOverflow: 'ellipsis'
-        }}
-      >
+      <p className="follow-stock-card-content">
         備註: { comment }
       </p>
     </li>
