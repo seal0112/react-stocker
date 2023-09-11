@@ -15,12 +15,29 @@ import * as StockerTool from '../utils/StockerTool'
  */
 const Revenue = () => {
   const [revenueData, setRevenueData] = useState([
-    ['Year/Month', '當月營收', '去年同月增減'],
+    ['Year/Month', '當月營收', '去年同月增減', '上月比較增減'],
     ['', 0, 0]
   ])
   const [activeKey, setActiveKey] = useState('precentageOperExp')
   const stock = useStock()
-  const revenueKeysOrder = ['Year/Month', '當月營收', '去年同月增減', '上月比較增減']
+  const revenueKeysOrder = [
+    {
+      title: 'Year/Month',
+      transferToFloat: false
+    },
+    {
+      title: '當月營收',
+      transferToFloat: false
+    },
+    {
+      title: '去年同月增減',
+      transferToFloat: false
+    },
+    {
+      title: '上月比較增減',
+      transferToFloat: false
+    }
+  ]
 
   const handleCount = (key) => {
     setActiveKey(key)

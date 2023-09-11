@@ -20,11 +20,26 @@ const ProfitAnalysis = () => {
   const stock = useStock()
 
   const profitKeysOrder = [
-    'Year/Season',
-    '營業毛利率',
-    '營業利益率',
-    '稅前淨利率',
-    '本期淨利率'
+    {
+      title: 'Year/Season',
+      transferToFloat: false
+    },
+    {
+      title: '營業毛利率',
+      transferToFloat: true
+    },
+    {
+      title: '營業利益率',
+      transferToFloat: true
+    },
+    {
+      title: '稅前淨利率',
+      transferToFloat: true
+    },
+    {
+      title: '本期淨利率',
+      transferToFloat: true
+    }
   ]
 
   const handleProfitState = (profitData) => {

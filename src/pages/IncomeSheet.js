@@ -20,13 +20,35 @@ const IncomeSheet = () => {
   const stock = useStock()
 
   const incomeSheetKeysOrder = [
-    'Year/Season',
-    '營業收入合計',
-    '營業毛利',
-    '營業利益',
-    '稅前淨利',
-    '本期淨利',
-    '母公司業主淨利']
+    {
+      title: 'Year/Season',
+      transferToFloat: false
+    },
+    {
+      title: '營業收入合計',
+      transferToFloat: false
+    },
+    {
+      title: '營業毛利',
+      transferToFloat: false
+    },
+    {
+      title: '營業利益',
+      transferToFloat: false
+    },
+    {
+      title: '稅前淨利',
+      transferToFloat: false
+    },
+    {
+      title: '本期淨利',
+      transferToFloat: false
+    },
+    {
+      title: '母公司業主淨利',
+      transferToFloat: false
+    }
+  ]
 
   const handleIncomeSheetState = (incomeSheetData) => {
     setIncomeSheetData(incomeSheetData)

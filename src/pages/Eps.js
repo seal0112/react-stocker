@@ -18,7 +18,15 @@ const Eps = () => {
   ])
   const stock = useStock()
 
-  const epsKeysOrder = ['Year/Season', '基本每股盈餘']
+  const epsKeysOrder = [
+    {
+      title: 'Year/Season',
+      transferToFloat: false
+    }, {
+      title: '基本每股盈餘',
+      transferToFloat: false
+    }
+  ]
 
   const handleEpsState = (epsData) => {
     setEpsdata(epsData)

@@ -25,8 +25,43 @@ const OperatingExpensesAnalysis = () => {
   const stock = useStock()
 
   const operatingExpensesKeysOrder = [
-    'Year/Season', '營業費用率', '推銷費用率', '管理費用率',
-    '研究發展費用率', '營業費用', '推銷費用', '管理費用', '研究發展費用']
+    {
+      title: 'Year/Season',
+      transferToFloat: false
+    },
+    {
+      title: '營業費用率',
+      transferToFloat: true
+    },
+    {
+      title: '推銷費用率',
+      transferToFloat: true
+    },
+    {
+      title: '管理費用率',
+      transferToFloat: true
+    },
+    {
+      title: '研究發展費用率',
+      transferToFloat: true
+    },
+    {
+      title: '營業費用',
+      transferToFloat: false
+    },
+    {
+      title: '推銷費用',
+      transferToFloat: false
+    },
+    {
+      title: '管理費用',
+      transferToFloat: false
+    },
+    {
+      title: '研究發展費用',
+      transferToFloat: false
+    }
+  ]
 
   const handleCount = key => {
     setActiveKey(key)
