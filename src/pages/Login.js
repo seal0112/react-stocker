@@ -83,14 +83,15 @@ const Login = () => {
   }
 
   const setAlertStatus = (toggle, content) => {
-    console.log(content)
     setAlertContent(content)
     setAlertShow(toggle)
   }
 
   useEffect(() => {
-    auth.getAccountData().then(() => {
-      navigate(from, { replace: true })
+    auth.getAccountData().then((user) => {
+      if (user) {
+        navigate(from, { replace: true })
+      }
     })
   }, [])
 

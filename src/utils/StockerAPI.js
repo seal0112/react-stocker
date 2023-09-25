@@ -1,42 +1,51 @@
 import axios from 'axios'
 
 import { getToken } from './StockerTool'
-
-const api = `https://${process.env.REACT_APP_HOST_DOMAIN}`
-const header = {
-  Accept: 'application/json'
-}
+import { domain, header } from './DomainSetup'
 
 const authRequest = axios.create({
   headers: header,
-  baseURL: api + '/api/auth',
+  baseURL: domain + '/api/auth',
   withCredentials: true,
   mode: 'no-cors'
 })
 
 const frontendDataRequest = axios.create({
   headers: header,
-  baseURL: api + '/api/v0',
+  baseURL: domain + '/api/v0',
   withCredentials: true,
   mode: 'no-cors'
 })
 
-frontendDataRequest.interceptors.request.use((config) => {
-  config.headers.Authorization = `Bearer ${getToken()}`
+frontendDataRequest.interceptors.request.use(async (config) => {
+  const accessToken = getToken()
+  config.headers.Authorization = `Bearer ${accessToken}`
   return config
 })
 
-// for user authiciate
-export const login = (data) =>
-  authRequest.post('/login', data).then((res) => res.data)
+frontendDataRequest.interceptors.response.use(
+  (response) => {
+    return response
+  },
+  async (error) => {
+    const originalRequest = error.config
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true
+      const response = await axios.get(`${domain}/api/auth/refresh`)
+        .then(res => res.data)
+        .catch(() => null)
 
-export const logout = () => authRequest.get('/logout')
-export const checkAuth = () => authRequest.get('/check_auth')
-export const userInfo = () => authRequest.get('/user_info', {
-  headers: {
-    authorization: `Bearer ${getToken()}`
+      if (!response?.access_token) {
+        return null
+      }
+      localStorage.setItem('access', response.access_token)
+      originalRequest.headers.authorization = `Bearer ${response.access_token}`
+      return authRequest(originalRequest)
+    }
+    window.location.href = '/login'
+    return Promise.reject(error)
   }
-})
+)
 
 // for front-end data request
 export const checkStockExist = (stockId) =>

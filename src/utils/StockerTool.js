@@ -1,3 +1,5 @@
+// import dayjs from 'dayjs'
+
 // formatDataForGoogleChart is use to change data format for google chart
 export const formatDataForGoogleChart = (data, keyOrder) => {
   const titles = typeof keyOrder[0] === 'object'
@@ -17,3 +19,13 @@ const parseToFloat = (key, data) => {
 
 export const getToken = () =>
   localStorage.getItem('access')
+
+// export const verifyJWTExpireTime = () => {
+//   const accessToken = getToken()
+//   if (!accessToken) {
+//     return false
+//   }
+//   const decoded = JSON.parse(atob(accessToken.split('.')[1]))
+//   const currentTime = dayjs().add(10, 'minute').unix()
+//   return decoded.exp > currentTime
+// }

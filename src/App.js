@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
@@ -14,17 +14,8 @@ import MarketNews from './pages/MarketNews'
 import AnnouncementDismantling from './pages/AnnouncementDismantling'
 import FollowStockList from './pages/FollowStockList'
 import RequireAuth from './components/RequireAuth'
-import { useAuth } from './hooks/AuthContext'
 
 export default function App () {
-  const auth = useAuth()
-
-  useEffect(() => {
-    if (auth) {
-      auth.getAccountData()
-    }
-  }, [])
-
   return (
     <div className="App">
       <BrowserRouter>

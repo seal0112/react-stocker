@@ -6,7 +6,6 @@ import { useAuth } from '../hooks/AuthContext'
 const RequireAuth = ({ redirectPath = '/login' }) => {
   const { user } = useAuth()
   const location = useLocation()
-
   if (!user) {
     return <Navigate to={redirectPath} state={{ from: location }} replace />
   }
