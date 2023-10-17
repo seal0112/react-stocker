@@ -95,3 +95,7 @@ export const getMarketFeed = (targetDate, feedType, page, pageSize) =>
 export const getAnnouncementDismantling = (announcementDate) =>
   frontendDataRequest.post('/incomesheet_announce', announcementDate)
     .then((res) => res.data)
+
+export const getStockOptions = (query) =>
+  frontendDataRequest.get(`/f/autocomplete?search_stock=${query}`)
+    .then((res) => res.data)

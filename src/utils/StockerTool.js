@@ -29,3 +29,16 @@ export const getToken = () =>
 //   const currentTime = dayjs().add(10, 'minute').unix()
 //   return decoded.exp > currentTime
 // }
+
+// debounce is use to delay the function call
+export const debounce = (func, delayTime = 500) => {
+  let timer
+  return function (...args) {
+    const context = this
+    if (timer) clearTimeout(timer)
+    timer = setTimeout(() => {
+      timer = null
+      func.apply(context, args)
+    }, delayTime)
+  }
+}
