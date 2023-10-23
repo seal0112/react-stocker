@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Navbar, Form } from 'react-bootstrap'
+import { Navbar } from 'react-bootstrap'
 import Select from 'react-select'
 import { useStock } from '../hooks/StockContext'
 import { debounce } from '../utils/StockerTool'
@@ -11,7 +11,9 @@ const Header = () => {
   const [stockInputValue, setStockInputValue] = useState('')
 
   const handleStockOptionSelect = (option) => {
-    stock.handleStockNum(option.value)
+    if (option.value) {
+      stock.handleStockNum(option.value)
+    }
   }
 
   const handleStockInputValue = (value) => {
@@ -36,15 +38,15 @@ const Header = () => {
 
   return (
     <header className="App-header">
-      <Navbar variant="dark" expand="md">
+      <Navbar variant="dark">
         <Navbar.Brand>Stocker</Navbar.Brand>
-        <Form className="mr-auto">
+        <div style={{ width: '50%' }}>
           <Select
             options={stockOptions}
             onInputChange={debounceHandleStockInputValue}
             onChange={handleStockOptionSelect}
           />
-        </Form>
+        </div>
       </Navbar>
     </header>
   )
