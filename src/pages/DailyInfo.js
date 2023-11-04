@@ -20,10 +20,25 @@ const DailyInfo = () => {
       .then(res => {
         setDailyInfo(res)
       })
+      .catch((err) => {
+        if (err.response.status === 404) {
+          setDailyInfo({
+            本日收盤價: null,
+            本日漲跌: null,
+            本益比: null,
+            近四季每股盈餘: null,
+            殖利率: null,
+            股價淨值比: null
+          })
+        }
+        return err
+      })
   }, [stock.stockNum])
 
   let upAndDownCardText
-  if (dailyInfo['本日漲跌'] >= 0) {
+  if (!dailyInfo['本日漲跌']) {
+    upAndDownCardText = '--'
+  } else if (dailyInfo['本日漲跌'] >= 0) {
     upAndDownCardText = (<Card.Text style={{ color: 'red' }}>
       {`+${dailyInfo['本日漲跌']} ` +
       `(${Math.round(dailyInfo['本日漲跌'] / (dailyInfo['本日收盤價'] - dailyInfo['本日漲跌']) * 10000) / 100})%`}
@@ -43,7 +58,7 @@ const DailyInfo = () => {
             <Card.Header>本日收盤價</Card.Header>
             <Card.Body>
               <Card.Text>
-                {dailyInfo['本日收盤價']}
+                {dailyInfo['本日收盤價'] || '--'}
               </Card.Text>
             </Card.Body>
           </Card>
