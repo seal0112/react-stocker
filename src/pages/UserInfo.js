@@ -1,59 +1,15 @@
-import React, {Component} from 'react';
-import { Dropdown, Image } from 'react-bootstrap';
-import { withRouter } from "react-router-dom";
-import * as StockerAPI from './utils/StockerAPI';
+import React from 'react'
+import { Container } from 'react-bootstrap'
 
-class UserInfo extends Component{
-  constructor (props) {
-    super(props)
-    this.state = {
-      username: "",
-      picture: "",
-    }
-  }
+import PushNotification from '../components/PushNotification'
 
-  componentDidMount = () => {
-    StockerAPI.getUserInfo()
-      .then(data => this.handleUserInfo(data));
-  }
-
-  handleUserInfo = (userInfo) => {
-    this.setState({
-      username: userInfo.username,
-      picture: userInfo.picture
-    })
-  }
-
-  logOut = (userInfo) => {
-    StockerAPI.logout()
-      .then(res=>this.props.history.push('/login'))
-      .catch(err=>{
-        if(err.response.status===404){
-          this.props.history.push('/login')
-        }
-    })
-  }
-
-  render() {
-    return (
-      <div className="user-info justify-content-end">
-        <Dropdown>
-          <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-            <Image
-              className="user-picture"
-              src={this.state.picture}
-              alt="Avatar"
-              roundedCircle/>
-            <span className="user-name">{this.state.username}</span>
-          </Dropdown.Toggle>
-
-          <Dropdown.Menu>
-            <Dropdown.Item onClick={()=>this.logOut()}>Log out</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-      </div>
-    )
-  }
+const UserInfo = () => {
+  return (
+    <Container>
+      <h2>用戶資料</h2>
+      <PushNotification />
+    </Container>
+  )
 }
 
-export default withRouter(UserInfo);
+export default UserInfo

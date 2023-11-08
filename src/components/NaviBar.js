@@ -126,7 +126,7 @@ const NaviBar = () => {
       naviTabSub: [
         {
           title: '帳號資料',
-          href: '/user-info',
+          href: '',
           icon: faCircleInfo
         },
         {
@@ -164,10 +164,11 @@ const NaviBar = () => {
 
   return (
     <Navbar
-        className="App-navbar"
-        expand="md"
-        onToggle={setNaviExpanded}
-        expanded={navExpanded}>
+      className="App-navbar"
+      expand="md"
+      onToggle={setNaviExpanded}
+      expanded={navExpanded}
+    >
       <Container>
         <Navbar.Toggle aria-controls="App-navbar-content">
           <FontAwesomeIcon className="icon" icon={ faAngleDoubleDown } size="lg" />

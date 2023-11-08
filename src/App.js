@@ -12,6 +12,7 @@ import ProfitAnalysis from './pages/ProfitAnalysis'
 import OperatingExpensesAnalysis from './pages/OperatingExpensesAnalysis'
 import MarketNews from './pages/MarketNews'
 import AnnouncementDismantling from './pages/AnnouncementDismantling'
+import UserInfo from './pages/UserInfo'
 import FollowStockList from './pages/FollowStockList'
 import RequireAuth from './components/RequireAuth'
 
@@ -106,7 +107,7 @@ export default function App () {
               <Route
                 key="follow-stock-list"
                 path="/user"
-                element={<FollowStockList />}
+                element={<UserInfo />}
               />
               <Route
                 key="follow-stock-list"

@@ -9,7 +9,6 @@ const FollowStockList = () => {
 
   useEffect(() => {
     followStockApi.getFollowStockList().then(data => {
-      console.log(data)
       setFollowStocks(data)
     })
   }, [])

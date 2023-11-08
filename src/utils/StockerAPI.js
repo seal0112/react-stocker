@@ -102,3 +102,11 @@ export const getAnnouncementDismantling = (announcementDate) =>
 export const getStockOptions = (query) =>
   frontendDataRequest.get(`/f/autocomplete?search_stock=${query}`)
     .then((res) => res.data)
+
+export const getPushNotification = () =>
+  frontendDataRequest.get('/push_notification/')
+    .then((res) => res.data)
+
+export const updatePushNotification = (pushNotificationData) =>
+  frontendDataRequest.put('/push_notification/', pushNotificationData)
+    .then((res) => res.data)
