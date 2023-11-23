@@ -5,6 +5,8 @@ import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
 
+import '../assets/css/NewsIcon.css'
+
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
@@ -16,7 +18,8 @@ const NewsCard = (props) => {
     },
     ctee: {
       text: '工商時報',
-      badgeColor: 'dark'
+      badgeColor: 'secondary',
+      className: 'ctee-icon'
     },
     cnyes: {
       text: '鉅亨網',
