@@ -25,13 +25,23 @@ const NewsCard = (props) => {
     money: {
       text: '經濟日報',
       badgeColor: 'danger'
+    },
+    yahoo: {
+      text: 'Yahoo',
+      badgeColor: 'secondary',
+      className: 'yahoo-icon'
     }
   }
 
   return (
     <a href={props.link} target="_blank" rel="noreferrer">
       <li className="news-card" id={props.id}>
-        <Badge pill bg={feedSource[props.source].badgeColor} style={{ color: 'white' }}>
+        <Badge
+          pill
+          bg={feedSource[props.source].badgeColor}
+          text="light"
+          className={feedSource[props.source].className}
+        >
           {feedSource[props.source].text}
         </Badge>
         <h5 className="news-card-title">{props.title}</h5>
