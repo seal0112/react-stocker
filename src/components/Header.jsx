@@ -45,6 +45,7 @@ const Header = () => {
             options={stockOptions}
             onInputChange={debounceHandleStockInputValue}
             onChange={handleStockOptionSelect}
+            menuPortalTarget={ document.body }
           />
         </div>
       </Navbar>
