@@ -45,7 +45,10 @@ frontendDataRequest.interceptors.response.use(
       originalRequest.headers.authorization = `Bearer ${response.access_token}`
       return authRequest(originalRequest)
     }
-    window.location.href = '/login'
+    if (error.response.status === 403) {
+      window.location.href = '/login'
+      return Promise.reject(error)
+    }
     return Promise.reject(error)
   }
 )
