@@ -33,16 +33,16 @@ const PushNotification = () => {
     })
   }
 
-  const toggleSubmitBtnDisabled = () => {
-    setSubmitBtnDisabled(!submitBtnDisabled)
+  const toggleSubmitBtnDisabled = (disable = true) => {
+    setSubmitBtnDisabled(disable)
   }
 
   const clickPushNotificaationSubmitBtn = (event) => {
     event.preventDefault()
-    toggleSubmitBtnDisabled()
+    toggleSubmitBtnDisabled(true)
     updatePushNotification(pushNotification).then(() => {
       alert('更新成功')
-      toggleSubmitBtnDisabled()
+      toggleSubmitBtnDisabled(false)
     })
   }
 
