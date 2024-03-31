@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import '../assets/css/StockerLayout.css'
 import dayjs from 'dayjs'
-import { Container, Spinner, Form } from 'react-bootstrap'
+import { Container, Spinner, Form, Row, Col } from 'react-bootstrap'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
 import NewsCard from '../components/NewsCard'
 import DateRangePicker from '../components/DateRangePicker'
-import SelectOption from '../components/SelectOption'
 import * as StockerAPI from '../utils/StockerAPI'
 
 const MarketNews = () => {
@@ -18,25 +17,46 @@ const MarketNews = () => {
 
   const [targetDate, setTargetDate] = useState(
     dayjs().format('YYYY-MM-DD'))
-  const [feedType, setFeedType] = useState('all')
+  const [feedSource, setFeedSource] = useState([])
 
-  const feedTypeSource = [{
-    value: 'all',
-    text: '公告及新聞'
+  const feedSourceOption = [{
+    value: 'mops',
+    text: '公開資訊觀測站'
   }, {
-    value: 'announcement',
-    text: '公告'
+    value: 'cnyes',
+    text: '鉅亨網'
   }, {
-    value: 'news',
-    text: '新聞'
+    value: 'ctee',
+    text: '工商時報'
+  }, {
+    value: 'money',
+    text: '經濟日報'
+  }, {
+    value: 'yahoo',
+    text: 'Yahoo'
   }]
 
   const getFeedData = () => {
-    StockerAPI.getMarketFeed(targetDate, feedType, nextPage, pageSize).then(result => {
+    StockerAPI.getMarketFeed(targetDate, feedSource, nextPage, pageSize).then(result => {
       setGetFeeds(true)
       setFeeds(feeds.concat(result.feeds))
       setNextPage(result.next_page)
       setHasMoreFeed(result.has_next)
+    })
+  }
+
+  const updateFeedSource = (event) => {
+    setFeedSource(preFeedSource => {
+      const source = event.target.value
+      const checked = event.target.checked
+      let newFeedSource = []
+      if (checked) {
+        newFeedSource = [...preFeedSource, source]
+      } else {
+        newFeedSource = preFeedSource.filter(item => item !== source)
+      }
+      localStorage.setItem('feedSource', newFeedSource.join(','))
+      return newFeedSource
     })
   }
 
@@ -45,13 +65,22 @@ const MarketNews = () => {
     setNextPage(1)
     setHasMoreFeed(true)
     setGetFeeds(false)
-  }, [targetDate, feedType])
+  }, [targetDate, feedSource])
 
   useEffect(() => {
     if (!getFeeds) {
       getFeedData()
     }
   }, [getFeeds])
+
+  useEffect(() => {
+    let storageFeedSource = localStorage.getItem('feedSource')
+    if (!storageFeedSource) {
+      storageFeedSource = feedSourceOption.map(option => option.value)
+      localStorage.setItem('feedSource', storageFeedSource)
+    }
+    setFeedSource(storageFeedSource.split(',') || [])
+  }, [])
 
   return (
     <main>
@@ -61,13 +90,28 @@ const MarketNews = () => {
             targetDate={targetDate}
             setTargetDate={setTargetDate}
           />
-          <SelectOption
-            label={'資料種類'}
-            name={feedType}
-            value={feedType}
-            optionSource={feedTypeSource}
-            setOptionValue={setFeedType}
-          />
+          <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
+            <Form.Label column sm="2">
+              資料來源
+            </Form.Label>
+            <Col>
+              {
+                feedSourceOption.map(source => (
+                  <Form.Check
+                    inline
+                    type="checkbox"
+                    key={source.value}
+                    name="feed-source"
+                    id={`feed-source-${source.value}`}
+                    value={source.value}
+                    label={source.text}
+                    onChange={updateFeedSource}
+                    checked={feedSource.includes(source.value)}
+                  />
+                ))
+              }
+            </Col>
+          </Form.Group>
         </Form>
       </Container>
       <ul className="news-list">

@@ -89,13 +89,13 @@ export const getOperatingExpenses = (stockId) =>
   frontendDataRequest.get(`/f/op_expense_analysis/${stockId}`)
     .then((res) => res.data)
 
-export const getMarketFeed = (targetDate, feedType, page, pageSize) =>
+export const getMarketFeed = (targetDate, feedSource, page, pageSize) =>
   frontendDataRequest.get(
     '/f/feed?' +
     `targetDate=${targetDate}&` +
-    `feedType=${feedType}&` +
     `page=${page}&` +
-    `page_size=${pageSize}`
+    `page_size=${pageSize}&` +
+    feedSource.map((source) => `source=${source}`).join('&')
   ).then((res) => res.data)
 
 export const getAnnouncementDismantling = (announcementDate) =>
