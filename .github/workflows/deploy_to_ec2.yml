@@ -16,8 +16,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      DOMAIN: ${{ secrets.DOMAIN }}
 
     steps:
       - name: Checkout repository
@@ -29,8 +27,9 @@ jobs:
           node-version: '20'
           check-latest: true
 
-      - name: test
-        run: echo ${{ env.DOMAIN }}
+      - name: Create .env file
+        run: |
+          echo "REACT_APP_HOST_DOMAIN=${{ secrets.DOMAIN }}" >> .env
 
       - name: Install dependencies
         run: npm install
