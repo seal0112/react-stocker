@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Chart } from 'react-google-charts'
 import { Tabs, Tab } from 'react-bootstrap'
 import CustomizedTable from '../components/CustomizedTable'
+// import VerticalDataTable from '../components/VerticalDataTable'
 import { useStock } from '../hooks/StockContext'
 import * as StockerAPI from '../utils/StockerAPI'
 import * as StockerTool from '../utils/StockerTool'
@@ -15,8 +16,8 @@ import * as StockerTool from '../utils/StockerTool'
  */
 const Revenue = () => {
   const [revenueData, setRevenueData] = useState([
-    ['Year/Month', '當月營收', '去年同月增減', '上月比較增減'],
-    ['', 0, 0]
+    ['Year/Month', '當月營收', '去年同月增減', '上月比較增減', '備註'],
+    ['', 0, 0, 0, '']
   ])
   const [activeKey, setActiveKey] = useState('precentageOperExp')
   const stock = useStock()
@@ -35,6 +36,10 @@ const Revenue = () => {
     },
     {
       title: '上月比較增減',
+      transferToFloat: false
+    },
+    {
+      title: '備註',
       transferToFloat: false
     }
   ]
@@ -136,7 +141,8 @@ const Revenue = () => {
             data={monthIncrease} />
         </Tab>
       </Tabs>
-      <CustomizedTable data={revenueData}/>
+      <CustomizedTable data={revenueData} />
+      {/* <VerticalDataTable data={revenueData} /> */}
     </div>
   )
 }
