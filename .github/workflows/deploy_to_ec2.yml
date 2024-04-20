@@ -16,6 +16,8 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      DOMAIN: ${{ env.DOMAIN }}
 
     steps:
       - name: Checkout repository
@@ -34,7 +36,7 @@ jobs:
         run: npm run build
 
       - name: Upload artifact
-        run: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4
         with:
           name: build
           path: build
@@ -63,8 +65,8 @@ jobs:
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          username: ${{ secrets.USER_NAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "build"
           target: "/home/ec2-user/projects/react-stocker/build"
 
