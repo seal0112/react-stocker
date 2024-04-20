@@ -52,6 +52,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build
+          path: build
 
       - name: Delete old file on EC2
         uses: appleboy/ssh-action@master
