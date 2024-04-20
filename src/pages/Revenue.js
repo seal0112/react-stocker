@@ -60,7 +60,7 @@ const Revenue = () => {
 
   const revenue = revenueData.map(d => [].concat(d.slice(0, 2)))
   const annualIncrease = revenueData.map(d => [].concat(d.slice(0, 1), d.slice(2, 3)))
-  const monthIncrease = revenueData.map(d => [].concat(d.slice(0, 1), d.slice(3)))
+  const monthIncrease = revenueData.map(d => [].concat(d.slice(0, 1), d.slice(3, 4)))
   console.log(activeKey)
 
   return (
