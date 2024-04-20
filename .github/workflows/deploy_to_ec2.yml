@@ -71,7 +71,7 @@ jobs:
           username: ${{ secrets.USER_NAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "build"
-          target: "/home/ec2-user/projects/react-stocker/build"
+          target: "projects/react-stocker"
 
   notify:
     needs: deploy
