@@ -14,7 +14,8 @@ const PushNotification = () => {
     notify_month_revenue: false,
     notify_income_sheet: false,
     notify_news: false,
-    notify_announcement: false
+    notify_announcement: false,
+    notify_earnings_call: false
   })
 
   const changeFormValue = (event) => {
@@ -132,6 +133,14 @@ const PushNotification = () => {
                   id="notify-announcement-switch"
                   label="個股公告更新通知"
                   name="notify_announcement"
+                  checked={pushNotification.notify_announcement}
+                  onChange={toggleFormCheckbox}
+                />
+                <Form.Check
+                  type="switch"
+                  id="notify-earnings-call-switch"
+                  label="個股公告更新通知"
+                  name="notify_earnings_call"
                   checked={pushNotification.notify_announcement}
                   onChange={toggleFormCheckbox}
                 />
