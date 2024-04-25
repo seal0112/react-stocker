@@ -51,7 +51,7 @@
     display: none;
     left: 0;
     top: 100%;
-    z-index: 999;
+    z-index: 1;
     background-color: #fff;
     margin-left: 7%;
     list-style: none;
@@ -107,7 +107,7 @@
     }
 
     .App-navbar .navbar-collapse {
-        z-index: 999;
+        z-index: 1;
     }
 
     .App-navbar .navbar-nav>.nav-item>.parent.nav-link {
