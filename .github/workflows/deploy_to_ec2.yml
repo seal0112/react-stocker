@@ -76,15 +76,34 @@ jobs:
 
   notify:
     needs: deploy
+    if: success()
     runs-on: ubuntu-latest
+
     steps:
       - name: Notify success to slack
+
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: "stocker-log"
           SLACK_USERNAME: "React Stocker Github Action"
           SLACK_MESSAGE: "Deployed to EC2 successfully"
+
+  notify-failure:
+    needs: deploy
+    if: failure()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Notify failure to slack
+
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: "stocker-log"
+          SLACK_USERNAME: "React Stocker Github Action"
+          SLACK_MESSAGE: "Deployed to EC2 failed"
+          SLACK_COLOR: ${{ job.status }}
 
 concurrency:
   group: ${{ github.ref }}
