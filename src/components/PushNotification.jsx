@@ -108,14 +108,14 @@ const PushNotification = () => {
               <Col sm={8}>
                 <Form.Check
                   type="switch"
-                  label="月營收更新通知"
+                  label="月營收通知"
                   name="notify_month_revenue"
                   checked={pushNotification.notify_month_revenue}
                   onChange={toggleFormCheckbox}
                 />
                 <Form.Check
                   type="switch"
-                  label="個股財報更新通知"
+                  label="個股財報通知"
                   name="notify_income_sheet"
                   checked={pushNotification.notify_income_sheet}
                   onChange={toggleFormCheckbox}
@@ -123,7 +123,7 @@ const PushNotification = () => {
                 <Form.Check
                   type="switch"
                   id="notify-news-switch"
-                  label="個股新聞更新通知"
+                  label="個股新聞通知"
                   name="notify_news"
                   checked={pushNotification.notify_news}
                   onChange={toggleFormCheckbox}
@@ -131,7 +131,7 @@ const PushNotification = () => {
                 <Form.Check
                   type="switch"
                   id="notify-announcement-switch"
-                  label="個股公告更新通知"
+                  label="個股公告通知"
                   name="notify_announcement"
                   checked={pushNotification.notify_announcement}
                   onChange={toggleFormCheckbox}
@@ -139,7 +139,7 @@ const PushNotification = () => {
                 <Form.Check
                   type="switch"
                   id="notify-earnings-call-switch"
-                  label="個股公告更新通知"
+                  label="個股法說會通知"
                   name="notify_earnings_call"
                   checked={pushNotification.notify_announcement}
                   onChange={toggleFormCheckbox}
