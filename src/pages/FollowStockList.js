@@ -15,6 +15,7 @@ const FollowStockList = () => {
   return (
     <Container>
       <h2>追蹤個股清單</h2>
+      <p>追蹤總數: {followStocks.length}間公司</p>
       <ul style={{ listStyle: 'none', paddingLeft: 0 }}>
         {
           followStocks.map(followStock => (
