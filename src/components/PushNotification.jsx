@@ -141,7 +141,7 @@ const PushNotification = () => {
                   id="notify-earnings-call-switch"
                   label="個股法說會通知"
                   name="notify_earnings_call"
-                  checked={pushNotification.notify_announcement}
+                  checked={pushNotification.notify_earnings_call}
                   onChange={toggleFormCheckbox}
                 />
               </Col>
