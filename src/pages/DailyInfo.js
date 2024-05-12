@@ -7,7 +7,7 @@ import * as StockerAPI from '../utils/StockerAPI'
 const DailyInfo = () => {
   const stock = useStock()
   const [dailyInfo, setDailyInfo] = useState({
-    本日收盤價: 0,
+    最新收盤價: 0,
     本日漲跌: 0,
     本益比: 0,
     近四季每股盈餘: 0,
@@ -23,7 +23,7 @@ const DailyInfo = () => {
       .catch((err) => {
         if (err.response.status === 404) {
           setDailyInfo({
-            本日收盤價: null,
+            最新收盤價: null,
             本日漲跌: null,
             本益比: null,
             近四季每股盈餘: null,
@@ -41,12 +41,12 @@ const DailyInfo = () => {
   } else if (dailyInfo['本日漲跌'] >= 0) {
     upAndDownCardText = (<Card.Text style={{ color: 'red' }}>
       {`+${dailyInfo['本日漲跌']} ` +
-      `(${Math.round(dailyInfo['本日漲跌'] / (dailyInfo['本日收盤價'] - dailyInfo['本日漲跌']) * 10000) / 100})%`}
+      `(${Math.round(dailyInfo['本日漲跌'] / (dailyInfo['最新收盤價'] - dailyInfo['本日漲跌']) * 10000) / 100})%`}
     </Card.Text>)
   } else {
     upAndDownCardText = (<Card.Text style={{ color: 'green' }}>
       {`${dailyInfo['本日漲跌']} ` +
-      `(${Math.round(dailyInfo['本日漲跌'] / (dailyInfo['本日收盤價'] - dailyInfo['本日漲跌']) * 10000) / 100}%)`}
+      `(${Math.round(dailyInfo['本日漲跌'] / (dailyInfo['最新收盤價'] - dailyInfo['本日漲跌']) * 10000) / 100}%)`}
     </Card.Text>)
   }
 
@@ -55,10 +55,10 @@ const DailyInfo = () => {
       <Row>
         <Col md={4} xs={6}>
           <Card id="price">
-            <Card.Header>本日收盤價</Card.Header>
+            <Card.Header>最新收盤價</Card.Header>
             <Card.Body>
               <Card.Text>
-                {dailyInfo['本日收盤價'] || '--'}
+                {dailyInfo['最新收盤價'] || '--'}
               </Card.Text>
             </Card.Body>
           </Card>
