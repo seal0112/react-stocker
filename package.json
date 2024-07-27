@@ -4,20 +4,20 @@
   "private": true,
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@fortawesome/fontawesome-svg-core": "^6.1.1",
-    "@fortawesome/free-brands-svg-icons": "^6.1.1",
-    "@fortawesome/free-solid-svg-icons": "^6.1.1",
-    "@fortawesome/react-fontawesome": "^0.1.18",
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.3.0",
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/free-brands-svg-icons": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "@testing-library/jest-dom": "^6.4.8",
+    "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.2.1",
-    "axios": "^0.27.2",
+    "axios": "^1.7.2",
     "bootstrap": "^5.2.3",
-    "dayjs": "^1.11.7",
+    "dayjs": "^1.11.12",
     "dotenv": "^16.0.1",
     "env-cmd": "^10.1.0",
-    "eslint-plugin-n": "^17.6.0",
-    "jwt-decode": "^3.1.2",
+    "eslint-plugin-n": "^17.10.1",
+    "jwt-decode": "^4.0.0",
     "prop-types": "^15.7.2",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.2",
@@ -26,11 +26,11 @@
     "react-google-charts": "^4.0.0",
     "react-google-login": "^5.1.25",
     "react-infinite-scroll-component": "^6.1.0",
-    "react-router-dom": "^6.3.0",
+    "react-router-dom": "^6.25.1",
     "react-scripts": "^5.0.1",
     "react-select": "^5.7.7",
     "serve": "^14.2.0",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^4.2.2"
   },
   "scripts": {
     "start": "PORT=3000 react-scripts start",
@@ -57,11 +57,12 @@
     ]
   },
   "devDependencies": {
-    "cypress": "^12.17.4",
-    "eslint": "^8.18.0",
+    "cypress": "^13.13.1",
+    "eslint": "^9.8.0",
+    "eslint-config-react-app": "^7.0.1",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.0.0",
-    "eslint-plugin-react": "^7.30.0"
+    "eslint-plugin-promise": "^7.0.0",
+    "eslint-plugin-react": "^7.35.0"
   }
 }
