@@ -9,7 +9,8 @@ const PushNotification = () => {
   const [submitBtnDisabled, setSubmitBtnDisabled] = useState(false)
   const [pushNotification, setPushNotification] = useState({
     notify_enabled: false,
-    line_notify_token: '',
+    gmail: '',
+    gmail_token: '',
     notify_time: '20:00',
     notify_month_revenue: false,
     notify_income_sheet: false,
@@ -76,14 +77,28 @@ const PushNotification = () => {
           <>
             <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
               <Form.Label column sm={4}>
-                LINE Notify Token:
+                Gmail:
               </Form.Label>
               <Col sm={8}>
                 <Form.Control
                   required
                   type="text"
-                  value={pushNotification.line_notify_token}
-                  name="line_notify_token"
+                  value={pushNotification.gmail || ''}
+                  name="gmail"
+                  onChange={changeFormValue}
+                />
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
+              <Form.Label column sm={4}>
+                Gmail Token:
+              </Form.Label>
+              <Col sm={8}>
+                <Form.Control
+                  required
+                  type="text"
+                  value={pushNotification.gmail_token || ''}
+                  name="gmail_token"
                   onChange={changeFormValue}
                 />
               </Col>
