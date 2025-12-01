@@ -55,6 +55,11 @@ const NaviBar = () => {
           title: '財報公告拆解',
           href: '/announcement-dismantling',
           icon: faToolbox
+        },
+        {
+          title: '財報公告清單',
+          href: '/announcement-dismantling-list',
+          icon: faToolbox
         }
       ]
     }, {

@@ -97,6 +97,11 @@ export default function App () {
                 path="/taiwan-stock/announcement-dismantling"
                 element={<AnnouncementDismantling />}
               />
+              <Route
+                key="announcement-dismantling-list"
+                path="/taiwan-stock/announcement-dismantling-list"
+                element={<AnnouncementDismantlingList />}
+              />
             </Route>
             <Route
               path=""
