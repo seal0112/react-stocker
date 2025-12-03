@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import '../assets/css/Login.css'
 import { useNavigate, useLocation } from 'react-router-dom'
 import GoogleLogin from 'react-google-login'
-import FacebookLogin from 'react-facebook-login'
 import { Form, Button, Alert } from 'react-bootstrap'
 import { useAuth } from '../hooks/AuthContext'
 
@@ -31,24 +30,6 @@ const Login = () => {
         }
         if (err.response.status === 403) {
           setAlertStatus(true, '帳號權限未開通')
-        }
-      })
-  }
-
-  const responseFacebook = response => {
-    const accessToken = response.accessToken
-    const data = {
-      external_type: 'facebook',
-      token: accessToken
-    }
-    auth.login(data)
-      .then(() => { navigate(from, { replace: true }) })
-      .catch(err => {
-        if (err.response.status === 401) {
-          setAlertShow(true, '帳號不存在')
-        }
-        if (err.response.status === 403) {
-          setAlertShow(true, '帳號權限未開通')
         }
       })
   }
@@ -140,13 +121,6 @@ const Login = () => {
               onSuccess={responseGoogle}
               onFailure={responseGoogle}
               cookiePolicy={'single_host_origin'} />
-        </div>
-        <div className="login-btn-area">
-          <FacebookLogin
-              appId="2670950613176820"
-              autoLoad={false}
-              fields="name,email,picture"
-              callback={responseFacebook} />
         </div>
       </Form>
     </div>

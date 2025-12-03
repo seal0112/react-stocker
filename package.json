@@ -22,7 +22,6 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.2",
     "react-dom": "^18.2.0",
-    "react-facebook-login": "^4.1.1",
     "react-google-charts": "^4.0.0",
     "react-google-login": "^5.1.25",
     "react-infinite-scroll-component": "^6.1.0",
@@ -33,7 +32,7 @@
     "web-vitals": "^4.2.2"
   },
   "scripts": {
-    "start": "PORT=3000 react-scripts start",
+    "start": "PORT=3030 react-scripts start",
     "build": "env-cmd -f .env.production react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -58,11 +57,11 @@
   },
   "devDependencies": {
     "cypress": "^13.13.1",
-    "eslint": "^9.8.0",
+    "eslint": "^8.57.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^7.0.0",
+    "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.35.0"
   }
 }
