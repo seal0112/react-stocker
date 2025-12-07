@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { Chart } from 'react-google-charts'
-import CustomizedTable from '../components/CustomizedTable'
-import { useStock } from '../hooks/StockContext'
+import CustomizedTable from 'components/CustomizedTable'
+import { useStock } from 'hooks/StockContext'
 import { Tabs, Tab } from 'react-bootstrap'
-import * as StockerAPI from '../utils/StockerAPI'
-import * as StockerTool from '../utils/StockerTool'
+import * as StockerAPI from 'utils/StockerAPI'
+import * as StockerTool from 'utils/StockerTool'
 
 /*
  * Operating Expenses Data example for google chart

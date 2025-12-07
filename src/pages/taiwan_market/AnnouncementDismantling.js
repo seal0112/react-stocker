@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import '../../assets/css/StockerLayout.css'
-import * as StockerAPI from '../../utils/StockerAPI'
+import 'assets/css/StockerLayout.css'
+import * as StockerAPI from 'utils/StockerAPI'
 import { Container, Form, Col, Row, Button, Alert } from 'react-bootstrap'
 import dayjs from 'dayjs'
 

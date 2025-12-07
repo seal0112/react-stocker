@@ -10,7 +10,7 @@ import {
   faCoins, faHandHoldingUsd, faFileInvoiceDollar, faFunnelDollar,
   faSearchDollar, faToolbox, faUser, faCircleInfo, faList
 } from '@fortawesome/free-solid-svg-icons'
-import { useStock } from '../hooks/StockContext'
+import { useStock } from 'hooks/StockContext'
 import { Link, useLocation } from 'react-router-dom'
 
 function SelectLink ({ label, to, icon }) {

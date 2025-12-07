@@ -1,6 +1,6 @@
 import React from 'react'
 import { Alert, Container } from 'react-bootstrap'
-import { useStock } from '../hooks/StockContext'
+import { useStock } from 'hooks/StockContext'
 
 const NoThisStock = () => {
   const stock = useStock()

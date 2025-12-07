@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Chart } from 'react-google-charts'
-import CustomizedTable from '../components/CustomizedTable'
-import { useStock } from '../hooks/StockContext'
-import * as StockerAPI from '../utils/StockerAPI'
-import * as StockerTool from '../utils/StockerTool'
+import CustomizedTable from 'components/CustomizedTable'
+import { useStock } from 'hooks/StockContext'
+import * as StockerAPI from 'utils/StockerAPI'
+import * as StockerTool from 'utils/StockerTool'
 
 /*
  * Income Sheet Data example for google chart

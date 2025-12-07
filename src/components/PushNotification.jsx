@@ -3,7 +3,7 @@ import {
   Form, Col, Row, Button
 } from 'react-bootstrap'
 
-import { getPushNotification, updatePushNotification } from '../utils/StockerAPI'
+import { getPushNotification, updatePushNotification } from 'utils/StockerAPI'
 
 const PushNotification = () => {
   const [submitBtnDisabled, setSubmitBtnDisabled] = useState(false)

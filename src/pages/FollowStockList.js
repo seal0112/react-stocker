@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Container } from 'react-bootstrap'
-import FollowStockCard from '../components/FollowStockCard'
+import FollowStockCard from 'components/FollowStockCard'
 
-import * as followStockApi from '../utils/FollowStockAPI'
+import * as followStockApi from 'utils/FollowStockAPI'
 
 const FollowStockList = () => {
   const [followStocks, setFollowStocks] = useState([])

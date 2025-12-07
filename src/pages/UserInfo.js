@@ -1,7 +1,7 @@
 import React from 'react'
 import { Container } from 'react-bootstrap'
 
-import PushNotification from '../components/PushNotification'
+import PushNotification from 'components/PushNotification'
 
 const UserInfo = () => {
   return (

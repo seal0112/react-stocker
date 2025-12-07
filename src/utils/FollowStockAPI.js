@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getToken } from './StockerTool'
+import { getToken } from 'utils/StockerTool'
 
 const api = `https://${process.env.REACT_APP_HOST_DOMAIN}`
 const header = {

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { Navbar } from 'react-bootstrap'
 import Select from 'react-select'
-import { useStock } from '../hooks/StockContext'
-import { debounce } from '../utils/StockerTool'
-import { getStockOptions } from '../utils/StockerAPI'
+import { useStock } from 'hooks/StockContext'
+import { debounce } from 'utils/StockerTool'
+import { getStockOptions } from 'utils/StockerAPI'
 
 const Header = () => {
   const stock = useStock()

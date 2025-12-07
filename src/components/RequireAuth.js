@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
-import { useAuth } from '../hooks/AuthContext'
+import { useAuth } from 'hooks/AuthContext'
 
 const RequireAuth = ({ redirectPath = '/login' }) => {
   const { user } = useAuth()

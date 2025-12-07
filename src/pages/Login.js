@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import '../assets/css/Login.css'
+import 'assets/css/Login.css'
 import { useNavigate, useLocation } from 'react-router-dom'
 import GoogleLogin from 'react-google-login'
 import { Form, Button, Alert } from 'react-bootstrap'
-import { useAuth } from '../hooks/AuthContext'
+import { useAuth } from 'hooks/AuthContext'
 
 const Login = () => {
   const [account, setAccount] = useState('')

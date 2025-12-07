@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import '../assets/css/DailyInfo.css'
+import 'assets/css/DailyInfo.css'
 import { Row, Col, Card } from 'react-bootstrap'
-import { useStock } from '../hooks/StockContext'
-import * as StockerAPI from '../utils/StockerAPI'
+import { useStock } from 'hooks/StockContext'
+import * as StockerAPI from 'utils/StockerAPI'
 
 const DailyInfo = () => {
   const stock = useStock()

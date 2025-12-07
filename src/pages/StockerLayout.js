@@ -2,15 +2,15 @@ import React, { useLayoutEffect } from 'react'
 import { Outlet, useLocation, useParams } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
 
-import '../assets/css/StockerLayout.css'
+import 'assets/css/StockerLayout.css'
 
-import Header from '../components/Header'
-import NaviBar from '../components/NaviBar'
-import StockInfoAndCommodity from '../components/StockInfoAndCommodity'
-import FollowStock from '../components/FollowStock'
-import NoThisStock from './NoThisStock'
+import Header from 'components/Header'
+import NaviBar from 'components/NaviBar'
+import StockInfoAndCommodity from 'components/StockInfoAndCommodity'
+import FollowStock from 'components/FollowStock'
+import NoThisStock from 'pages/NoThisStock'
 
-import { useStock } from '../hooks/StockContext'
+import { useStock } from 'hooks/StockContext'
 
 const StockerLayout = () => {
   const stock = useStock()

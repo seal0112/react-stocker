@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import '../assets/css/StockInfoAndCommodity.css'
-import { useStock } from '../hooks/StockContext'
-import * as StockerAPI from '../utils/StockerAPI'
+import 'assets/css/StockInfoAndCommodity.css'
+import { useStock } from 'hooks/StockContext'
+import * as StockerAPI from 'utils/StockerAPI'
 
 const StockInfoAndCommodity = () => {
   const [companyName, setCompanyName] = useState('')

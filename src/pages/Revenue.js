@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Chart } from 'react-google-charts'
 import { Tabs, Tab } from 'react-bootstrap'
-import CustomizedTable from '../components/CustomizedTable'
-// import VerticalDataTable from '../components/VerticalDataTable'
-import { useStock } from '../hooks/StockContext'
-import * as StockerAPI from '../utils/StockerAPI'
-import * as StockerTool from '../utils/StockerTool'
+import CustomizedTable from 'components/CustomizedTable'
+// import VerticalDataTable from 'components/VerticalDataTable'
+import { useStock } from 'hooks/StockContext'
+import * as StockerAPI from 'utils/StockerAPI'
+import * as StockerTool from 'utils/StockerTool'
 
 /*
  * Revenue Data example for google chart

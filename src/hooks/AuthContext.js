@@ -1,7 +1,7 @@
 import React, { useState, createContext, useContext } from 'react'
 import PropTypes from 'prop-types'
 
-import * as AuthAPI from '../utils/AuthAPI'
+import * as AuthAPI from 'utils/AuthAPI'
 
 const AuthContext = createContext()
 

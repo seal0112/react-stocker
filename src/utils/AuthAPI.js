@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-import { getToken } from './StockerTool'
-import { domain, header } from './DomainSetup'
+import { getToken } from 'utils/StockerTool'
+import { domain, header } from 'utils/DomainSetup'
 
 const authRequest = axios.create({
   headers: header,

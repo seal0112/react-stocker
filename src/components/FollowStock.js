@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { useStock } from '../hooks/StockContext'
+import { useStock } from 'hooks/StockContext'
 import dayjs from 'dayjs'
-import '../assets/css/follow-stock.css'
+import 'assets/css/follow-stock.css'
 import {
   Button, Modal, Form, Row,
   Col, ButtonGroup, ToggleButton
 } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faLightbulb } from '@fortawesome/free-solid-svg-icons'
-import * as followStockApi from '../utils/FollowStockAPI'
+import * as followStockApi from 'utils/FollowStockAPI'
 
 const longShortBtn = [
   {
