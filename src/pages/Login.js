@@ -116,7 +116,7 @@ const Login = () => {
         <div className="login-btn-area">
           <GoogleLogin
               className="oauth-login-btn"
-              clientId="622841715235-kifmb8aoh7jvjt1kjpltdtut9tf8j3p5.apps.googleusercontent.com"
+              clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
               buttonText="Sign in with Google"
               onSuccess={responseGoogle}
               onFailure={responseGoogle}
