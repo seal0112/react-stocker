@@ -30,7 +30,7 @@ const VerticalDataTable = (props) => {
             bordered
             hover
             responsive="md"
-            style={{ maxHeight: '500px', overflowX: 'scroll', overflowY: 'scrloll' }}
+            style={{ maxHeight: '500px', overflowX: 'scroll', overflowY: 'scroll' }}
           >
             <thead>
               <tr key="time">

@@ -5,12 +5,18 @@ const StockContext = createContext()
 
 export const StockProvider = ({ children }) => {
   const [stockNum, setStockNum] = useState()
+  const [stockExist, setStockExist] = useState(true)
 
   const handleStockNum = (stockNum) => {
     setStockNum(stockNum)
+    setStockExist(true)
   }
 
-  const value = { stockNum, handleStockNum }
+  const handleStockExist = (exist) => {
+    setStockExist(exist)
+  }
+
+  const value = { stockNum, stockExist, handleStockNum, handleStockExist }
 
   return (
     <StockContext.Provider value={value}>
