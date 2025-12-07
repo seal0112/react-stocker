@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import '../assets/css/StockerLayout.css'
+import '../../assets/css/StockerLayout.css'
 import dayjs from 'dayjs'
 import { Container, Spinner, Form, Row, Col } from 'react-bootstrap'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
-import NewsCard from '../components/NewsCard'
-import DateRangePicker from '../components/DateRangePicker'
-import * as StockerAPI from '../utils/StockerAPI'
+import NewsCard from '../../components/NewsCard'
+import DateRangePicker from '../../components/DateRangePicker'
+import * as StockerAPI from '../../utils/StockerAPI'
 
 const MarketNews = () => {
   const pageSize = 20
