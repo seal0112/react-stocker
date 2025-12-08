@@ -13,6 +13,7 @@ import OperatingExpensesAnalysis from 'pages/OperatingExpensesAnalysis'
 import MarketNews from 'pages/taiwan_market/MarketNews'
 import AnnouncementDismantling from 'pages/taiwan_market/AnnouncementDismantling'
 import AnnouncementDismantlingList from 'pages/taiwan_market/announcement_dismantling_list'
+import RecommendStockList from 'pages/RecommendStockList'
 import UserInfo from 'pages/UserInfo'
 import FollowStockList from 'pages/FollowStockList'
 import RequireAuth from 'components/RequireAuth'
@@ -102,6 +103,11 @@ export default function App () {
                 key="announcement-dismantling-list"
                 path="/taiwan-stock/announcement-dismantling-list"
                 element={<AnnouncementDismantlingList />}
+              />
+              <Route
+                key="recommend-stock"
+                path="/taiwan-stock/recommend-stock"
+                element={<RecommendStockList />}
               />
             </Route>
             <Route

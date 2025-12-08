@@ -8,7 +8,7 @@ import {
   faGlobe, faListAlt, faClipboardList, faBalanceScale,
   faInfoCircle, faNewspaper, faCommentAlt, faAngleDoubleDown,
   faCoins, faHandHoldingUsd, faFileInvoiceDollar, faFunnelDollar,
-  faSearchDollar, faToolbox, faUser, faCircleInfo, faList
+  faSearchDollar, faToolbox, faUser, faCircleInfo, faList, faStar
 } from '@fortawesome/free-solid-svg-icons'
 import { useStock } from 'hooks/StockContext'
 import { Link, useLocation } from 'react-router-dom'
@@ -60,6 +60,11 @@ const NaviBar = () => {
           title: '財報公告清單',
           href: '/announcement-dismantling-list',
           icon: faToolbox
+        },
+        {
+          title: '每日推薦股票',
+          href: '/recommend-stock',
+          icon: faStar
         }
       ]
     }, {

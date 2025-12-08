@@ -1,0 +1,90 @@
+.recommend-stock-container {
+    padding: 1rem 0;
+}
+
+.recommend-stock-filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.recommend-stock-filters .form-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.recommend-stock-filters label {
+    margin-bottom: 0;
+    white-space: nowrap;
+}
+
+.recommend-stock-filters input[type="date"],
+.recommend-stock-filters select {
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+}
+
+.recommend-stock-stats {
+    background-color: #f8f9fa;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.recommend-stock-table {
+    margin-top: 1rem;
+}
+
+.recommend-stock-table thead th {
+    background-color: #6096FD;
+    color: white;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.recommend-stock-table tbody td {
+    vertical-align: middle;
+}
+
+.recommend-stock-table tbody td a {
+    color: #0d6efd;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.recommend-stock-table tbody td a:hover {
+    text-decoration: underline;
+}
+
+.filter-model-badge {
+    background-color: #6096FD;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    white-space: nowrap;
+}
+
+.recommend-stock-empty {
+    text-align: center;
+    padding: 2rem;
+    color: #6c757d;
+}
+
+@media screen and (max-width: 576px) {
+    .recommend-stock-filters {
+        flex-direction: column;
+    }
+
+    .recommend-stock-table {
+        font-size: 0.875rem;
+    }
+
+    .filter-model-badge {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.4rem;
+    }
+}
