@@ -7,6 +7,7 @@ import App from 'App'
 import reportWebVitals from 'reportWebVitals'
 import { AuthProvider } from 'hooks/AuthContext'
 import { StockProvider } from 'hooks/StockContext'
+import { ChartProvider } from 'hooks/ChartContext'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
@@ -14,7 +15,9 @@ root.render(
   <React.StrictMode>
     <AuthProvider>
       <StockProvider>
-        <App />
+        <ChartProvider>
+          <App />
+        </ChartProvider>
       </StockProvider>
     </AuthProvider>
   </React.StrictMode>

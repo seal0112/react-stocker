@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Chart } from 'react-google-charts'
+import { StockerChart } from 'components/charts'
 import CustomizedTable from 'components/CustomizedTable'
 import { useStock } from 'hooks/StockContext'
 import { Tabs, Tab } from 'react-bootstrap'
@@ -87,56 +87,54 @@ const OperatingExpensesAnalysis = () => {
     <div className="Operating-Expenses-Analysis">
       <Tabs defaultActiveKey="precentageOperExp" id="Operating-Expenses-tab" onSelect={handleCount}>
         <Tab eventKey="precentageOperExp" title="營業費用比例">
-          <Chart
-              chartType="ComboChart"
-              width="100%"
-              height="400px"
-              loader={<div>Loading Chart</div>}
-              options={{
-                title: '營業費用比例',
-                legend: { position: 'top' },
-                chartArea: { width: '80%' },
-                seriesType: 'line',
-                series: {
-                  0: { visibleInLegend: true },
-                  1: { visibleInLegend: true },
-                  2: { visibleInLegend: true },
-                  3: { visibleInLegend: true }
-                },
-                pointSize: 7,
-                vAxes: {
-                  0: {}
-                },
-                hAxis: {}
-              }}
-              data={precentageOperExp} />
+          <StockerChart
+            type="combo"
+            data={precentageOperExp}
+            height="400px"
+            options={{
+              title: '營業費用比例',
+              legend: { position: 'top' },
+              chartArea: { width: '80%' },
+              seriesType: 'line',
+              series: {
+                0: { visibleInLegend: true },
+                1: { visibleInLegend: true },
+                2: { visibleInLegend: true },
+                3: { visibleInLegend: true }
+              },
+              pointSize: 7,
+              vAxes: {
+                0: {}
+              },
+              hAxis: {}
+            }}
+          />
         </Tab>
         <Tab eventKey="rowOperExp" title="營業費用資料">
-          <Chart
-              chartType="ComboChart"
-              width="100%"
-              height="500px"
-              loader={<div>Loading Chart</div>}
-              options={{
-                title: '營業費用資料',
-                legend: { position: 'top' },
-                chartArea: { width: '75%' },
-                seriesType: 'line',
-                series: {
-                  0: { visibleInLegend: true },
-                  1: { visibleInLegend: true },
-                  2: { visibleInLegend: true },
-                  3: { visibleInLegend: true }
-                },
-                pointSize: 7,
-                vAxes: {
-                  0: {}
-                },
-                hAxis: {
-                  showTextEvery: 4
-                }
-              }}
-              data={rowOperExp} />
+          <StockerChart
+            type="combo"
+            data={rowOperExp}
+            height="500px"
+            options={{
+              title: '營業費用資料',
+              legend: { position: 'top' },
+              chartArea: { width: '75%' },
+              seriesType: 'line',
+              series: {
+                0: { visibleInLegend: true },
+                1: { visibleInLegend: true },
+                2: { visibleInLegend: true },
+                3: { visibleInLegend: true }
+              },
+              pointSize: 7,
+              vAxes: {
+                0: {}
+              },
+              hAxis: {
+                showTextEvery: 4
+              }
+            }}
+          />
         </Tab>
       </Tabs>
       <CustomizedTable data={operatingExpensesData} />

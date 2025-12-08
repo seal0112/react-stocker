@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Chart } from 'react-google-charts'
+import { StockerChart } from 'components/charts'
 import CustomizedTable from 'components/CustomizedTable'
 import { useStock } from 'hooks/StockContext'
 import * as StockerAPI from 'utils/StockerAPI'
@@ -40,27 +40,26 @@ const Eps = () => {
 
   return (
     <div className="Eps">
-      <Chart
-          chartType="ColumnChart"
-          width="100%"
-          height="400px"
-          loader={<div>Loading Chart</div>}
-          options={{
+      <StockerChart
+        type="bar"
+        data={epsData}
+        height="400px"
+        options={{
+          title: 'EPS',
+          legend: {
+            position: 'top'
+          },
+          chartArea: { width: '80%' },
+          colors: ['#2cc185'],
+          vAxis: {
             title: 'EPS',
-            legend: {
-              position: 'top'
-            },
-            chartArea: { width: '80%' },
-            colors: ['#2cc185'],
-            vAxis: {
-              title: 'EPS',
-              minValue: 0
-            },
-            hAxis: {
-              showTextEvery: 4
-            }
-          }}
-          data={epsData} />
+            minValue: 0
+          },
+          hAxis: {
+            showTextEvery: 4
+          }
+        }}
+      />
       <CustomizedTable data={epsData} />
     </div>
   )

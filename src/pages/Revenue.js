@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Chart } from 'react-google-charts'
+import { StockerChart } from 'components/charts'
 import { Tabs, Tab } from 'react-bootstrap'
 import CustomizedTable from 'components/CustomizedTable'
 // import VerticalDataTable from 'components/VerticalDataTable'
@@ -67,13 +67,12 @@ const Revenue = () => {
     <div className="revenue">
       <Tabs defaultActiveKey="revenue" id="Revenue-Analysis-tab" onSelect={handleCount}>
         <Tab eventKey="revenue" title="當月營收">
-          <Chart
-            chartType="ComboChart"
-            width="100%"
+          <StockerChart
+            type="combo"
+            data={revenue}
             height="400px"
-            loader={<div>Loading Chart</div>}
             options={{
-              title: '營業費用比例',
+              title: '當月營收',
               legend: {
                 position: 'top'
               },
@@ -88,16 +87,16 @@ const Revenue = () => {
               },
               hAxis: {
                 showTextEvery: 12
-              }
+              },
+              colors: ['#2cc185']
             }}
-            data={revenue} />
+          />
         </Tab>
         <Tab eventKey="annualIncrease" title="營收年增率">
-          <Chart
-            chartType="ComboChart"
-            width="100%"
+          <StockerChart
+            type="combo"
+            data={annualIncrease}
             height="500px"
-            loader={<div>Loading Chart</div>}
             options={{
               title: '營收年增率',
               legend: {
@@ -112,16 +111,16 @@ const Revenue = () => {
               vAxes: {
                 0: {}
               },
-              hAxis: {}
+              hAxis: {},
+              colors: ['#dc3545']
             }}
-            data={annualIncrease} />
+          />
         </Tab>
         <Tab eventKey="monthIncrease" title="營收月增率">
-          <Chart
-            chartType="ComboChart"
-            width="100%"
+          <StockerChart
+            type="combo"
+            data={monthIncrease}
             height="500px"
-            loader={<div>Loading Chart</div>}
             options={{
               title: '營收月增率',
               legend: {
@@ -136,9 +135,10 @@ const Revenue = () => {
               vAxes: {
                 0: {}
               },
-              hAxis: {}
+              hAxis: {},
+              colors: ['#dc3545']
             }}
-            data={monthIncrease} />
+          />
         </Tab>
       </Tabs>
       <CustomizedTable data={revenueData} />

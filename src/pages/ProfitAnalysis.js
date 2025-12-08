@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Chart } from 'react-google-charts'
+import { StockerChart } from 'components/charts'
 import CustomizedTable from 'components/CustomizedTable'
 import { useStock } from 'hooks/StockContext'
 import * as StockerAPI from 'utils/StockerAPI'
@@ -54,36 +54,35 @@ const ProfitAnalysis = () => {
 
   return (
     <div className="Profit-Analysis">
-      <Chart
-          chartType="ComboChart"
-          width="100%"
-          height="400px"
-          loader={<div>Loading Chart</div>}
-          options={{
-            title: '利潤分析',
-            legend: { position: 'top' },
-            chartArea: { width: '80%' },
-            seriesType: 'line',
-            series: {
-              0: { visibleInLegend: true },
-              1: { visibleInLegend: true },
-              2: { visibleInLegend: true },
-              3: { visibleInLegend: true },
-              4: { visibleInLegend: true },
-              5: { visibleInLegend: true }
-            },
-            pointSize: 7,
-            vAxes: {
-              0: {}
-            },
-            hAxis: {
-              showTextEvery: 4
-            },
-            explorer: {
-              actions: ['dragToZoom', 'rightClickToReset']
-            }
-          }}
-          data={profitData} />
+      <StockerChart
+        type="combo"
+        data={profitData}
+        height="400px"
+        options={{
+          title: '利潤分析',
+          legend: { position: 'top' },
+          chartArea: { width: '80%' },
+          seriesType: 'line',
+          series: {
+            0: { visibleInLegend: true },
+            1: { visibleInLegend: true },
+            2: { visibleInLegend: true },
+            3: { visibleInLegend: true },
+            4: { visibleInLegend: true },
+            5: { visibleInLegend: true }
+          },
+          pointSize: 7,
+          vAxes: {
+            0: {}
+          },
+          hAxis: {
+            showTextEvery: 4
+          },
+          explorer: {
+            actions: ['dragToZoom', 'rightClickToReset']
+          }
+        }}
+      />
       <CustomizedTable data={profitData}/>
     </div>
   )

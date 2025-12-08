@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Chart } from 'react-google-charts'
+import { StockerChart } from 'components/charts'
 import CustomizedTable from 'components/CustomizedTable'
 import { useStock } from 'hooks/StockContext'
 import * as StockerAPI from 'utils/StockerAPI'
@@ -62,40 +62,36 @@ const IncomeSheet = () => {
 
   return (
     <div className="IncomeSheet">
-      <Chart
-          chartType="ComboChart"
-          width="100%"
-          height="400px"
-          loader={ <div>Loading Chart</div> }
-          options={{
-            chart: {
-              title: '損益表'
-            },
-            legend: {
-              position: 'top'
-            },
-            chartArea: { width: '80%' },
-            series: {
-              0: { visibleInLegend: true },
-              1: { visibleInLegend: true },
-              2: { visibleInLegend: true },
-              3: { visibleInLegend: true },
-              4: { visibleInLegend: true },
-              5: { visibleInLegend: true }
-            },
-            pointSize: 7,
-            vAxes: {
-              // Adds labels to each axis; they don't have to match the axis names.
-              0: { baseline: 0 }
-            },
-            hAxis: {
-              showTextEvery: 4
-            },
-            explorer: {
-              actions: ['dragToZoom', 'rightClickToReset']
-            }
-          }}
-          data={incomeSheetData} />
+      <StockerChart
+        type="combo"
+        data={incomeSheetData}
+        height="400px"
+        options={{
+          title: '損益表',
+          legend: {
+            position: 'top'
+          },
+          chartArea: { width: '80%' },
+          series: {
+            0: { visibleInLegend: true },
+            1: { visibleInLegend: true },
+            2: { visibleInLegend: true },
+            3: { visibleInLegend: true },
+            4: { visibleInLegend: true },
+            5: { visibleInLegend: true }
+          },
+          pointSize: 7,
+          vAxes: {
+            0: { baseline: 0 }
+          },
+          hAxis: {
+            showTextEvery: 4
+          },
+          explorer: {
+            actions: ['dragToZoom', 'rightClickToReset']
+          }
+        }}
+      />
       <CustomizedTable data={incomeSheetData}/>
     </div>
   )
