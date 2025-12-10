@@ -9,7 +9,7 @@ const getCurrentSeason = () => {
   return season === 0 ? 4 : season
 }
 
-const AnnouncementDismantling = () => {
+const AnnouncementDismantlingList = () => {
   const [link, setLink] = useState('')
   const [year, setYear] = useState(dayjs().year())
   const [season, setSeason] = useState(1)
@@ -156,7 +156,7 @@ const AnnouncementDismantling = () => {
               <Col sm={3}>稅後淨利</Col>
               <Col sm={9}>{announceData['本期淨利']}</Col>
             </Row>
-          </ >
+          </>
         }
 
       </Container>
@@ -164,4 +164,4 @@ const AnnouncementDismantling = () => {
   )
 }
 
-export default AnnouncementDismantling
+export default AnnouncementDismantlingList

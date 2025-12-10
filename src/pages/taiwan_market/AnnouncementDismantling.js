@@ -156,7 +156,7 @@ const AnnouncementDismantling = () => {
               <Col sm={3}>稅後淨利</Col>
               <Col sm={9}>{announceData['本期淨利']}</Col>
             </Row>
-          </ >
+          </>
         }
 
       </Container>
