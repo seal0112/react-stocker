@@ -92,6 +92,7 @@ jobs:
           SLACK_CHANNEL: "stocker-log"
           SLACK_USERNAME: "React Stocker Github Action"
           SLACK_MESSAGE: "Deployed to EC2 successfully"
+          SLACK_COLOR: "success"
 
   notify-failure:
     needs: deploy
@@ -106,8 +107,8 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: "stocker-log"
           SLACK_USERNAME: "React Stocker Github Action"
-          SLACK_MESSAGE: "Deployed to EC2 failed"
-          SLACK_COLOR: ${{ job.status }}
+          SLACK_MESSAGE: "❌ Deployed to EC2 failed"
+          SLACK_COLOR: "failure"
 
 concurrency:
   group: ${{ github.ref }}
