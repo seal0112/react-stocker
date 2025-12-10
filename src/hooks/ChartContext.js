@@ -1,4 +1,5 @@
 import React, { createContext, useContext } from 'react'
+import PropTypes from 'prop-types'
 
 const ChartContext = createContext()
 
@@ -10,6 +11,10 @@ export const ChartProvider = ({ children }) => {
       {children}
     </ChartContext.Provider>
   )
+}
+
+ChartProvider.propTypes = {
+  children: PropTypes.node.isRequired
 }
 
 export const useChartLibrary = () => {

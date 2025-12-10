@@ -79,7 +79,7 @@ const defaultColors = [
   '#36A2EB', // 淺藍
   '#9966FF', // 紫色
   '#FF9F40', // 橙色
-  '#4BC0C0'  // 青色
+  '#4BC0C0' // 青色
 ]
 
 const getDefaultColor = (index) => {

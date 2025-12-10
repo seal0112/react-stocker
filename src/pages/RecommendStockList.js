@@ -103,9 +103,8 @@ const RecommendStockList = () => {
         </div>
       )}
 
-      {loading ? (
-        <p>載入中...</p>
-      ) : recommendStocks.length > 0 ? (
+      {loading && <p>載入中...</p>}
+      {!loading && recommendStocks.length > 0 && (
         <Table striped bordered hover responsive className="recommend-stock-table">
           <thead>
             <tr>
@@ -136,7 +135,8 @@ const RecommendStockList = () => {
             ))}
           </tbody>
         </Table>
-      ) : (
+      )}
+      {!loading && recommendStocks.length === 0 && (
         <div className="recommend-stock-empty">
           <p>該日期無推薦股票</p>
         </div>
