@@ -14,6 +14,7 @@ import MarketNews from 'pages/taiwan_market/MarketNews'
 import AnnouncementDismantling from 'pages/taiwan_market/AnnouncementDismantling'
 import AnnouncementDismantlingList from 'pages/taiwan_market/AnnouncementDismantlingList'
 import RecommendStockList from 'pages/RecommendStockList'
+import EarningsCallList from 'pages/EarningsCallList'
 import UserInfo from 'pages/UserInfo'
 import FollowStockList from 'pages/FollowStockList'
 import RequireAuth from 'components/RequireAuth'
@@ -108,6 +109,11 @@ export default function App () {
                 key="recommend-stock"
                 path="/taiwan-stock/recommend-stock"
                 element={<RecommendStockList />}
+              />
+              <Route
+                key="earnings-call-list"
+                path="/taiwan-stock/earnings-call"
+                element={<EarningsCallList />}
               />
             </Route>
             <Route

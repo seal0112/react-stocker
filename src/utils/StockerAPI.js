@@ -113,3 +113,12 @@ export const getPushNotification = () =>
 export const updatePushNotification = (pushNotificationData) =>
   frontendDataRequest.put('/push_notification/', pushNotificationData)
     .then((res) => res.data)
+
+export const getEarningsCallList = (params = {}) => {
+  const queryParams = new URLSearchParams()
+  if (params.stock) queryParams.append('stock', params.stock)
+  if (params.meeting_date) queryParams.append('meeting_date', params.meeting_date)
+  const queryString = queryParams.toString()
+  return frontendDataRequest.get(`/earnings_call${queryString ? '?' + queryString : ''}`)
+    .then((res) => res.data)
+}
