@@ -1,14 +1,24 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Navbar } from 'react-bootstrap'
+import { Navbar, Button } from 'react-bootstrap'
 import Select from 'react-select'
+import { useNavigate } from 'react-router-dom'
 import { useStock } from 'hooks/StockContext'
+import { useAuth } from 'hooks/AuthContext'
 import { debounce } from 'utils/StockerTool'
 import { getStockOptions } from 'utils/StockerAPI'
 
 const Header = () => {
   const stock = useStock()
+  const { user, logout } = useAuth()
+  const navigate = useNavigate()
   const [stockOptions, setStockOptions] = useState([])
   const [stockInputValue, setStockInputValue] = useState('')
+
+  const handleLogout = () => {
+    logout().then(() => {
+      navigate('/login')
+    })
+  }
 
   const handleStockOptionSelect = (option) => {
     if (option.value) {
@@ -48,6 +58,16 @@ const Header = () => {
             menuPortalTarget={ document.body }
           />
         </div>
+        {user && (
+          <Button
+            variant="outline-light"
+            size="sm"
+            onClick={handleLogout}
+            className="ms-auto"
+          >
+            登出
+          </Button>
+        )}
       </Navbar>
     </header>
   )
