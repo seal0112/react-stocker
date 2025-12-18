@@ -35,7 +35,15 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  const value = { user, login, logout, getAccountData }
+  const hasRole = (roleName) => {
+    return user?.roles?.includes(roleName) || false
+  }
+
+  const canManageTokens = () => {
+    return hasRole('admin') || hasRole('moderator')
+  }
+
+  const value = { user, login, logout, getAccountData, hasRole, canManageTokens }
 
   return (
     <AuthContext.Provider value={value}>
