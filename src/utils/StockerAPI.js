@@ -1,6 +1,5 @@
 import axios from 'axios'
 
-import { getToken } from 'utils/StockerTool'
 import { domain, header } from 'utils/DomainSetup'
 
 const authRequest = axios.create({
@@ -17,35 +16,27 @@ const frontendDataRequest = axios.create({
   mode: 'no-cors'
 })
 
-frontendDataRequest.interceptors.request.use(async (config) => {
-  const accessToken = getToken()
-  config.headers.Authorization = `Bearer ${accessToken}`
-  return config
-})
-
 frontendDataRequest.interceptors.response.use(
   (response) => {
     return response
   },
   async (error) => {
     const originalRequest = error.config
-    if (error.response.status === 404) {
+    if (error.response?.status === 404) {
       return Promise.reject(error)
     }
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true
-      const response = await axios.get(`${domain}/api/auth/refresh`)
+      const response = await authRequest.get('/refresh')
         .then(res => res.data)
         .catch(() => null)
 
       if (!response?.access_token) {
         return null
       }
-      localStorage.setItem('access', response.access_token)
-      originalRequest.headers.authorization = `Bearer ${response.access_token}`
-      return authRequest(originalRequest)
+      return frontendDataRequest(originalRequest)
     }
-    if (error.response.status === 403) {
+    if (error.response?.status === 403) {
       window.location.href = '/login'
       return Promise.reject(error)
     }

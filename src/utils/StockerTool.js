@@ -17,11 +17,8 @@ const parseToFloat = (key, data) => {
   return data[key.title]
 }
 
-export const getToken = () =>
-  localStorage.getItem('access')
-
 // export const verifyJWTExpireTime = () => {
-//   const accessToken = getToken()
+//   const accessToken = sessionStorage.getItem('access')
 //   if (!accessToken) {
 //     return false
 //   }

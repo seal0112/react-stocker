@@ -9,16 +9,14 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
 
   const login = (data) => {
-    return AuthAPI.login(data).then(token => {
-      localStorage.setItem('access', token.access_token)
+    return AuthAPI.login(data).then(() => {
       getAccountData()
     })
   }
 
   const logout = () => {
-    return AuthAPI.logout(() => {
+    return AuthAPI.logout().then(() => {
       setUser({})
-      localStorage.removeItem('access')
     })
   }
 

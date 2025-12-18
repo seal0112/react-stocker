@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { getToken } from 'utils/StockerTool'
 
 const api = `https://${process.env.REACT_APP_HOST_DOMAIN}`
 const header = {
@@ -11,11 +10,6 @@ const followStockRequest = axios.create({
   baseURL: api + '/api/v0',
   withCredentials: true,
   mode: 'no-cors'
-})
-
-followStockRequest.interceptors.request.use((config) => {
-  config.headers.Authorization = `Bearer ${getToken()}`
-  return config
 })
 
 export const getFollowStockList = () =>
