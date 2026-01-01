@@ -15,6 +15,10 @@ export const updateUserRoles = (userId, roleNames) =>
   usersRequest.patch(`/${userId}/roles`, { role_names: roleNames })
     .then((res) => res.data)
 
+export const updateUserStatus = (userId, active) =>
+  usersRequest.patch(`/${userId}/status`, { active })
+    .then((res) => res.data)
+
 export const getAllRoles = () =>
   rolesRequest.get('')
     .then((res) => res.data)

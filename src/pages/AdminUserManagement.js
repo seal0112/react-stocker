@@ -4,9 +4,18 @@ import {
 } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 
-import { getAllUsers, getAllRoles, updateUserRoles } from 'utils/UserManagementAPI'
+import { getAllUsers, getAllRoles, updateUserRoles, updateUserStatus } from 'utils/UserManagementAPI'
 import { useAuth } from 'hooks/AuthContext'
 import 'assets/css/AdminUserManagement.css'
+
+// Role name translations
+const ROLE_LABELS = {
+  admin: '管理員',
+  moderator: '版主',
+  user: '一般使用者'
+}
+
+const getRoleLabel = (roleName) => ROLE_LABELS[roleName] || roleName
 
 const AdminUserManagement = () => {
   const navigate = useNavigate()
@@ -23,6 +32,9 @@ const AdminUserManagement = () => {
   const [selectedRoles, setSelectedRoles] = useState([])
   const [saveLoading, setSaveLoading] = useState(false)
 
+  // Status update loading state
+  const [statusLoading, setStatusLoading] = useState({})
+
   const fetchData = useCallback(async () => {
     try {
       setLoading(true)
@@ -37,7 +49,7 @@ const AdminUserManagement = () => {
       if (err.response?.status === 403) {
         setError('permission_denied')
       } else {
-        setError('Failed to load user data')
+        setError('載入使用者資料失敗')
       }
     } finally {
       setLoading(false)
@@ -80,9 +92,21 @@ const AdminUserManagement = () => {
       setEditingUser(null)
       fetchData()
     } catch (err) {
-      alert(err.response?.data?.error || 'Failed to update roles')
+      alert(err.response?.data?.error || '更新角色失敗')
     } finally {
       setSaveLoading(false)
+    }
+  }
+
+  const handleStatusToggle = async (user) => {
+    try {
+      setStatusLoading(prev => ({ ...prev, [user.id]: true }))
+      await updateUserStatus(user.id, !user.active)
+      fetchData()
+    } catch (err) {
+      alert(err.response?.data?.error || '更新狀態失敗')
+    } finally {
+      setStatusLoading(prev => ({ ...prev, [user.id]: false }))
     }
   }
 
@@ -105,7 +129,7 @@ const AdminUserManagement = () => {
   if (loading) {
     return (
       <Container className="admin-user-management">
-        <h2>User Management</h2>
+        <h2>使用者管理</h2>
         <div className="text-center py-5">
           <Spinner animation="border" />
         </div>
@@ -116,9 +140,9 @@ const AdminUserManagement = () => {
   if (error === 'permission_denied') {
     return (
       <Container className="admin-user-management">
-        <h2>User Management</h2>
+        <h2>使用者管理</h2>
         <Alert variant="danger">
-          Permission denied. Admin role is required.
+          權限不足，需要管理員權限。
         </Alert>
       </Container>
     )
@@ -126,7 +150,7 @@ const AdminUserManagement = () => {
 
   return (
     <Container className="admin-user-management">
-      <h2>User Management</h2>
+      <h2>使用者管理</h2>
 
       {error && <Alert variant="danger">{error}</Alert>}
 
@@ -135,12 +159,12 @@ const AdminUserManagement = () => {
           <thead>
             <tr>
               <th>ID</th>
-              <th>Username</th>
+              <th>使用者名稱</th>
               <th>Email</th>
-              <th>Roles</th>
-              <th>Status</th>
-              <th>Last Login</th>
-              <th>Actions</th>
+              <th>角色</th>
+              <th>狀態</th>
+              <th>最後登入</th>
+              <th>操作</th>
             </tr>
           </thead>
           <tbody>
@@ -165,13 +189,13 @@ const AdminUserManagement = () => {
                       bg={getRoleBadgeVariant(role)}
                       className="me-1"
                     >
-                      {role}
+                      {getRoleLabel(role)}
                     </Badge>
                   ))}
                 </td>
                 <td>
                   <Badge bg={user.active ? 'success' : 'secondary'}>
-                    {user.active ? 'Active' : 'Inactive'}
+                    {user.active ? '啟用' : '停用'}
                   </Badge>
                 </td>
                 <td>{formatDate(user.last_login_at)}</td>
@@ -180,8 +204,19 @@ const AdminUserManagement = () => {
                     variant="outline-primary"
                     size="sm"
                     onClick={() => handleEditClick(user)}
+                    className="me-1"
                   >
-                    Edit Roles
+                    編輯角色
+                  </Button>
+                  <Button
+                    variant={user.active ? 'outline-secondary' : 'outline-success'}
+                    size="sm"
+                    onClick={() => handleStatusToggle(user)}
+                    disabled={statusLoading[user.id]}
+                  >
+                    {statusLoading[user.id]
+                      ? <Spinner animation="border" size="sm" />
+                      : user.active ? '停用帳號' : '啟用帳號'}
                   </Button>
                 </td>
               </tr>
@@ -192,22 +227,22 @@ const AdminUserManagement = () => {
 
       {users.length === 0 && (
         <div className="text-center py-4 text-muted">
-          No users found
+          沒有找到使用者
         </div>
       )}
 
       {/* Edit Roles Modal */}
       <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Edit User Roles</Modal.Title>
+          <Modal.Title>編輯使用者角色</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {editingUser && (
             <>
               <p className="mb-3">
-                <strong>User:</strong> {editingUser.username}
+                <strong>使用者：</strong> {editingUser.username}
                 <br />
-                <strong>Email:</strong> {editingUser.email}
+                <strong>Email：</strong> {editingUser.email}
               </p>
               <Form>
                 {roles.map((role) => (
@@ -218,7 +253,7 @@ const AdminUserManagement = () => {
                     label={
                       <span>
                         <Badge bg={getRoleBadgeVariant(role.name)} className="me-2">
-                          {role.name}
+                          {getRoleLabel(role.name)}
                         </Badge>
                         {role.description && (
                           <small className="text-muted">{role.description}</small>
@@ -232,7 +267,7 @@ const AdminUserManagement = () => {
                   />
                 ))}
                 <Form.Text className="text-muted">
-                  The &apos;user&apos; role cannot be removed.
+                  「一般使用者」角色無法移除。
                 </Form.Text>
               </Form>
             </>
@@ -240,14 +275,14 @@ const AdminUserManagement = () => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowEditModal(false)}>
-            Cancel
+            取消
           </Button>
           <Button
             variant="primary"
             onClick={handleSaveRoles}
             disabled={saveLoading}
           >
-            {saveLoading ? <Spinner animation="border" size="sm" /> : 'Save'}
+            {saveLoading ? <Spinner animation="border" size="sm" /> : '儲存'}
           </Button>
         </Modal.Footer>
       </Modal>
