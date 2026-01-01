@@ -164,50 +164,52 @@ const ApiTokenManager = () => {
       {error && <Alert variant="danger">{error}</Alert>}
 
       <div className="token-list">
-        {tokens.length === 0 ? (
-          <div className="empty-state">
-            <p>尚未建立任何 API Token</p>
-            <p className="small">API Token 可用於程式自動化存取</p>
-          </div>
-        ) : (
-          tokens.map((token) => (
-            <div
-              key={token.id}
-              className={`token-item ${!token.is_active ? 'token-inactive' : ''}`}
-            >
-              <div className="d-flex justify-content-between align-items-start">
-                <div>
-                  <span className="token-name">{token.name}</span>
-                  {!token.is_active && (
-                    <Badge bg="secondary" className="ms-2">已停用</Badge>
+        {tokens.length === 0
+          ? (
+              <div className="empty-state">
+                <p>尚未建立任何 API Token</p>
+                <p className="small">API Token 可用於程式自動化存取</p>
+              </div>
+            )
+          : (
+              tokens.map((token) => (
+                <div
+                  key={token.id}
+                  className={`token-item ${!token.is_active ? 'token-inactive' : ''}`}
+                >
+                  <div className="d-flex justify-content-between align-items-start">
+                    <div>
+                      <span className="token-name">{token.name}</span>
+                      {!token.is_active && (
+                        <Badge bg="secondary" className="ms-2">已停用</Badge>
+                      )}
+                    </div>
+                    <span className="token-prefix">{token.token_prefix}...</span>
+                  </div>
+                  <div className="token-meta">
+                    <div>建立時間: {formatDate(token.created_at)}</div>
+                    <div>最後使用: {formatDate(token.last_used_at)}</div>
+                    {token.expires_at && (
+                      <div>過期時間: {formatDate(token.expires_at)}</div>
+                    )}
+                  </div>
+                  {token.is_active && (
+                    <div className="token-actions">
+                      <Button
+                        variant="outline-danger"
+                        size="sm"
+                        onClick={() => {
+                          setTokenToDelete(token)
+                          setShowDeleteModal(true)
+                        }}
+                      >
+                        撤銷
+                      </Button>
+                    </div>
                   )}
                 </div>
-                <span className="token-prefix">{token.token_prefix}...</span>
-              </div>
-              <div className="token-meta">
-                <div>建立時間: {formatDate(token.created_at)}</div>
-                <div>最後使用: {formatDate(token.last_used_at)}</div>
-                {token.expires_at && (
-                  <div>過期時間: {formatDate(token.expires_at)}</div>
-                )}
-              </div>
-              {token.is_active && (
-                <div className="token-actions">
-                  <Button
-                    variant="outline-danger"
-                    size="sm"
-                    onClick={() => {
-                      setTokenToDelete(token)
-                      setShowDeleteModal(true)
-                    }}
-                  >
-                    撤銷
-                  </Button>
-                </div>
-              )}
-            </div>
-          ))
-        )}
+              ))
+            )}
       </div>
 
       {/* Create Token Modal */}
