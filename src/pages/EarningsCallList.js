@@ -79,36 +79,40 @@ const EarningsCallList = () => {
           </Row>
         </Form>
 
-        {loading ? (
-          <div style={{ textAlign: 'center', padding: '2rem' }}>
-            <Spinner animation="border" variant="success" />
-          </div>
-        ) : earningsCalls.length === 0 ? (
-          <p>目前沒有法說會資料</p>
-        ) : (
-          <Table striped bordered hover responsive>
-            <thead>
-              <tr>
-                <th>股票代碼</th>
-                <th>會議日期</th>
-                <th>會議時間</th>
-                <th>地點</th>
-                <th>說明</th>
-              </tr>
-            </thead>
-            <tbody>
-              {earningsCalls.map((call) => (
-                <tr key={call.id}>
-                  <td>{call.stock_id}</td>
-                  <td>{call.meeting_date ? dayjs(call.meeting_date).format('YYYY-MM-DD') : '-'}</td>
-                  <td>{call.meeting_time || '-'}</td>
-                  <td>{call.location || '-'}</td>
-                  <td>{call.description || '-'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        )}
+        {loading
+          ? (
+              <div style={{ textAlign: 'center', padding: '2rem' }}>
+                <Spinner animation="border" variant="success" />
+              </div>
+            )
+          : earningsCalls.length === 0
+            ? (
+                <p>目前沒有法說會資料</p>
+              )
+            : (
+                <Table striped bordered hover responsive>
+                  <thead>
+                    <tr>
+                      <th>股票代碼</th>
+                      <th>會議日期</th>
+                      <th>會議時間</th>
+                      <th>地點</th>
+                      <th>說明</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {earningsCalls.map((call) => (
+                      <tr key={call.id}>
+                        <td>{call.stock_id}</td>
+                        <td>{call.meeting_date ? dayjs(call.meeting_date).format('YYYY-MM-DD') : '-'}</td>
+                        <td>{call.meeting_time || '-'}</td>
+                        <td>{call.location || '-'}</td>
+                        <td>{call.description || '-'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              )}
       </Container>
     </main>
   )
