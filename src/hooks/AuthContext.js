@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
 
   const getAccountData = () => {
     if (user) {
-      return user
+      return Promise.resolve(user)
     } else {
       return AuthAPI.userInfo().then(data => {
         if (data) {
