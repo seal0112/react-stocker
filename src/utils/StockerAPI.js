@@ -1,20 +1,7 @@
-import axios from 'axios'
+import { createApiRequest } from 'utils/DomainSetup'
 
-import { domain, header } from 'utils/DomainSetup'
-
-const authRequest = axios.create({
-  headers: header,
-  baseURL: domain + '/api/auth',
-  withCredentials: true,
-  mode: 'no-cors'
-})
-
-const frontendDataRequest = axios.create({
-  headers: header,
-  baseURL: domain + '/api/v0',
-  withCredentials: true,
-  mode: 'no-cors'
-})
+const authRequest = createApiRequest('/api/auth')
+const frontendDataRequest = createApiRequest('/api/v0')
 
 frontendDataRequest.interceptors.response.use(
   (response) => {

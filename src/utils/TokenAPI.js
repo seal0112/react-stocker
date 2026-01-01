@@ -1,13 +1,6 @@
-import axios from 'axios'
+import { createApiRequest } from 'utils/DomainSetup'
 
-import { domain, header } from 'utils/DomainSetup'
-
-const tokenRequest = axios.create({
-  headers: header,
-  baseURL: domain + '/api/v1/token',
-  withCredentials: true,
-  mode: 'no-cors'
-})
+const tokenRequest = createApiRequest('/api/v1/token')
 
 export const getTokens = () =>
   tokenRequest.get('')

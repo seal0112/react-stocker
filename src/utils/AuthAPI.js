@@ -1,13 +1,6 @@
-import axios from 'axios'
+import { createApiRequest } from 'utils/DomainSetup'
 
-import { domain, header } from 'utils/DomainSetup'
-
-const authRequest = axios.create({
-  headers: header,
-  baseURL: domain + '/api/auth',
-  withCredentials: true,
-  mode: 'no-cors'
-})
+const authRequest = createApiRequest('/api/auth')
 
 // for user authenticate
 export const login = (data) =>

@@ -1,16 +1,6 @@
-import axios from 'axios'
+import { createApiRequest } from 'utils/DomainSetup'
 
-const api = `https://${process.env.REACT_APP_HOST_DOMAIN}`
-const header = {
-  Accept: 'application/json'
-}
-
-const followStockRequest = axios.create({
-  headers: header,
-  baseURL: api + '/api/v0',
-  withCredentials: true,
-  mode: 'no-cors'
-})
+const followStockRequest = createApiRequest('/api/v0')
 
 export const getFollowStockList = () =>
   followStockRequest.get('/follow_stock/')
