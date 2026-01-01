@@ -232,7 +232,7 @@ const AdminUserManagement = () => {
                   />
                 ))}
                 <Form.Text className="text-muted">
-                  The 'user' role cannot be removed.
+                  The &apos;user&apos; role cannot be removed.
                 </Form.Text>
               </Form>
             </>
