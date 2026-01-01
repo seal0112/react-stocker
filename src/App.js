@@ -17,6 +17,7 @@ import RecommendStockList from 'pages/RecommendStockList'
 import EarningsCallList from 'pages/EarningsCallList'
 import UserInfo from 'pages/UserInfo'
 import FollowStockList from 'pages/FollowStockList'
+import AdminUserManagement from 'pages/AdminUserManagement'
 import RequireAuth from 'components/RequireAuth'
 
 export default function App () {
@@ -123,7 +124,7 @@ export default function App () {
               }
             >
               <Route
-                key="follow-stock-list"
+                key="user-info"
                 path="/user"
                 element={<UserInfo />}
               />
@@ -131,6 +132,11 @@ export default function App () {
                 key="follow-stock-list"
                 path="/user/follow-stocks"
                 element={<FollowStockList />}
+              />
+              <Route
+                key="admin-user-management"
+                path="/admin/users"
+                element={<AdminUserManagement />}
               />
             </Route>
           </Route>

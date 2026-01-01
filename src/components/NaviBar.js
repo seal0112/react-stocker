@@ -9,9 +9,10 @@ import {
   faInfoCircle, faNewspaper, faCommentAlt, faAngleDoubleDown,
   faCoins, faHandHoldingUsd, faFileInvoiceDollar, faFunnelDollar,
   faSearchDollar, faToolbox, faUser, faCircleInfo, faList, faStar,
-  faCalendarAlt
+  faCalendarAlt, faUsersCog
 } from '@fortawesome/free-solid-svg-icons'
 import { useStock } from 'hooks/StockContext'
+import { useAuth } from 'hooks/AuthContext'
 import { Link, useLocation } from 'react-router-dom'
 
 function SelectLink ({ label, to, icon }) {
@@ -40,6 +41,7 @@ const NaviBar = () => {
 
   const stock = useStock()
   const { pathname } = useLocation()
+  const { hasRole } = useAuth()
 
   const naviTabParent = [
     {
@@ -149,7 +151,15 @@ const NaviBar = () => {
           title: '追蹤個股',
           href: '/follow-stocks',
           icon: faList
-        }
+        },
+        ...(hasRole('admin')
+          ? [{
+              title: '使用者管理',
+              href: '/admin/users',
+              icon: faUsersCog,
+              isAbsolutePath: true
+            }]
+          : [])
       ]
     }
   ]
@@ -206,9 +216,11 @@ const NaviBar = () => {
                     <Nav.Item as="li" key={naviTabSub.href} onClick={ closeNavibar }>
                       <SelectLink
                         to={
-                          new Set(['taiwan-stock', 'user']).has(naviTabPar.href)
-                            ? `/${naviTabPar.href}${naviTabSub.href}`
-                            : `/${naviTabPar.href}${naviTabSub.href}/${stock.stockNum}`
+                          naviTabSub.isAbsolutePath
+                            ? naviTabSub.href
+                            : new Set(['taiwan-stock', 'user']).has(naviTabPar.href)
+                              ? `/${naviTabPar.href}${naviTabSub.href}`
+                              : `/${naviTabPar.href}${naviTabSub.href}/${stock.stockNum}`
                         }
                         icon={naviTabSub.icon}
                         label={naviTabSub.title}
