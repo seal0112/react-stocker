@@ -10,11 +10,11 @@ const tokenRequest = axios.create({
 })
 
 export const getTokens = () =>
-  tokenRequest.get('/')
+  tokenRequest.get('')
     .then((res) => res.data)
 
 export const createToken = (data) =>
-  tokenRequest.post('/', data)
+  tokenRequest.post('', data)
     .then((res) => res.data)
 
 export const deleteToken = (tokenId) =>
