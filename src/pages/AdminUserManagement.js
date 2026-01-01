@@ -11,7 +11,7 @@ import 'assets/css/AdminUserManagement.css'
 // Role name translations
 const ROLE_LABELS = {
   admin: '管理員',
-  moderator: '版主',
+  moderator: '協同管理',
   user: '一般使用者'
 }
 
@@ -99,10 +99,14 @@ const AdminUserManagement = () => {
   }
 
   const handleStatusToggle = async (user) => {
+    const newStatus = !user.active
     try {
       setStatusLoading(prev => ({ ...prev, [user.id]: true }))
-      await updateUserStatus(user.id, !user.active)
-      fetchData()
+      await updateUserStatus(user.id, newStatus)
+      // Update local state without refetching
+      setUsers(prev => prev.map(u =>
+        u.id === user.id ? { ...u, active: newStatus } : u
+      ))
     } catch (err) {
       alert(err.response?.data?.error || '更新狀態失敗')
     } finally {
