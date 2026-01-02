@@ -3,9 +3,14 @@ import { createApiRequest } from 'utils/DomainSetup'
 const usersRequest = createApiRequest('/api/v1/users')
 const rolesRequest = createApiRequest('/api/v1/roles')
 
-export const getAllUsers = () =>
-  usersRequest.get('')
+export const getAllUsers = (page, perPage) => {
+  const params = new URLSearchParams()
+  if (page) params.append('page', page)
+  if (perPage) params.append('per_page', perPage)
+  const queryString = params.toString()
+  return usersRequest.get(queryString ? `?${queryString}` : '')
     .then((res) => res.data)
+}
 
 export const getUserById = (userId) =>
   usersRequest.get(`/${userId}`)
