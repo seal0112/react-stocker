@@ -25,7 +25,7 @@ const StockerLayout = () => {
     <div className="Stocker">
       <Header />
       <NaviBar />
-      {new Set(['taiwan-stock', 'user']).has(pathname.split('/')[1])
+      {new Set(['taiwan-stock', 'user', 'admin']).has(pathname.split('/')[1])
         ? <Outlet />
         : stock.stockNum
           ? <Container>

@@ -9,7 +9,7 @@ import {
   faInfoCircle, faNewspaper, faCommentAlt, faAngleDoubleDown,
   faCoins, faHandHoldingUsd, faFileInvoiceDollar, faFunnelDollar,
   faSearchDollar, faToolbox, faUser, faCircleInfo, faList, faStar,
-  faCalendarAlt, faUsersCog
+  faCalendarAlt, faUsersCog, faCogs
 } from '@fortawesome/free-solid-svg-icons'
 import { useStock } from 'hooks/StockContext'
 import { useAuth } from 'hooks/AuthContext'
@@ -151,17 +151,23 @@ const NaviBar = () => {
           title: '追蹤個股',
           href: '/follow-stocks',
           icon: faList
-        },
-        ...(hasRole('admin')
-          ? [{
-              title: '使用者管理',
-              href: '/admin/users',
-              icon: faUsersCog,
-              isAbsolutePath: true
-            }]
-          : [])
+        }
       ]
-    }
+    },
+    ...(hasRole('admin')
+      ? [{
+          title: '系統管理',
+          href: 'admin',
+          icon: faCogs,
+          naviTabSub: [
+            {
+              title: '使用者管理',
+              href: '/users',
+              icon: faUsersCog
+            }
+          ]
+        }]
+      : [])
   ]
 
   const clickNaviParent = (event) => {
@@ -218,7 +224,7 @@ const NaviBar = () => {
                         to={
                           naviTabSub.isAbsolutePath
                             ? naviTabSub.href
-                            : new Set(['taiwan-stock', 'user']).has(naviTabPar.href)
+                            : new Set(['taiwan-stock', 'user', 'admin']).has(naviTabPar.href)
                               ? `/${naviTabPar.href}${naviTabSub.href}`
                               : `/${naviTabPar.href}${naviTabSub.href}/${stock.stockNum}`
                         }
