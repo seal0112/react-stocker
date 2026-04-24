@@ -15,9 +15,10 @@ export const AuthProvider = ({ children }) => {
   }
 
   const logout = () => {
-    return AuthAPI.logout().then(() => {
-      setUser({})
-    })
+    return AuthAPI.logout()
+      .finally(() => {
+        setUser(null)
+      })
   }
 
   const getAccountData = () => {
