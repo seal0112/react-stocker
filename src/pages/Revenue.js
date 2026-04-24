@@ -84,7 +84,7 @@ const Revenue = () => {
                 1: { type: 'line', targetAxisIndex: 1 }
               },
               vAxes: {
-                0: {},
+                0: { minValue: 0 },
                 1: {}
               },
               hAxis: { showTextEvery: 12 },

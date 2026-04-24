@@ -123,7 +123,7 @@ export const convertGoogleOptionsToChartJS = (googleOptions = {}, type = 'line')
       y: {
         display: true,
         position: 'left',
-        beginAtZero: googleOptions.vAxis?.minValue === 0,
+        beginAtZero: googleOptions.vAxis?.minValue === 0 || googleOptions.vAxes?.[0]?.minValue === 0,
         title: {
           display: !!googleOptions.vAxes?.[0]?.title || !!googleOptions.vAxis?.title,
           text: googleOptions.vAxes?.[0]?.title || googleOptions.vAxis?.title || ''
