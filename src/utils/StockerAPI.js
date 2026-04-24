@@ -67,6 +67,10 @@ export const getOperatingExpenses = (stockId, year = 5) =>
   frontendDataRequest.get(`/f/op_expense_analysis/${stockId}?year=${year}`)
     .then((res) => res.data)
 
+export const getMonthlyValuation = (stockId, years = 5) =>
+  frontendDataRequest.get(`/monthly_valuation?stock=${stockId}&years=${years}`)
+    .then((res) => res.data)
+
 export const getMarketFeed = (targetDate, feedSource, page, pageSize) =>
   frontendDataRequest.get(
     '/f/feed?' +
