@@ -22,7 +22,6 @@ const OperatingExpensesAnalysis = () => {
     ],
     ['', 0, 0, 0, 0, 0, 0, 0, 0]
   ])
-  const [activeKey, setActiveKey] = useState('precentageOperExp')
   const [yearRange, setYearRange] = useState(5)
   const stock = useStock()
 
@@ -65,10 +64,6 @@ const OperatingExpensesAnalysis = () => {
     }
   ]
 
-  const handleCount = key => {
-    setActiveKey(key)
-  }
-
   const handleOperatingExpensesState = operatingExpensesData => {
     setOperatingExpensesData(operatingExpensesData)
   }
@@ -87,7 +82,7 @@ const OperatingExpensesAnalysis = () => {
   return (
     <div className="Operating-Expenses-Analysis">
       <YearRangePicker value={yearRange} onChange={setYearRange} />
-      <Tabs defaultActiveKey="precentageOperExp" id="Operating-Expenses-tab" onSelect={handleCount}>
+      <Tabs defaultActiveKey="precentageOperExp" id="Operating-Expenses-tab">
         <Tab eventKey="precentageOperExp" title="營業費用比例">
           <StockerChart
             type="combo"

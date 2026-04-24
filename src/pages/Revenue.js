@@ -12,7 +12,6 @@ const Revenue = () => {
     ['Year/Month', '當月營收', '去年同月增減', '上月比較增減', '備註', '均價'],
     ['', 0, 0, 0, '', null]
   ])
-  const [activeKey, setActiveKey] = useState('precentageOperExp')
   const [yearRange, setYearRange] = useState(5)
   const stock = useStock()
 
@@ -24,10 +23,6 @@ const Revenue = () => {
     { title: '備註', transferToFloat: false },
     { title: '均價', transferToFloat: true }
   ]
-
-  const handleCount = (key) => {
-    setActiveKey(key)
-  }
 
   const handleRevenueData = (revenueData) => {
     setRevenueData(revenueData)
@@ -44,7 +39,7 @@ const Revenue = () => {
       })
       const merged = revenueRaw.map(r => ({
         ...r,
-        '均價': valuationMap[r['Year/Month']] ?? null
+        均價: valuationMap[r['Year/Month']] ?? null
       }))
       return StockerTool.formatDataForGoogleChart(merged, revenueKeysOrder)
     }).then(handleRevenueData)
@@ -58,7 +53,7 @@ const Revenue = () => {
   return (
     <div className="revenue">
       <YearRangePicker value={yearRange} onChange={setYearRange} />
-      <Tabs defaultActiveKey="revenue" id="Revenue-Analysis-tab" onSelect={handleCount}>
+      <Tabs defaultActiveKey="revenue" id="Revenue-Analysis-tab">
         <Tab eventKey="revenue" title="當月營收">
           <StockerChart
             type="combo"

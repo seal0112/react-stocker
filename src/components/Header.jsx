@@ -1,17 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Navbar, Button, Form } from 'react-bootstrap'
+import { Navbar, Button } from 'react-bootstrap'
 import Select from 'react-select'
 import { useNavigate } from 'react-router-dom'
 import { useStock } from 'hooks/StockContext'
 import { useAuth } from 'hooks/AuthContext'
-import { useChartLibrary } from 'hooks/ChartContext'
 import { debounce } from 'utils/StockerTool'
 import { getStockOptions } from 'utils/StockerAPI'
 
 const Header = () => {
   const stock = useStock()
   const { user, logout } = useAuth()
-  const { chartLibrary, toggleChartLibrary } = useChartLibrary()
   const navigate = useNavigate()
   const [stockOptions, setStockOptions] = useState([])
   const [stockInputValue, setStockInputValue] = useState('')
@@ -61,14 +59,6 @@ const Header = () => {
           />
         </div>
         <div className="ms-auto d-flex align-items-center gap-3">
-          <Form.Check
-            type="switch"
-            id="chart-library-switch"
-            label={chartLibrary === 'chartjs' ? 'Chart.js' : 'Google Charts'}
-            checked={chartLibrary === 'chartjs'}
-            onChange={toggleChartLibrary}
-            className="text-white"
-          />
           {user && (
             <Button
               variant="outline-light"
