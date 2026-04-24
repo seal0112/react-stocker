@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { StockerChart } from 'components/charts'
 import { Tabs, Tab } from 'react-bootstrap'
 import CustomizedTable from 'components/CustomizedTable'
+import YearRangePicker from 'components/YearRangePicker'
 // import VerticalDataTable from 'components/VerticalDataTable'
 import { useStock } from 'hooks/StockContext'
 import * as StockerAPI from 'utils/StockerAPI'
@@ -20,6 +21,7 @@ const Revenue = () => {
     ['', 0, 0, 0, '']
   ])
   const [activeKey, setActiveKey] = useState('precentageOperExp')
+  const [yearRange, setYearRange] = useState(5)
   const stock = useStock()
   const revenueKeysOrder = [
     {
@@ -53,10 +55,10 @@ const Revenue = () => {
   }
 
   useEffect(() => {
-    StockerAPI.getRevenue(stock.stockNum)
+    StockerAPI.getRevenue(stock.stockNum, yearRange)
       .then(data => StockerTool.formatDataForGoogleChart(data, revenueKeysOrder))
       .then(handleRevenueData)
-  }, [stock.stockNum])
+  }, [stock.stockNum, yearRange])
 
   const revenue = revenueData.map(d => [].concat(d.slice(0, 2)))
   const revenueWithGrowth = revenueData.map(d => [d[0], d[1], d[2]])
@@ -65,6 +67,7 @@ const Revenue = () => {
 
   return (
     <div className="revenue">
+      <YearRangePicker value={yearRange} onChange={setYearRange} />
       <Tabs defaultActiveKey="revenue" id="Revenue-Analysis-tab" onSelect={handleCount}>
         <Tab eventKey="revenue" title="當月營收">
           <StockerChart

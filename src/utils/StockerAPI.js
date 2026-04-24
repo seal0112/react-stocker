@@ -47,24 +47,24 @@ export const getDailyInfo = (stockId) =>
   frontendDataRequest.get(`/f/daily_info/${stockId}`)
     .then((res) => res.data)
 
-export const getRevenue = (stockId) =>
-  frontendDataRequest.get(`/f/month_revenue/${stockId}`)
+export const getRevenue = (stockId, year = 5) =>
+  frontendDataRequest.get(`/f/month_revenue/${stockId}?year=${year}`)
     .then((res) => res.data)
 
-export const getEps = (stockId) =>
-  frontendDataRequest.get(`/f/eps/${stockId}`)
+export const getEps = (stockId, year = 5) =>
+  frontendDataRequest.get(`/f/eps/${stockId}?year=${year}`)
     .then((res) => res.data)
 
-export const getIncomeSheet = (stockId) =>
-  frontendDataRequest.get(`/f/income_sheet/${stockId}`)
+export const getIncomeSheet = (stockId, year = 5) =>
+  frontendDataRequest.get(`/f/income_sheet/${stockId}?year=${year}`)
     .then((res) => res.data)
 
-export const getProfit = (stockId) =>
-  frontendDataRequest.get(`/f/profit_analysis/${stockId}`)
+export const getProfit = (stockId, year = 5) =>
+  frontendDataRequest.get(`/f/profit_analysis/${stockId}?year=${year}`)
     .then((res) => res.data)
 
-export const getOperatingExpenses = (stockId) =>
-  frontendDataRequest.get(`/f/op_expense_analysis/${stockId}`)
+export const getOperatingExpenses = (stockId, year = 5) =>
+  frontendDataRequest.get(`/f/op_expense_analysis/${stockId}?year=${year}`)
     .then((res) => res.data)
 
 export const getMarketFeed = (targetDate, feedSource, page, pageSize) =>

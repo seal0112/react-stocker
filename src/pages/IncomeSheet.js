@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { StockerChart } from 'components/charts'
 import CustomizedTable from 'components/CustomizedTable'
+import YearRangePicker from 'components/YearRangePicker'
 import { useStock } from 'hooks/StockContext'
 import * as StockerAPI from 'utils/StockerAPI'
 import * as StockerTool from 'utils/StockerTool'
@@ -17,6 +18,7 @@ const IncomeSheet = () => {
     ['Year/Season', '營業收入合計', '營業毛利', '營業利益', '稅前淨利', '本期淨利', '母公司業主淨利'],
     ['', 0, 0, 0, 0, 0, 0]
   ])
+  const [yearRange, setYearRange] = useState(5)
   const stock = useStock()
 
   const incomeSheetKeysOrder = [
@@ -55,13 +57,14 @@ const IncomeSheet = () => {
   }
 
   useEffect(() => {
-    StockerAPI.getIncomeSheet(stock.stockNum)
+    StockerAPI.getIncomeSheet(stock.stockNum, yearRange)
       .then(data => StockerTool.formatDataForGoogleChart(data, incomeSheetKeysOrder))
       .then(handleIncomeSheetState)
-  }, [stock.stockNum])
+  }, [stock.stockNum, yearRange])
 
   return (
     <div className="IncomeSheet">
+      <YearRangePicker value={yearRange} onChange={setYearRange} />
       <StockerChart
         type="combo"
         data={incomeSheetData}

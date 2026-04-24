@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { StockerChart } from 'components/charts'
 import CustomizedTable from 'components/CustomizedTable'
+import YearRangePicker from 'components/YearRangePicker'
 import { useStock } from 'hooks/StockContext'
 import { Tabs, Tab } from 'react-bootstrap'
 import * as StockerAPI from 'utils/StockerAPI'
@@ -22,6 +23,7 @@ const OperatingExpensesAnalysis = () => {
     ['', 0, 0, 0, 0, 0, 0, 0, 0]
   ])
   const [activeKey, setActiveKey] = useState('precentageOperExp')
+  const [yearRange, setYearRange] = useState(5)
   const stock = useStock()
 
   const operatingExpensesKeysOrder = [
@@ -72,18 +74,19 @@ const OperatingExpensesAnalysis = () => {
   }
 
   useEffect(() => {
-    StockerAPI.getOperatingExpenses(stock.stockNum)
+    StockerAPI.getOperatingExpenses(stock.stockNum, yearRange)
       .then(data => StockerTool.formatDataForGoogleChart(
         data, operatingExpensesKeysOrder)
       )
       .then(handleOperatingExpensesState)
-  }, [stock.stockNum])
+  }, [stock.stockNum, yearRange])
 
   const precentageOperExp = operatingExpensesData.map(d => [].concat(d.slice(0, 5)))
   const rowOperExp = operatingExpensesData.map(d => [].concat(d.slice(0, 1), d.slice(5)))
 
   return (
     <div className="Operating-Expenses-Analysis">
+      <YearRangePicker value={yearRange} onChange={setYearRange} />
       <Tabs defaultActiveKey="precentageOperExp" id="Operating-Expenses-tab" onSelect={handleCount}>
         <Tab eventKey="precentageOperExp" title="營業費用比例">
           <StockerChart
