@@ -25,7 +25,7 @@ ChartJS.register(
 const ChartJSBar = ({ data, options = {}, height = '400px' }) => {
   const chartData = formatForChartJS(data, {
     type: 'bar',
-    colors: options.colors || options.series?.map(s => s.color) || palette
+    colors: options.colors || palette
   })
 
   const chartOptions = mergeOptions(

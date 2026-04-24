@@ -28,7 +28,7 @@ ChartJS.register(
 
 const ChartJSCombo = ({ data, options = {}, height = '400px' }) => {
   const seriesType = options.seriesType || 'line'
-  const colors = options.colors || options.series?.map(s => s.color) || palette
+  const colors = options.colors || palette
 
   const chartData = formatForChartJS(data, {
     type: seriesType,

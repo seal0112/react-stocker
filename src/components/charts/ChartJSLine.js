@@ -27,7 +27,7 @@ ChartJS.register(
 const ChartJSLine = ({ data, options = {}, height = '400px' }) => {
   const chartData = formatForChartJS(data, {
     type: 'line',
-    colors: options.colors || options.series?.map(s => s.color) || palette,
+    colors: options.colors || palette,
     pointSize: options.pointSize
   })
 
