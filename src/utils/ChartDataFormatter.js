@@ -109,11 +109,13 @@ export const convertGoogleOptionsToChartJS = (googleOptions = {}, type = 'line')
         ticks: {
           callback: function (value, index, ticks) {
             const label = this.getLabelForValue(value)
-            if (!label || !label.includes('Q')) return label
-            const year = label.split('Q')[0]
+            if (!label) return label
+            const sep = label.includes('Q') ? 'Q' : label.includes('/') ? '/' : null
+            if (!sep) return label
+            const year = label.split(sep)[0]
             if (index === 0) return year
             const prevLabel = this.getLabelForValue(ticks[index - 1].value)
-            const prevYear = prevLabel?.split('Q')[0]
+            const prevYear = prevLabel?.split(sep)[0]
             return year !== prevYear ? year : null
           }
         }
