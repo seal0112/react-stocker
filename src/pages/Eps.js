@@ -24,7 +24,7 @@ const Eps = () => {
       transferToFloat: false
     }, {
       title: '基本每股盈餘',
-      transferToFloat: false
+      transferToFloat: true
     }
   ]
 

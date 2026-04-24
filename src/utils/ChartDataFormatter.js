@@ -107,9 +107,15 @@ export const convertGoogleOptionsToChartJS = (googleOptions = {}, type = 'line')
       x: {
         display: true,
         ticks: {
-          maxTicksLimit: googleOptions.hAxis?.showTextEvery
-            ? Math.ceil(100 / googleOptions.hAxis.showTextEvery)
-            : undefined
+          callback: function (value, index, ticks) {
+            const label = this.getLabelForValue(value)
+            if (!label || !label.includes('Q')) return label
+            const year = label.split('Q')[0]
+            if (index === 0) return year
+            const prevLabel = this.getLabelForValue(ticks[index - 1].value)
+            const prevYear = prevLabel?.split('Q')[0]
+            return year !== prevYear ? year : null
+          }
         }
       },
       y: {
