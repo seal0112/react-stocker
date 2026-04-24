@@ -65,7 +65,6 @@ const OperatingExpensesAnalysis = () => {
 
   const handleCount = key => {
     setActiveKey(key)
-    console.log(activeKey)
   }
 
   const handleOperatingExpensesState = operatingExpensesData => {

@@ -40,10 +40,12 @@ const ChartJSCombo = ({ data, options = {}, height = '400px' }) => {
   chartData.datasets = chartData.datasets.map((dataset, index) => {
     const seriesConfig = options.series?.[index] || {}
     const type = seriesConfig.type || seriesType
+    const targetAxisIndex = seriesConfig.targetAxisIndex ?? 0
 
     return {
       ...dataset,
       type: type === 'bars' ? 'bar' : 'line',
+      yAxisID: targetAxisIndex === 1 ? 'y1' : 'y',
       backgroundColor: type === 'bars'
         ? colors[index % colors.length]
         : `${colors[index % colors.length]}20`,

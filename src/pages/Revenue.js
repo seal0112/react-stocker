@@ -59,9 +59,9 @@ const Revenue = () => {
   }, [stock.stockNum])
 
   const revenue = revenueData.map(d => [].concat(d.slice(0, 2)))
+  const revenueWithGrowth = revenueData.map(d => [d[0], d[1], d[2]])
   const annualIncrease = revenueData.map(d => [].concat(d.slice(0, 1), d.slice(2, 3)))
   const monthIncrease = revenueData.map(d => [].concat(d.slice(0, 1), d.slice(3, 4)))
-  console.log(activeKey)
 
   return (
     <div className="revenue">
@@ -69,26 +69,23 @@ const Revenue = () => {
         <Tab eventKey="revenue" title="當月營收">
           <StockerChart
             type="combo"
-            data={revenue}
+            data={revenueWithGrowth}
             height="400px"
             options={{
               title: '當月營收',
-              legend: {
-                position: 'top'
-              },
+              legend: { position: 'top' },
               chartArea: { width: '80%' },
               seriesType: 'bars',
               series: {
-                0: { visibleInLegend: true, color: '#2cc185' }
+                0: { type: 'bars', targetAxisIndex: 0 },
+                1: { type: 'line', targetAxisIndex: 1 }
               },
-              pointSize: 7,
               vAxes: {
-                0: {}
+                0: {},
+                1: {}
               },
-              hAxis: {
-                showTextEvery: 12
-              },
-              colors: ['#2cc185']
+              hAxis: { showTextEvery: 12 },
+              colors: ['#2cc185', '#dc3545']
             }}
           />
         </Tab>

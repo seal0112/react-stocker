@@ -120,12 +120,24 @@ export const convertGoogleOptionsToChartJS = (googleOptions = {}, type = 'line')
       },
       y: {
         display: true,
+        position: 'left',
         beginAtZero: googleOptions.vAxis?.minValue === 0,
         title: {
-          display: !!googleOptions.vAxis?.title,
-          text: googleOptions.vAxis?.title || ''
+          display: !!googleOptions.vAxes?.[0]?.title || !!googleOptions.vAxis?.title,
+          text: googleOptions.vAxes?.[0]?.title || googleOptions.vAxis?.title || ''
         }
-      }
+      },
+      ...(googleOptions.vAxes?.[1] !== undefined && {
+        y1: {
+          display: true,
+          position: 'right',
+          grid: { drawOnChartArea: false },
+          title: {
+            display: !!googleOptions.vAxes[1]?.title,
+            text: googleOptions.vAxes[1]?.title || ''
+          }
+        }
+      })
     },
     interaction: {
       intersect: false,
