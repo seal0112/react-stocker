@@ -106,6 +106,30 @@ export const convertGoogleOptionsToChartJS = (googleOptions = {}, type = 'line')
     scales: {
       x: {
         display: true,
+        grid: {
+          color: function (context) {
+            const label = context.chart.data.labels?.[context.index]
+            if (!label) return 'transparent'
+            const sep = label.includes('Q') ? 'Q' : label.includes('/') ? '/' : null
+            if (!sep) return 'rgba(0,0,0,0.1)'
+            const year = label.split(sep)[0]
+            if (context.index === 0) return 'rgba(0,0,0,0.4)'
+            const prevLabel = context.chart.data.labels?.[context.index - 1]
+            const prevYear = prevLabel?.split(sep)[0]
+            return year !== prevYear ? 'rgba(0,0,0,0.4)' : 'transparent'
+          },
+          lineWidth: function (context) {
+            const label = context.chart.data.labels?.[context.index]
+            if (!label) return 1
+            const sep = label.includes('Q') ? 'Q' : label.includes('/') ? '/' : null
+            if (!sep) return 1
+            const year = label.split(sep)[0]
+            if (context.index === 0) return 2
+            const prevLabel = context.chart.data.labels?.[context.index - 1]
+            const prevYear = prevLabel?.split(sep)[0]
+            return year !== prevYear ? 2 : 1
+          }
+        },
         ticks: {
           autoSkip: false,
           maxRotation: 0,
