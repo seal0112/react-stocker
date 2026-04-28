@@ -24,7 +24,6 @@ const FollowStockList = () => {
               id={followStock.id}
               stock={followStock.stock}
               longOrShort={followStock.long_or_short}
-              lastUpdateTime={followStock.last_update_time}
               comment={followStock.comment}
             ></FollowStockCard>
 
