@@ -7,7 +7,7 @@ const UPDATE_FIELDS = [
   { label: '財報', key: 'income_sheet_last_update' },
   { label: '法說會', key: 'earnings_call_last_update' },
   { label: '公告', key: 'announcement_last_update' },
-  { label: '新聞', key: 'news_last_update' },
+  { label: '新聞', key: 'news_last_update' }
 ]
 
 const FollowStockCard = ({ id, stock, longOrShort, comment }) => {
