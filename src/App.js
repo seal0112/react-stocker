@@ -1,5 +1,6 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 import StockerLayout from 'pages/StockerLayout'
@@ -22,6 +23,7 @@ import RequireAuth from 'components/RequireAuth'
 
 export default function App () {
   return (
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
     <div className="App">
       <BrowserRouter>
         <Routes>
@@ -143,5 +145,6 @@ export default function App () {
         </Routes>
       </BrowserRouter>
     </div>
+    </GoogleOAuthProvider>
   )
 }

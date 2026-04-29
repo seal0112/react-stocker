@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import 'assets/css/Login.css'
 import { useNavigate, useLocation } from 'react-router-dom'
-import GoogleLogin from 'react-google-login'
+import { GoogleLogin } from '@react-oauth/google'
 import { Form, Button, Alert } from 'react-bootstrap'
 import { useAuth } from 'hooks/AuthContext'
 
@@ -16,11 +16,10 @@ const Login = () => {
   const location = useLocation()
   const from = location.state ? location.state.from.pathname : '/'
 
-  const responseGoogle = googleUser => {
-    const idToken = googleUser.getAuthResponse().id_token
+  const responseGoogle = credentialResponse => {
     const data = {
       external_type: 'google',
-      token: idToken
+      token: credentialResponse.credential
     }
     auth.login(data)
       .then(() => { navigate(from, { replace: true }) })
@@ -115,12 +114,8 @@ const Login = () => {
         </Button>
         <div className="login-btn-area">
           <GoogleLogin
-              className="oauth-login-btn"
-              clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-              buttonText="Sign in with Google"
               onSuccess={responseGoogle}
-              onFailure={responseGoogle}
-              cookiePolicy={'single_host_origin'} />
+              onError={() => setAlertStatus(true, 'Google 登入失敗')} />
         </div>
       </Form>
     </div>
