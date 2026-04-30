@@ -44,7 +44,7 @@ const EarningsCallList = () => {
   return (
     <main>
       <Container>
-        <h4 style={{ marginBottom: '1rem' }}>法說會列表</h4>
+        <h4 style={{ marginBottom: '1rem' }}>法說會列表（即將舉行）</h4>
         <Form style={{ marginBottom: '1rem' }} onSubmit={handleSearch}>
           <Row className="mb-3">
             <Col sm={4}>
@@ -60,7 +60,7 @@ const EarningsCallList = () => {
             </Col>
             <Col sm={4}>
               <Form.Group controlId="meetingDate">
-                <Form.Label>會議日期</Form.Label>
+                <Form.Label>指定日期</Form.Label>
                 <Form.Control
                   type="date"
                   value={meetingDate}
