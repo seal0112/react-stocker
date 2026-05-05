@@ -14,6 +14,7 @@ import OperatingExpensesAnalysis from 'pages/OperatingExpensesAnalysis'
 import MarketNews from 'pages/taiwan_market/MarketNews'
 import AnnouncementDismantling from 'pages/taiwan_market/AnnouncementDismantling'
 import AnnouncementDismantlingList from 'pages/taiwan_market/AnnouncementDismantlingList'
+import StockFeed from 'pages/StockFeed'
 import RecommendStockList from 'pages/RecommendStockList'
 import EarningsCallList from 'pages/EarningsCallList'
 import UserInfo from 'pages/UserInfo'
@@ -53,7 +54,7 @@ export default function App () {
               <Route
                 key="news"
                 path="/basic-info/news/:stockNum"
-                element={<p>news</p>}
+                element={<StockFeed />}
               />
               <Route
                 key="comment"

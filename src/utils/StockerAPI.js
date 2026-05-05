@@ -96,6 +96,10 @@ export const updatePushNotification = (pushNotificationData) =>
   frontendDataRequest.put('/push_notification/', pushNotificationData)
     .then((res) => res.data)
 
+export const getStockFeed = (stockId, page, pageSize) =>
+  frontendDataRequest.get(`/feed/${stockId}?page=${page}&page_size=${pageSize}`)
+    .then((res) => res.data)
+
 export const getEarningsCallList = (params = {}) => {
   const queryParams = new URLSearchParams()
   if (params.stock) queryParams.append('stock', params.stock)
