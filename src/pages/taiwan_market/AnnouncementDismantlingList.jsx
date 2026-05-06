@@ -47,8 +47,8 @@ const AnnouncementDismantlingList = () => {
 
   return (
     <main>
-      <Container fluid>
-        <Row className="mb-3 align-items-center">
+      <Container fluid className="px-4">
+        <Row className="mb-3 mt-3 align-items-center">
           <Col xs="auto">
             <Form.Control
               type="date"
