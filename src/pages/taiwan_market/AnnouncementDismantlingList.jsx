@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import 'assets/css/StockerLayout.css'
 import * as StockerAPI from 'utils/StockerAPI'
 import { Container, Form, Col, Row, Table, Badge, Spinner } from 'react-bootstrap'
@@ -12,10 +13,14 @@ const YoY = ({ value }) => {
   return <Badge bg={color}>{prefix}{num.toFixed(2)}%</Badge>
 }
 
+YoY.propTypes = { value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]) }
+
 const Pct = ({ value }) => {
   if (value == null) return <span className="text-muted">-</span>
   return <span>{parseFloat(value).toFixed(2)}%</span>
 }
+
+Pct.propTypes = { value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]) }
 
 const AnnouncementDismantlingList = () => {
   const [date, setDate] = useState(dayjs().format('YYYY-MM-DD'))
