@@ -84,6 +84,12 @@ export const getAnnouncementDismantling = (announcementDate) =>
   frontendDataRequest.post('/incomesheet_announce', announcementDate)
     .then((res) => res.data)
 
+export const getAnnouncementDismantlingList = (updateDate) => {
+  const params = updateDate ? `?update_date=${updateDate}` : ''
+  return frontendDataRequest.get(`/feed/announcement_income_sheet_analysis${params}`)
+    .then((res) => res.data)
+}
+
 export const getStockOptions = (query) =>
   frontendDataRequest.get(`/f/autocomplete?search_stock=${query}`)
     .then((res) => res.data)
