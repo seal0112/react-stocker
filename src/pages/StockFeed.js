@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Spinner, Form, Row, Col } from 'react-bootstrap'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import dayjs from 'dayjs'
@@ -16,6 +16,7 @@ const StockFeed = () => {
   const [hasMore, setHasMore] = useState(true)
   const [loading, setLoading] = useState(false)
   const [startDate, setStartDate] = useState('')
+  const debounceTimer = useRef(null)
 
   const reset = (date) => {
     setFeeds([])
@@ -50,14 +51,15 @@ const StockFeed = () => {
   const handleDateChange = (e) => {
     const val = e.target.value
     setStartDate(val)
-    reset(val)
+    clearTimeout(debounceTimer.current)
+    debounceTimer.current = setTimeout(() => reset(val), 300)
   }
 
   return (
     <main>
       <Row className="px-3 pt-3 pb-2 align-items-center">
         <Col xs="auto">
-          <Form.Label className="mb-0">從</Form.Label>
+          <Form.Label className="mb-0">截至</Form.Label>
         </Col>
         <Col xs="auto">
           <Form.Control
@@ -69,7 +71,7 @@ const StockFeed = () => {
           />
         </Col>
         <Col xs="auto" className="text-muted">
-          {startDate ? `${startDate} 起` : '全部'}
+          {startDate ? `${startDate} 以前` : '全部'}
         </Col>
       </Row>
       <ul className="news-list">
