@@ -138,8 +138,23 @@ const NaviBar = () => {
       icon: faChartLine,
       naviTabSub: [
         {
-          title: '月估值',
-          href: '/monthly-valuation',
+          title: '月均價',
+          href: '/monthly-valuation/price',
+          icon: faChartLine
+        },
+        {
+          title: '本益比',
+          href: '/monthly-valuation/pe',
+          icon: faChartLine
+        },
+        {
+          title: '淨值比',
+          href: '/monthly-valuation/pb',
+          icon: faChartLine
+        },
+        {
+          title: '殖利率',
+          href: '/monthly-valuation/yield',
           icon: faChartLine
         }
       ]

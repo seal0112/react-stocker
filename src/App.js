@@ -89,7 +89,7 @@ export default function App () {
               />
               <Route
                 key="monthly-valuation"
-                path="/valuation/monthly-valuation/:stockNum"
+                path="/valuation/monthly-valuation/:metric/:stockNum"
                 element={<MonthlyValuation />}
               />
               <Route path="*" element={<p>no match</p>} />
