@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons'
 import { StockerChart } from 'components/charts'
-import { Row, Col } from 'react-bootstrap'
+import { Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { useStock } from 'hooks/StockContext'
 import * as StockerAPI from 'utils/StockerAPI'
 import * as StockerTool from 'utils/StockerTool'
@@ -104,6 +106,22 @@ const MonthlyValuation = () => {
           />
         </Col>
         <Col xs="auto" className="text-muted" style={{ minWidth: 40 }}>{percentile.high}%</Col>
+        <Col xs="auto">
+          <OverlayTrigger
+            placement="top"
+            overlay={
+              <Tooltip>
+                拖動左右把手選取歷史資料的分位範圍。<br />
+                圖表橫線 = 落在此範圍內所有月份資料的平均值。<br />
+                例：0% ~ 20% 為歷史最低的 20% 區間平均。
+              </Tooltip>
+            }
+          >
+            <span style={{ cursor: 'pointer', color: '#adb5bd' }}>
+              <FontAwesomeIcon icon={faCircleQuestion} />
+            </span>
+          </OverlayTrigger>
+        </Col>
       </Row>
 
       <StockerChart
