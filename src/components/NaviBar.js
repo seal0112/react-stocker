@@ -143,17 +143,17 @@ const NaviBar = () => {
           icon: faChartLine
         },
         {
-          title: '本益比',
+          title: '月均本益比',
           href: '/monthly-valuation/pe',
           icon: faChartLine
         },
         {
-          title: '淨值比',
+          title: '月均淨值比',
           href: '/monthly-valuation/pb',
           icon: faChartLine
         },
         {
-          title: '殖利率',
+          title: '月均殖利率',
           href: '/monthly-valuation/yield',
           icon: faChartLine
         }
