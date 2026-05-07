@@ -35,12 +35,12 @@ const MonthlyValuation = () => {
 
   const tableData = rawData.length > 0
     ? StockerTool.formatDataForGoogleChart(rawData, [
-        { title: 'Year/Month', transferToFloat: false },
-        { title: '均價', transferToFloat: true },
-        { title: '本益比', transferToFloat: true },
-        { title: '淨值比', transferToFloat: true },
-        { title: '殖利率', transferToFloat: true }
-      ])
+      { title: 'Year/Month', transferToFloat: false },
+      { title: '均價', transferToFloat: true },
+      { title: '本益比', transferToFloat: true },
+      { title: '淨值比', transferToFloat: true },
+      { title: '殖利率', transferToFloat: true }
+    ])
     : [['Year/Month', '均價', '本益比', '淨值比', '殖利率']]
 
   return (
