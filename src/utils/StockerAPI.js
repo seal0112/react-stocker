@@ -102,9 +102,12 @@ export const updatePushNotification = (pushNotificationData) =>
   frontendDataRequest.put('/push_notification/', pushNotificationData)
     .then((res) => res.data)
 
-export const getStockFeed = (stockId, page, pageSize) =>
-  frontendDataRequest.get(`/feed/${stockId}?page=${page}&page_size=${pageSize}`)
+export const getStockFeed = (stockId, page, pageSize, startDate = null) => {
+  const params = new URLSearchParams({ page, page_size: pageSize })
+  if (startDate) params.append('start_date', startDate)
+  return frontendDataRequest.get(`/feed/${stockId}?${params.toString()}`)
     .then((res) => res.data)
+}
 
 export const getEarningsCallList = (params = {}) => {
   const queryParams = new URLSearchParams()
