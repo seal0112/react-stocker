@@ -102,10 +102,11 @@ export const updatePushNotification = (pushNotificationData) =>
   frontendDataRequest.put('/push_notification/', pushNotificationData)
     .then((res) => res.data)
 
-export const getStockFeed = (stockId, page, pageSize, startDate = null) => {
+export const getStockFeed = (stockId, page, pageSize, startDate = null, sources = []) => {
   const params = new URLSearchParams({ page, page_size: pageSize })
   if (startDate) params.append('start_date', startDate)
-  return frontendDataRequest.get(`/feed/${stockId}?${params.toString()}`)
+  const sourceStr = sources.length > 0 ? '&' + sources.map(s => `source=${s}`).join('&') : ''
+  return frontendDataRequest.get(`/feed/${stockId}?${params.toString()}${sourceStr}`)
     .then((res) => res.data)
 }
 
