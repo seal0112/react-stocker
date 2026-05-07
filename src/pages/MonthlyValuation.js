@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
+import Slider from 'rc-slider'
+import 'rc-slider/assets/index.css'
 import { StockerChart } from 'components/charts'
-import CustomizedTable from 'components/CustomizedTable'
-import { Tabs, Tab, Form, Row, Col, Table } from 'react-bootstrap'
+import { Tabs, Tab, Row, Col, Table } from 'react-bootstrap'
 import { useStock } from 'hooks/StockContext'
 import * as StockerAPI from 'utils/StockerAPI'
 import * as StockerTool from 'utils/StockerTool'
@@ -17,24 +18,18 @@ const loadPercentile = () => {
   return { low: 20, high: 80 }
 }
 
-const savePercentile = (low, high) => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ low, high }))
-}
-
-const calcPercentile = (sortedVals, pct) => {
-  const idx = Math.floor((pct / 100) * sortedVals.length)
-  return Math.min(idx, sortedVals.length - 1)
+const calcAvgInRange = (vals, low, high) => {
+  const sorted = [...vals].sort((a, b) => a - b)
+  const loIdx = Math.floor((low / 100) * sorted.length)
+  const hiIdx = Math.min(Math.ceil((high / 100) * sorted.length), sorted.length) - 1
+  const slice = sorted.slice(loIdx, hiIdx + 1)
+  if (slice.length === 0) return null
+  return slice.reduce((a, b) => a + b, 0) / slice.length
 }
 
 const getPercentileRank = (sortedVals, value) => {
   const below = sortedVals.filter(v => v <= value).length
   return Math.round((below / sortedVals.length) * 100)
-}
-
-const avg = (arr) => {
-  const valid = arr.filter(v => v != null && !isNaN(v))
-  if (valid.length === 0) return null
-  return (valid.reduce((a, b) => a + b, 0) / valid.length).toFixed(2)
 }
 
 const MonthlyValuation = () => {
@@ -52,80 +47,78 @@ const MonthlyValuation = () => {
       })
   }, [stock.stockNum])
 
-  const handlePercentileChange = (key, val) => {
-    const num = Math.min(100, Math.max(0, Number(val)))
-    const next = { ...percentile, [key]: num }
+  const handleSliderChange = (val) => {
+    const next = { low: val[0], high: val[1] }
     setPercentile(next)
-    savePercentile(next.low, next.high)
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+  }
+
+  const getMetricAvg = (metric) => {
+    const vals = rawData.map(r => parseFloat(r[metric])).filter(v => !isNaN(v))
+    const avg = calcAvgInRange(vals, percentile.low, percentile.high)
+    return avg != null ? parseFloat(avg.toFixed(2)) : null
   }
 
   const makeChartData = (field) => {
-    if (rawData.length === 0) return [['Year/Month', field], ['', null]]
-    return StockerTool.formatDataForGoogleChart(rawData, [
-      { title: 'Year/Month', transferToFloat: false },
-      { title: field, transferToFloat: true }
-    ])
+    if (rawData.length === 0) return [['Year/Month', field, '分位平均'], ['', null, null]]
+    const avg = getMetricAvg(field)
+    return StockerTool.formatDataForGoogleChart(
+      rawData.map(r => ({ ...r, 分位平均: avg })),
+      [
+        { title: 'Year/Month', transferToFloat: false },
+        { title: field, transferToFloat: true },
+        { title: '分位平均', transferToFloat: true }
+      ]
+    )
   }
 
   const percentileStats = METRICS.map(metric => {
-    const vals = rawData
-      .map(r => parseFloat(r[metric]))
-      .filter(v => !isNaN(v))
-      .sort((a, b) => a - b)
-
+    const vals = rawData.map(r => parseFloat(r[metric])).filter(v => !isNaN(v)).sort((a, b) => a - b)
     if (vals.length === 0) return { metric, rangeAvg: '-', current: '-', rank: '-' }
-
-    const loIdx = calcPercentile(vals, percentile.low)
-    const hiIdx = calcPercentile(vals, percentile.high)
-    const rangeVals = vals.slice(loIdx, hiIdx + 1)
-    const rangeAvg = avg(rangeVals)
-
+    const rangeAvg = calcAvgInRange(vals, percentile.low, percentile.high)
     const latest = parseFloat(rawData[rawData.length - 1]?.[metric])
-    const current = isNaN(latest) ? '-' : latest.toFixed(2)
-    const rank = isNaN(latest) ? '-' : `${getPercentileRank(vals, latest)}%`
-
-    return { metric, rangeAvg, current, rank }
+    return {
+      metric,
+      rangeAvg: rangeAvg != null ? rangeAvg.toFixed(2) : '-',
+      current: isNaN(latest) ? '-' : latest.toFixed(2),
+      rank: isNaN(latest) ? '-' : `${getPercentileRank(vals, latest)}%`
+    }
   })
 
-  const tableData = rawData.length > 0
-    ? StockerTool.formatDataForGoogleChart(rawData, [
-      { title: 'Year/Month', transferToFloat: false },
-      { title: '均價', transferToFloat: true },
-      { title: '本益比', transferToFloat: true },
-      { title: '淨值比', transferToFloat: true },
-      { title: '殖利率', transferToFloat: true }
-    ])
-    : [['Year/Month', '均價', '本益比', '淨值比', '殖利率']]
+  const lineOverlay = {
+    seriesType: 'line',
+    series: {
+      0: { type: 'line', targetAxisIndex: 0 },
+      1: { type: 'line', targetAxisIndex: 0 }
+    }
+  }
+
+  const barWithLine = {
+    seriesType: 'bars',
+    series: {
+      0: { type: 'bars', targetAxisIndex: 0 },
+      1: { type: 'line', targetAxisIndex: 0 }
+    }
+  }
 
   return (
-    <div className="MonthlyValuation">
-      <Row className="align-items-center mb-3 px-2 pt-3">
-        <Col xs="auto">
-          <Form.Label className="mb-0 me-2">分位範圍</Form.Label>
-        </Col>
-        <Col xs="auto">
-          <Form.Control
-            type="number"
-            min={0} max={100}
-            value={percentile.low}
-            style={{ width: '75px' }}
-            onChange={e => handlePercentileChange('low', e.target.value)}
+    <div className="MonthlyValuation px-3 pt-3">
+      <Row className="align-items-center mb-2">
+        <Col xs="auto" className="text-muted" style={{ minWidth: 40 }}>{percentile.low}%</Col>
+        <Col>
+          <Slider
+            range
+            min={0}
+            max={100}
+            value={[percentile.low, percentile.high]}
+            onChange={handleSliderChange}
+            allowCross={false}
           />
         </Col>
-        <Col xs="auto">% ～ </Col>
-        <Col xs="auto">
-          <Form.Control
-            type="number"
-            min={0} max={100}
-            value={percentile.high}
-            style={{ width: '75px' }}
-            onChange={e => handlePercentileChange('high', e.target.value)}
-          />
-        </Col>
-        <Col xs="auto">%</Col>
+        <Col xs="auto" className="text-muted" style={{ minWidth: 40 }}>{percentile.high}%</Col>
       </Row>
 
-      <Table bordered size="sm" className="mx-2 mb-4" style={{ width: 'auto' }}>
+      <Table bordered size="sm" className="mb-3" style={{ width: 'auto' }}>
         <thead className="table-dark">
           <tr>
             <th>指標</th>
@@ -138,7 +131,7 @@ const MonthlyValuation = () => {
           {percentileStats.map(({ metric, rangeAvg, current, rank }) => (
             <tr key={metric}>
               <td><strong>{metric}</strong></td>
-              <td>{rangeAvg ?? '-'}</td>
+              <td>{rangeAvg}</td>
               <td>{current}</td>
               <td>{rank}</td>
             </tr>
@@ -149,16 +142,17 @@ const MonthlyValuation = () => {
       <Tabs defaultActiveKey="price" id="monthly-valuation-tab">
         <Tab eventKey="price" title="月均價">
           <StockerChart
-            type="bar"
+            type="combo"
             data={makeChartData('均價')}
             height="400px"
             options={{
               title: '月均價',
               legend: { position: 'top' },
               chartArea: { width: '80%' },
-              colors: ['#6096FD'],
+              colors: ['#6096FD', '#f4a261'],
               vAxis: { title: '價格 (元)', minValue: 0 },
-              hAxis: { showTextEvery: 12 }
+              hAxis: { showTextEvery: 12 },
+              ...barWithLine
             }}
           />
         </Tab>
@@ -171,10 +165,10 @@ const MonthlyValuation = () => {
               title: '本益比 (P/E)',
               legend: { position: 'top' },
               chartArea: { width: '80%' },
-              seriesType: 'line',
-              colors: ['#f4a261'],
-              pointSize: 5,
-              hAxis: { showTextEvery: 12 }
+              colors: ['#f4a261', '#dc3545'],
+              pointSize: 4,
+              hAxis: { showTextEvery: 12 },
+              ...lineOverlay
             }}
           />
         </Tab>
@@ -187,10 +181,10 @@ const MonthlyValuation = () => {
               title: '淨值比 (P/B)',
               legend: { position: 'top' },
               chartArea: { width: '80%' },
-              seriesType: 'line',
-              colors: ['#e76f51'],
-              pointSize: 5,
-              hAxis: { showTextEvery: 12 }
+              colors: ['#e76f51', '#dc3545'],
+              pointSize: 4,
+              hAxis: { showTextEvery: 12 },
+              ...lineOverlay
             }}
           />
         </Tab>
@@ -203,15 +197,14 @@ const MonthlyValuation = () => {
               title: '殖利率 (%)',
               legend: { position: 'top' },
               chartArea: { width: '80%' },
-              seriesType: 'line',
-              colors: ['#2cc185'],
-              pointSize: 5,
-              hAxis: { showTextEvery: 12 }
+              colors: ['#2cc185', '#dc3545'],
+              pointSize: 4,
+              hAxis: { showTextEvery: 12 },
+              ...lineOverlay
             }}
           />
         </Tab>
       </Tabs>
-      <CustomizedTable data={tableData} />
     </div>
   )
 }
