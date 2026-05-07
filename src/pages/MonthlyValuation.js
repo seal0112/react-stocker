@@ -112,7 +112,7 @@ const MonthlyValuation = () => {
             onChange={e => handlePercentileChange('low', e.target.value)}
           />
         </Col>
-        <Col xs="auto">%　～　</Col>
+        <Col xs="auto">% ～ </Col>
         <Col xs="auto">
           <Form.Control
             type="number"

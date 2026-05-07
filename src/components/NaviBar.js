@@ -134,7 +134,7 @@ const NaviBar = () => {
       ]
     }, {
       title: '價值評估',
-      href: 'financial-stat',
+      href: 'valuation',
       icon: faChartLine,
       naviTabSub: [
         {
