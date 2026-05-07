@@ -13,7 +13,7 @@ import * as StockerTool from 'utils/StockerTool'
 const STORAGE_KEY = 'monthly_valuation_percentile'
 
 const METRIC_MAP = {
-  price: { field: '均價', title: '月均價', color: '#6096FD', avgColor: '#f4a261', chartType: 'bar' },
+  price: { field: '均價', title: '月均價', color: '#6096FD', avgColor: '#f4a261', chartType: 'line' },
   pe: { field: '本益比', title: '本益比 (P/E)', color: '#f4a261', avgColor: '#dc3545', chartType: 'line' },
   pb: { field: '淨值比', title: '淨值比 (P/B)', color: '#e76f51', avgColor: '#dc3545', chartType: 'line' },
   yield: { field: '殖利率', title: '殖利率 (%)', color: '#2cc185', avgColor: '#dc3545', chartType: 'line' }
