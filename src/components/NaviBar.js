@@ -9,7 +9,7 @@ import {
   faInfoCircle, faNewspaper, faCommentAlt, faAngleDoubleDown,
   faCoins, faHandHoldingUsd, faFileInvoiceDollar, faFunnelDollar,
   faSearchDollar, faToolbox, faUser, faCircleInfo, faList, faStar,
-  faCalendarAlt, faUsersCog, faCogs
+  faCalendarAlt, faUsersCog, faCogs, faChartLine
 } from '@fortawesome/free-solid-svg-icons'
 import { useStock } from 'hooks/StockContext'
 import { useAuth } from 'hooks/AuthContext'
@@ -130,6 +130,17 @@ const NaviBar = () => {
           title: '營業費用分析',
           href: '/operating-expenses-analysis',
           icon: faSearchDollar
+        }
+      ]
+    }, {
+      title: '價值評估',
+      href: 'financial-stat',
+      icon: faChartLine,
+      naviTabSub: [
+        {
+          title: '月估值',
+          href: '/monthly-valuation',
+          icon: faChartLine
         }
       ]
     }, {

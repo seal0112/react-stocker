@@ -11,6 +11,7 @@ import Eps from 'pages/Eps'
 import IncomeSheet from 'pages/IncomeSheet'
 import ProfitAnalysis from 'pages/ProfitAnalysis'
 import OperatingExpensesAnalysis from 'pages/OperatingExpensesAnalysis'
+import MonthlyValuation from 'pages/MonthlyValuation'
 import MarketNews from 'pages/taiwan_market/MarketNews'
 import AnnouncementDismantling from 'pages/taiwan_market/AnnouncementDismantling'
 import AnnouncementDismantlingList from 'pages/taiwan_market/AnnouncementDismantlingList'
@@ -85,6 +86,11 @@ export default function App () {
                 key="operating-expenses-analysis"
                 path="/financial-stat/operating-expenses-analysis/:stockNum"
                 element={<OperatingExpensesAnalysis />}
+              />
+              <Route
+                key="monthly-valuation"
+                path="/financial-stat/monthly-valuation/:stockNum"
+                element={<MonthlyValuation />}
               />
               <Route path="*" element={<p>no match</p>} />
             </Route>
