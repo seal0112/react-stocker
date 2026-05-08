@@ -5,12 +5,14 @@ import 'rc-slider/assets/index.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons'
 import { StockerChart } from 'components/charts'
-import { Row, Col, OverlayTrigger, Tooltip } from 'react-bootstrap'
+import { Row, Col, OverlayTrigger, Tooltip, ButtonGroup, ToggleButton } from 'react-bootstrap'
 import { useStock } from 'hooks/StockContext'
 import * as StockerAPI from 'utils/StockerAPI'
 import * as StockerTool from 'utils/StockerTool'
 
 const STORAGE_KEY = 'monthly_valuation_percentile'
+const YEARS_STORAGE_KEY = 'monthly_valuation_years'
+const YEARS_OPTIONS = [1, 3, 5, 10]
 
 const METRIC_MAP = {
   price: { field: '均價', title: '月均價', color: '#6096FD', avgColor: '#f4a261', chartType: 'line' },
@@ -27,6 +29,11 @@ const loadPercentile = () => {
   return { low: 20, high: 80 }
 }
 
+const loadYears = () => {
+  const saved = parseInt(localStorage.getItem(YEARS_STORAGE_KEY))
+  return YEARS_OPTIONS.includes(saved) ? saved : 5
+}
+
 const calcAvgInRange = (vals, low, high) => {
   const sorted = [...vals].sort((a, b) => a - b)
   const loIdx = Math.floor((low / 100) * sorted.length)
@@ -40,21 +47,27 @@ const MonthlyValuation = () => {
   const { metric = 'price' } = useParams()
   const [rawData, setRawData] = useState([])
   const [percentile, setPercentile] = useState(loadPercentile)
+  const [years, setYears] = useState(loadYears)
   const stock = useStock()
 
   const config = METRIC_MAP[metric] || METRIC_MAP.price
 
   useEffect(() => {
-    StockerAPI.getMonthlyValuation(stock.stockNum, 5)
+    StockerAPI.getMonthlyValuation(stock.stockNum, years)
       .then(data => {
         setRawData(data.map(r => ({ ...r, 'Year/Month': `${r.year}/${r.month}` })))
       })
-  }, [stock.stockNum])
+  }, [stock.stockNum, years])
 
   const handleSliderChange = (val) => {
     const next = { low: val[0], high: val[1] }
     setPercentile(next)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+  }
+
+  const handleYearsChange = (val) => {
+    setYears(val)
+    localStorage.setItem(YEARS_STORAGE_KEY, String(val))
   }
 
   const getAvg = () => {
@@ -93,6 +106,26 @@ const MonthlyValuation = () => {
 
   return (
     <div className="MonthlyValuation px-3 pt-3">
+      <Row className="align-items-center mb-3">
+        <Col xs="auto">
+          <ButtonGroup size="sm">
+            {YEARS_OPTIONS.map(y => (
+              <ToggleButton
+                key={y}
+                id={`years-${y}`}
+                type="radio"
+                variant={years === y ? 'primary' : 'outline-secondary'}
+                value={y}
+                checked={years === y}
+                onChange={() => handleYearsChange(y)}
+              >
+                {y}年
+              </ToggleButton>
+            ))}
+          </ButtonGroup>
+        </Col>
+      </Row>
+
       <Row className="align-items-center mb-4">
         <Col xs="auto" className="text-muted" style={{ minWidth: 40 }}>{percentile.low}%</Col>
         <Col>
