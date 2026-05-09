@@ -47,8 +47,8 @@ const Revenue = () => {
 
   // index: 0=Year/Month, 1=當月營收, 2=去年同月增減, 3=上月比較增減, 4=備註, 5=均價
   const revenueWithPrice = revenueData.map(d => [d[0], d[1], d[5]])
-  const annualIncrease = revenueData.map(d => [d[0], d[2]])
-  const monthIncrease = revenueData.map(d => [d[0], d[3]])
+  const annualIncrease = revenueData.map(d => [d[0], d[2], d[5]])
+  const monthIncrease = revenueData.map(d => [d[0], d[3], d[5]])
 
   return (
     <div className="revenue">
@@ -66,7 +66,7 @@ const Revenue = () => {
               seriesType: 'bars',
               series: {
                 0: { type: 'bars', targetAxisIndex: 0 },
-                1: { type: 'line', targetAxisIndex: 1 }
+                1: { type: 'line', targetAxisIndex: 1, lineWidth: 3, pointSize: 5 }
               },
               vAxes: {
                 0: { minValue: 0 },
@@ -87,11 +87,13 @@ const Revenue = () => {
               legend: { position: 'top' },
               chartArea: { width: '75%' },
               seriesType: 'line',
-              series: { 0: { visibleInLegend: true } },
-              pointSize: 7,
-              vAxes: { 0: {} },
+              series: {
+                0: { targetAxisIndex: 0, pointSize: 7 },
+                1: { targetAxisIndex: 1, lineWidth: 2, pointSize: 4, color: '#6096FD' }
+              },
+              vAxes: { 0: {}, 1: { minValue: 0 } },
               hAxis: {},
-              colors: ['#dc3545']
+              colors: ['#dc3545', '#6096FD']
             }}
           />
         </Tab>
@@ -105,11 +107,13 @@ const Revenue = () => {
               legend: { position: 'top' },
               chartArea: { width: '75%' },
               seriesType: 'line',
-              series: { 0: { visibleInLegend: true } },
-              pointSize: 7,
-              vAxes: { 0: {} },
+              series: {
+                0: { targetAxisIndex: 0, pointSize: 7 },
+                1: { targetAxisIndex: 1, lineWidth: 2, pointSize: 4, color: '#6096FD' }
+              },
+              vAxes: { 0: {}, 1: { minValue: 0 } },
               hAxis: {},
-              colors: ['#dc3545']
+              colors: ['#dc3545', '#6096FD']
             }}
           />
         </Tab>
