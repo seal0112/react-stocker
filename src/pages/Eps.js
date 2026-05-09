@@ -55,8 +55,7 @@ const Eps = () => {
           chartArea: { width: '80%' },
           colors: ['#2cc185'],
           vAxis: {
-            title: 'EPS',
-            minValue: 0
+            title: 'EPS'
           },
           hAxis: {
             showTextEvery: 4
