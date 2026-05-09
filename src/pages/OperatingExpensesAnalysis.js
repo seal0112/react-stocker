@@ -3,6 +3,7 @@ import { StockerChart } from 'components/charts'
 import CustomizedTable from 'components/CustomizedTable'
 import YearRangePicker from 'components/YearRangePicker'
 import { useStock } from 'hooks/StockContext'
+import useYearRange from 'hooks/useYearRange'
 import { Tabs, Tab } from 'react-bootstrap'
 import * as StockerAPI from 'utils/StockerAPI'
 import * as StockerTool from 'utils/StockerTool'
@@ -22,7 +23,7 @@ const OperatingExpensesAnalysis = () => {
     ],
     ['', 0, 0, 0, 0, 0, 0, 0, 0]
   ])
-  const [yearRange, setYearRange] = useState(5)
+  const [yearRange, setYearRange] = useYearRange()
   const stock = useStock()
 
   const operatingExpensesKeysOrder = [

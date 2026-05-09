@@ -3,6 +3,7 @@ import { StockerChart } from 'components/charts'
 import CustomizedTable from 'components/CustomizedTable'
 import YearRangePicker from 'components/YearRangePicker'
 import { useStock } from 'hooks/StockContext'
+import useYearRange from 'hooks/useYearRange'
 import * as StockerAPI from 'utils/StockerAPI'
 import * as StockerTool from 'utils/StockerTool'
 
@@ -17,7 +18,7 @@ const Eps = () => {
     ['Year/Season', '基本每股盈餘'],
     ['', 0]
   ])
-  const [yearRange, setYearRange] = useState(5)
+  const [yearRange, setYearRange] = useYearRange()
   const stock = useStock()
 
   const epsKeysOrder = [

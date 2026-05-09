@@ -3,6 +3,7 @@ import { StockerChart } from 'components/charts'
 import CustomizedTable from 'components/CustomizedTable'
 import YearRangePicker from 'components/YearRangePicker'
 import { useStock } from 'hooks/StockContext'
+import useYearRange from 'hooks/useYearRange'
 import * as StockerAPI from 'utils/StockerAPI'
 import * as StockerTool from 'utils/StockerTool'
 
@@ -18,7 +19,7 @@ const ProfitAnalysis = () => {
     ['Year/Season', '營業毛利率', '營業利益率', '稅前淨利率', '本期淨利率'],
     ['', 0, 0, 0, 0]
   ])
-  const [yearRange, setYearRange] = useState(5)
+  const [yearRange, setYearRange] = useYearRange()
   const stock = useStock()
 
   const profitKeysOrder = [

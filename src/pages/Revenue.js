@@ -4,6 +4,7 @@ import { Tabs, Tab } from 'react-bootstrap'
 import CustomizedTable from 'components/CustomizedTable'
 import YearRangePicker from 'components/YearRangePicker'
 import { useStock } from 'hooks/StockContext'
+import useYearRange from 'hooks/useYearRange'
 import * as StockerAPI from 'utils/StockerAPI'
 import * as StockerTool from 'utils/StockerTool'
 
@@ -12,7 +13,7 @@ const Revenue = () => {
     ['Year/Month', '當月營收', '去年同月增減', '上月比較增減', '備註', '均價'],
     ['', 0, 0, 0, '', null]
   ])
-  const [yearRange, setYearRange] = useState(5)
+  const [yearRange, setYearRange] = useYearRange()
   const stock = useStock()
 
   const revenueKeysOrder = [
