@@ -9,7 +9,7 @@ import { useAuth } from 'hooks/AuthContext'
 
 const PROVIDER_LABELS = {
   gemini: 'Gemini',
-  claude: 'Claude',
+  claude: 'Claude'
 }
 
 const PLACEHOLDER_HINT = '可用 placeholder：{stock_id}、{meeting_date}、{feeds_content}'
@@ -71,7 +71,7 @@ const AiPromptManager = () => {
       provider: prompt.provider || '',
       content: prompt.content,
       description: prompt.description || '',
-      is_active: prompt.is_active,
+      is_active: prompt.is_active
     })
     setSaveError(null)
     setShowModal(true)
@@ -87,13 +87,13 @@ const AiPromptManager = () => {
       setSaveError(null)
       const payload = {
         ...form,
-        provider: form.provider || null,
+        provider: form.provider || null
       }
       if (editingPrompt) {
         const updated = await updateAiPrompt(editingPrompt.id, {
           content: payload.content,
           description: payload.description,
-          is_active: payload.is_active,
+          is_active: payload.is_active
         })
         setPrompts(prev => prev.map(p => p.id === updated.id ? updated : p))
       } else {

@@ -10,19 +10,19 @@ const PROVIDERS = [
     label: 'Gemini (Google)',
     models: [
       { value: 'gemini-2.5-flash-preview-05-20', label: 'Gemini 2.5 Flash', price: '$0.15 / $0.60' },
-      { value: 'gemini-2.0-flash',               label: 'Gemini 2.0 Flash', price: '$0.10 / $0.40' },
-      { value: 'gemini-1.5-flash',               label: 'Gemini 1.5 Flash', price: '$0.075 / $0.30' },
-    ],
+      { value: 'gemini-2.0-flash', label: 'Gemini 2.0 Flash', price: '$0.10 / $0.40' },
+      { value: 'gemini-1.5-flash', label: 'Gemini 1.5 Flash', price: '$0.075 / $0.30' }
+    ]
   },
   {
     value: 'claude',
     label: 'Claude (Anthropic)',
     models: [
-      { value: 'claude-opus-4-7',           label: 'Claude Opus 4.7',   price: '$15 / $75' },
-      { value: 'claude-sonnet-4-6',         label: 'Claude Sonnet 4.6', price: '$3 / $15' },
-      { value: 'claude-haiku-4-5-20251001', label: 'Claude Haiku 4.5',  price: '$0.80 / $4' },
-    ],
-  },
+      { value: 'claude-opus-4-7', label: 'Claude Opus 4.7', price: '$15 / $75' },
+      { value: 'claude-sonnet-4-6', label: 'Claude Sonnet 4.6', price: '$3 / $15' },
+      { value: 'claude-haiku-4-5-20251001', label: 'Claude Haiku 4.5', price: '$0.80 / $4' }
+    ]
+  }
 ]
 
 const defaultModel = (providerValue) =>
