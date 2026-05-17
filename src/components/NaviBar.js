@@ -9,7 +9,7 @@ import {
   faInfoCircle, faNewspaper, faCommentAlt, faAngleDoubleDown,
   faCoins, faHandHoldingUsd, faFileInvoiceDollar, faFunnelDollar,
   faSearchDollar, faToolbox, faUser, faCircleInfo, faList, faStar,
-  faCalendarAlt, faUsersCog, faCogs, faChartLine
+  faCalendarAlt, faUsersCog, faCogs, faChartLine, faRobot
 } from '@fortawesome/free-solid-svg-icons'
 import { useStock } from 'hooks/StockContext'
 import { useAuth } from 'hooks/AuthContext'
@@ -190,6 +190,11 @@ const NaviBar = () => {
               title: '使用者管理',
               href: '/users',
               icon: faUsersCog
+            },
+            {
+              title: 'AI Prompt 管理',
+              href: '/ai-prompts',
+              icon: faRobot
             }
           ]
         }]

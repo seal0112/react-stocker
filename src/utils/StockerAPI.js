@@ -114,7 +114,15 @@ export const getEarningsCallList = (params = {}) => {
   const queryParams = new URLSearchParams()
   if (params.stock) queryParams.append('stock', params.stock)
   if (params.meeting_date) queryParams.append('meeting_date', params.meeting_date)
+  if (params.date_from) queryParams.append('date_from', params.date_from)
+  if (params.date_to) queryParams.append('date_to', params.date_to)
+  if (params.score_min !== undefined && params.score_min !== '') queryParams.append('score_min', params.score_min)
+  if (params.score_max !== undefined && params.score_max !== '') queryParams.append('score_max', params.score_max)
   const queryString = queryParams.toString()
   return frontendDataRequest.get(`/earnings_call${queryString ? '?' + queryString : ''}`)
     .then((res) => res.data)
 }
+
+export const getEarningsCallSummary = (earningsCallId) =>
+  frontendDataRequest.get(`/earnings_call/${earningsCallId}/summary`)
+    .then((res) => res.data)

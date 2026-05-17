@@ -21,6 +21,7 @@ import EarningsCallList from 'pages/EarningsCallList'
 import UserInfo from 'pages/UserInfo'
 import FollowStockList from 'pages/FollowStockList'
 import AdminUserManagement from 'pages/AdminUserManagement'
+import AiPromptManager from 'pages/AiPromptManager'
 import RequireAuth from 'components/RequireAuth'
 
 export default function App () {
@@ -146,6 +147,11 @@ export default function App () {
                 key="admin-user-management"
                 path="/admin/users"
                 element={<AdminUserManagement />}
+              />
+              <Route
+                key="admin-ai-prompts"
+                path="/admin/ai-prompts"
+                element={<AiPromptManager />}
               />
             </Route>
           </Route>
