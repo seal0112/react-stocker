@@ -195,6 +195,11 @@ const NaviBar = () => {
               title: 'AI Prompt 管理',
               href: '/ai-prompts',
               icon: faRobot
+            },
+            {
+              title: '系統設定',
+              href: '/settings',
+              icon: faCogs
             }
           ]
         }]

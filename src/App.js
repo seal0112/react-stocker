@@ -22,6 +22,7 @@ import UserInfo from 'pages/UserInfo'
 import FollowStockList from 'pages/FollowStockList'
 import AdminUserManagement from 'pages/AdminUserManagement'
 import AiPromptManager from 'pages/AiPromptManager'
+import AdminSettings from 'pages/AdminSettings'
 import RequireAuth from 'components/RequireAuth'
 
 export default function App () {
@@ -152,6 +153,11 @@ export default function App () {
                 key="admin-ai-prompts"
                 path="/admin/ai-prompts"
                 element={<AiPromptManager />}
+              />
+              <Route
+                key="admin-settings"
+                path="/admin/settings"
+                element={<AdminSettings />}
               />
             </Route>
           </Route>
