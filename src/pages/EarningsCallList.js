@@ -55,7 +55,7 @@ const StatusBadge = ({ status }) => {
 }
 StatusBadge.propTypes = { status: PropTypes.string }
 
-const SummaryDetail = ({ earningsCallId, processingStatus, isAdmin }) => {
+const SummaryDetail = ({ earningsCallId, processingStatus, isAdmin, meetingDate }) => {
   const [summary, setSummary] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -85,7 +85,8 @@ const SummaryDetail = ({ earningsCallId, processingStatus, isAdmin }) => {
       .finally(() => setTriggering(false))
   }
 
-  const canTrigger = isAdmin && (!processingStatus || processingStatus === 'failed' || processingStatus === 'pending')
+  const meetingPassed = meetingDate ? !dayjs(meetingDate).isAfter(dayjs(), 'day') : true
+  const canTrigger = isAdmin && meetingPassed && (!processingStatus || processingStatus === 'failed' || processingStatus === 'pending')
 
   if (loading) return <div className="py-2 text-center"><Spinner animation="border" size="sm" /></div>
   if (error) return <Alert variant="danger" className="mb-0 py-2">{error}</Alert>
@@ -171,7 +172,8 @@ const SummaryDetail = ({ earningsCallId, processingStatus, isAdmin }) => {
 SummaryDetail.propTypes = {
   earningsCallId: PropTypes.number.isRequired,
   processingStatus: PropTypes.string,
-  isAdmin: PropTypes.bool
+  isAdmin: PropTypes.bool,
+  meetingDate: PropTypes.string
 }
 
 const EarningsCallList = () => {
@@ -327,6 +329,7 @@ const EarningsCallList = () => {
                                   earningsCallId={ec.id}
                                   processingStatus={ec.summary?.processing_status}
                                   isAdmin={isAdmin}
+                                  meetingDate={ec.meeting_date}
                                 />
                               )}
                             </div>
