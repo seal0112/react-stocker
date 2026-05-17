@@ -9,9 +9,12 @@ const PROVIDERS = [
     value: 'gemini',
     label: 'Gemini (Google)',
     models: [
-      { value: 'gemini-2.5-flash-preview-05-20', label: 'Gemini 2.5 Flash', price: '$0.15 / $0.60' },
-      { value: 'gemini-2.0-flash', label: 'Gemini 2.0 Flash', price: '$0.10 / $0.40' },
-      { value: 'gemini-1.5-flash', label: 'Gemini 1.5 Flash', price: '$0.075 / $0.30' }
+      { value: 'gemini-3.1-pro-preview', label: 'Gemini 3.1 Pro Preview', price: '$2.00 / $12.00' },
+      { value: 'gemini-3-flash-preview', label: 'Gemini 3 Flash Preview', price: '$0.50 / $3.00' },
+      { value: 'gemini-3.1-flash-lite', label: 'Gemini 3.1 Flash-Lite', price: '$0.25 / $1.50' },
+      { value: 'gemini-2.5-pro', label: 'Gemini 2.5 Pro', price: '$1.25 / $10.00' },
+      { value: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash', price: '$0.30 / $2.50' },
+      { value: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash-Lite', price: '$0.10 / $0.40' }
     ]
   },
   {
