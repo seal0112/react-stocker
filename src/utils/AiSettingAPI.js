@@ -1,7 +1,9 @@
-import { frontendDataRequest } from './StockerAPI'
+import { createApiRequest } from 'utils/DomainSetup'
+
+const request = createApiRequest('/api/v0')
 
 export const getAiSetting = () =>
-  frontendDataRequest.get('/ai_setting').then((res) => res.data)
+  request.get('/ai_setting').then((res) => res.data)
 
 export const updateAiSetting = (provider, model) =>
-  frontendDataRequest.put('/ai_setting', { provider, model }).then((res) => res.data)
+  request.put('/ai_setting', { provider, model }).then((res) => res.data)
