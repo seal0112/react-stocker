@@ -4,6 +4,7 @@ import {
   Container, Table, Spinner, Form, Row, Col, Button, Badge, Collapse, Alert
 } from 'react-bootstrap'
 import * as StockerAPI from 'utils/StockerAPI'
+import { useAuth } from 'hooks/AuthContext'
 import dayjs from 'dayjs'
 
 const SCORE_FILTERS = [
@@ -54,10 +55,12 @@ const StatusBadge = ({ status }) => {
 }
 StatusBadge.propTypes = { status: PropTypes.string }
 
-const SummaryDetail = ({ earningsCallId }) => {
+const SummaryDetail = ({ earningsCallId, processingStatus, isAdmin }) => {
   const [summary, setSummary] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [triggering, setTriggering] = useState(false)
+  const [triggerMsg, setTriggerMsg] = useState(null)
 
   useEffect(() => {
     StockerAPI.getEarningsCallSummary(earningsCallId)
@@ -73,9 +76,32 @@ const SummaryDetail = ({ earningsCallId }) => {
       })
   }, [earningsCallId])
 
+  const handleTrigger = () => {
+    setTriggering(true)
+    setTriggerMsg(null)
+    StockerAPI.triggerEarningsCallSummary(earningsCallId)
+      .then(() => setTriggerMsg({ variant: 'success', text: '已送出分析請求，約 1 分鐘後完成' }))
+      .catch(() => setTriggerMsg({ variant: 'danger', text: '觸發失敗，請稍後再試' }))
+      .finally(() => setTriggering(false))
+  }
+
+  const canTrigger = isAdmin && (!processingStatus || processingStatus === 'failed' || processingStatus === 'pending')
+
   if (loading) return <div className="py-2 text-center"><Spinner animation="border" size="sm" /></div>
   if (error) return <Alert variant="danger" className="mb-0 py-2">{error}</Alert>
-  if (!summary) return <p className="text-muted mb-0 py-2">尚無 AI 分析資料</p>
+  if (!summary) {
+    return (
+      <div className="p-3">
+        <p className="text-muted mb-2">尚無 AI 分析資料</p>
+        {canTrigger && (
+          <Button size="sm" variant="outline-primary" onClick={handleTrigger} disabled={triggering}>
+            {triggering ? <><Spinner animation="border" size="sm" className="me-1" />觸發中...</> : '觸發 AI 分析'}
+          </Button>
+        )}
+        {triggerMsg && <Alert variant={triggerMsg.variant} className="mt-2 mb-0 py-1 px-2" style={{ fontSize: '0.85rem' }}>{triggerMsg.text}</Alert>}
+      </div>
+    )
+  }
 
   return (
     <div className="p-3" style={{ background: '#f8f9fa', fontSize: '0.9rem' }}>
@@ -128,15 +154,30 @@ const SummaryDetail = ({ earningsCallId }) => {
               </ul>
             </div>
           )}
+          {canTrigger && (
+            <div className="mt-3">
+              <Button size="sm" variant="outline-secondary" onClick={handleTrigger} disabled={triggering}>
+                {triggering ? <><Spinner animation="border" size="sm" className="me-1" />觸發中...</> : '重新觸發 AI 分析'}
+              </Button>
+              {triggerMsg && <Alert variant={triggerMsg.variant} className="mt-2 mb-0 py-1 px-2" style={{ fontSize: '0.85rem' }}>{triggerMsg.text}</Alert>}
+            </div>
+          )}
         </Col>
       </Row>
     </div>
   )
 }
 
-SummaryDetail.propTypes = { earningsCallId: PropTypes.number.isRequired }
+SummaryDetail.propTypes = {
+  earningsCallId: PropTypes.number.isRequired,
+  processingStatus: PropTypes.string,
+  isAdmin: PropTypes.bool
+}
 
 const EarningsCallList = () => {
+  const { hasRole } = useAuth()
+  const isAdmin = hasRole('admin')
+
   const [earningsCalls, setEarningsCalls] = useState([])
   const [loading, setLoading] = useState(true)
   const [expandedId, setExpandedId] = useState(null)
@@ -282,7 +323,11 @@ const EarningsCallList = () => {
                           <Collapse in={expandedId === ec.id}>
                             <div>
                               {expandedId === ec.id && (
-                                <SummaryDetail earningsCallId={ec.id} />
+                                <SummaryDetail
+                                  earningsCallId={ec.id}
+                                  processingStatus={ec.summary?.processing_status}
+                                  isAdmin={isAdmin}
+                                />
                               )}
                             </div>
                           </Collapse>
