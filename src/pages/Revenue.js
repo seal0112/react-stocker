@@ -94,7 +94,8 @@ const Revenue = () => {
               },
               vAxes: { 0: {}, 1: { minValue: 0 } },
               hAxis: {},
-              colors: ['#dc3545', '#6096FD']
+              colors: ['#dc3545', '#6096FD'],
+              belowZeroBackground: true
             }}
           />
         </Tab>
@@ -114,7 +115,8 @@ const Revenue = () => {
               },
               vAxes: { 0: {}, 1: { minValue: 0 } },
               hAxis: {},
-              colors: ['#dc3545', '#6096FD']
+              colors: ['#dc3545', '#6096FD'],
+              belowZeroBackground: true
             }}
           />
         </Tab>

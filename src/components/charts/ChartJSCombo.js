@@ -26,6 +26,22 @@ ChartJS.register(
   Legend
 )
 
+const belowZeroPlugin = {
+  id: 'belowZeroBackground',
+  afterDraw (chart) {
+    const { ctx, chartArea, scales } = chart
+    const yScale = scales.y
+    if (!yScale) return
+    const yZero = yScale.getPixelForValue(0)
+    const clampedY = Math.min(Math.max(yZero, chartArea.top), chartArea.bottom)
+    if (clampedY >= chartArea.bottom) return
+    ctx.save()
+    ctx.fillStyle = 'rgba(220, 53, 69, 0.07)'
+    ctx.fillRect(chartArea.left, clampedY, chartArea.right - chartArea.left, chartArea.bottom - clampedY)
+    ctx.restore()
+  }
+}
+
 const ChartJSCombo = ({ data, options = {}, height = '400px' }) => {
   const seriesType = options.seriesType || 'line'
   const colors = options.colors || palette
@@ -59,9 +75,11 @@ const ChartJSCombo = ({ data, options = {}, height = '400px' }) => {
     comboChartDefaults
   )
 
+  const plugins = options.belowZeroBackground ? [belowZeroPlugin] : []
+
   return (
     <div style={{ height, width: '100%' }}>
-      <Chart type="bar" data={chartData} options={chartOptions} />
+      <Chart type="bar" data={chartData} options={chartOptions} plugins={plugins} />
     </div>
   )
 }
