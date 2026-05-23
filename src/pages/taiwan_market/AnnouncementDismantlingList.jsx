@@ -54,7 +54,7 @@ const AnnouncementDismantlingList = () => {
   const fetchRawFeeds = (targetDate) => {
     StockerAPI.getAnnouncementFeeds(targetDate)
       .then(data => {
-        const announcements = (data || []).filter(f => f.feedType === 'announcement' || f.feed_kind === 'announcement')
+        const announcements = (data || []).filter(f => f.feedType === 'announcement')
         setRawFeeds(announcements)
       })
       .catch(() => setRawFeeds([]))
