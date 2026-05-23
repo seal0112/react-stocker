@@ -302,7 +302,10 @@ const EarningsCallList = () => {
                         style={{ cursor: 'pointer' }}
                         onClick={() => toggleRow(ec.id)}
                       >
-                        <td><strong>{ec.stock_id}</strong></td>
+                        <td>
+                          <strong>{ec.stock_id}</strong>
+                          {ec.company_name && <div className="text-muted" style={{ fontSize: '0.8rem' }}>{ec.company_name}</div>}
+                        </td>
                         <td>{ec.meeting_date ? dayjs(ec.meeting_date).format('YYYY-MM-DD') : '—'}</td>
                         <td>
                           <SentimentBadge
