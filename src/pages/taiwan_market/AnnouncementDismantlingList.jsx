@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import 'assets/css/StockerLayout.css'
 import * as StockerAPI from 'utils/StockerAPI'
-import { Container, Form, Col, Row, Table, Badge, Spinner } from 'react-bootstrap'
+import { Container, Form, Col, Row, Table, Badge, Spinner, Button, Alert } from 'react-bootstrap'
 import dayjs from 'dayjs'
 
 const YoY = ({ value }) => {
@@ -26,6 +26,8 @@ const AnnouncementDismantlingList = () => {
   const [date, setDate] = useState(dayjs().format('YYYY-MM-DD'))
   const [list, setList] = useState([])
   const [loading, setLoading] = useState(false)
+  const [triggering, setTriggering] = useState(false)
+  const [triggerMsg, setTriggerMsg] = useState(null)
 
   const fetchList = (targetDate) => {
     setLoading(true)
@@ -42,7 +44,23 @@ const AnnouncementDismantlingList = () => {
   const handleDateChange = (e) => {
     const newDate = e.target.value
     setDate(newDate)
+    setTriggerMsg(null)
     fetchList(newDate)
+  }
+
+  const handleTrigger = () => {
+    setTriggering(true)
+    setTriggerMsg(null)
+    StockerAPI.triggerAnnouncementParsing(date)
+      .then(res => {
+        if (res.triggered === 0) {
+          setTriggerMsg({ variant: 'warning', text: `當日無可解析的公告 feed（${date}）` })
+        } else {
+          setTriggerMsg({ variant: 'success', text: `已觸發 ${res.triggered} 筆公告解析，約 1–2 分鐘後重新載入` })
+        }
+      })
+      .catch(() => setTriggerMsg({ variant: 'danger', text: '觸發失敗，請稍後再試' }))
+      .finally(() => setTriggering(false))
   }
 
   return (
@@ -62,7 +80,24 @@ const AnnouncementDismantlingList = () => {
         </Row>
 
         {!loading && list.length === 0 && (
-          <div className="text-muted text-center py-4">當日無公告財報資料</div>
+          <div className="text-center py-4">
+            <div className="text-muted mb-3">當日無公告財報資料</div>
+            <Button
+              variant="outline-primary"
+              size="sm"
+              onClick={handleTrigger}
+              disabled={triggering}
+            >
+              {triggering
+                ? <><Spinner animation="border" size="sm" className="me-1" />觸發中...</>
+                : '觸發重新解析'}
+            </Button>
+            {triggerMsg && (
+              <Alert variant={triggerMsg.variant} className="mt-3 mb-0 py-2 px-3 d-inline-block" style={{ fontSize: '0.875rem' }}>
+                {triggerMsg.text}
+              </Alert>
+            )}
+          </div>
         )}
 
         {list.length > 0 && (

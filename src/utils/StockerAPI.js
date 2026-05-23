@@ -90,6 +90,10 @@ export const getAnnouncementDismantlingList = (updateDate) => {
     .then((res) => res.data)
 }
 
+export const triggerAnnouncementParsing = (date) =>
+  frontendDataRequest.post(`/announcement_income_sheet_analysis/trigger?date=${date}`)
+    .then((res) => res.data)
+
 export const getStockOptions = (query) =>
   frontendDataRequest.get(`/f/autocomplete?search_stock=${query}`)
     .then((res) => res.data)
