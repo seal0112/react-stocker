@@ -65,19 +65,24 @@ const AnnouncementDismantlingList = () => {
     return () => stopPolling()
   }, [])
 
-  const startPolling = (targetDate, feedId) => {
+  const startPolling = (targetDate, feedId, alreadyInList) => {
     setPollingId(feedId)
     pollStartRef.current = Date.now()
+    let polls = 0
     pollRef.current = setInterval(() => {
       if (Date.now() - pollStartRef.current > POLL_TIMEOUT_MS) {
         stopPolling()
         return
       }
+      polls++
       StockerAPI.getAnnouncementDismantlingList(targetDate)
         .then(data => {
           if (data.length > 0) {
             setList(data)
             setRawFeeds([])
+          }
+          const found = data.some(item => item.feed_id === feedId)
+          if (alreadyInList ? polls >= 6 : found) {
             stopPolling()
           }
         })
@@ -100,9 +105,10 @@ const AnnouncementDismantlingList = () => {
   }, [loading])
 
   const handleTrigger = (feedId) => {
+    const alreadyInList = list.some(item => item.feed_id === feedId)
     setTriggeringId(feedId)
     StockerAPI.triggerAnnouncementParsing(feedId)
-      .then(() => startPolling(date, feedId))
+      .then(() => startPolling(date, feedId, alreadyInList))
       .catch(() => {})
       .finally(() => setTriggeringId(null))
   }
@@ -194,33 +200,52 @@ const AnnouncementDismantlingList = () => {
                 <th>稅後淨利率</th>
                 <th>YoY</th>
                 <th>本業佔比</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
-              {list.map(item => (
-                <tr key={item.feed_id}>
-                  <td>
-                    <strong>{item.stock_id}</strong>
-                    {item.company_name && <div className="text-muted" style={{ fontSize: '0.8rem' }}>{item.company_name}</div>}
-                  </td>
-                  <td>
-                    {item.feed?.link
-                      ? <a href={item.feed.link} target="_blank" rel="noreferrer">{item.feed.title}</a>
-                      : item.feed?.title ?? '-'
-                    }
-                  </td>
-                  <td>{item.year} Q{item.season}</td>
-                  <td>{item['基本每股盈餘'] ?? '-'}</td>
-                  <td><YoY value={item['基本每股盈餘年增率']} /></td>
-                  <td><Pct value={item['營業毛利率']} /></td>
-                  <td><YoY value={item['營業毛利率年增率']} /></td>
-                  <td><Pct value={item['營業利益率']} /></td>
-                  <td><YoY value={item['營業利益率年增率']} /></td>
-                  <td><Pct value={item['本期淨利率']} /></td>
-                  <td><YoY value={item['本期淨利率年增率']} /></td>
-                  <td><Pct value={item['本業佔比']} /></td>
-                </tr>
-              ))}
+              {list.map(item => {
+                const isPolling = pollingId === item.feed_id
+                const isTriggering = triggeringId === item.feed_id
+                return (
+                  <tr key={item.feed_id}>
+                    <td>
+                      <strong>{item.stock_id}</strong>
+                      {item.company_name && <div className="text-muted" style={{ fontSize: '0.8rem' }}>{item.company_name}</div>}
+                    </td>
+                    <td>
+                      {item.feed?.link
+                        ? <a href={item.feed.link} target="_blank" rel="noreferrer">{item.feed.title}</a>
+                        : item.feed?.title ?? '-'
+                      }
+                    </td>
+                    <td>{item.year} Q{item.season}</td>
+                    <td>{item['基本每股盈餘'] ?? '-'}</td>
+                    <td><YoY value={item['基本每股盈餘年增率']} /></td>
+                    <td><Pct value={item['營業毛利率']} /></td>
+                    <td><YoY value={item['營業毛利率年增率']} /></td>
+                    <td><Pct value={item['營業利益率']} /></td>
+                    <td><YoY value={item['營業利益率年增率']} /></td>
+                    <td><Pct value={item['本期淨利率']} /></td>
+                    <td><YoY value={item['本期淨利率年增率']} /></td>
+                    <td><Pct value={item['本業佔比']} /></td>
+                    <td>
+                      <Button
+                        size="sm"
+                        variant={isPolling ? 'outline-secondary' : 'outline-primary'}
+                        onClick={() => handleTrigger(item.feed_id)}
+                        disabled={isTriggering || isPolling}
+                      >
+                        {isTriggering
+                          ? <><Spinner animation="border" size="sm" className="me-1" />觸發中</>
+                          : isPolling
+                            ? <><Spinner animation="border" size="sm" className="me-1" />等待中</>
+                            : '重新解析'}
+                      </Button>
+                    </td>
+                  </tr>
+                )
+              })}
             </tbody>
           </Table>
         )}
