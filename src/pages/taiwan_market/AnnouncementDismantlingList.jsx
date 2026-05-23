@@ -89,7 +89,12 @@ const AnnouncementDismantlingList = () => {
     return () => stopPolling()
   }, [])
 
-  const startPolling = (targetDate, feedId, alreadyInList) => {
+  const SNAPSHOT_KEYS = ['processing_failed', '基本每股盈餘', '營業毛利率', '營業利益率', '本期淨利率']
+
+  const itemChanged = (snapshot, current) =>
+    SNAPSHOT_KEYS.some(key => String(snapshot[key]) !== String(current[key]))
+
+  const startPolling = (targetDate, feedId, alreadyInList, snapshot) => {
     setPollingId(feedId)
     pollStartRef.current = Date.now()
     let polls = 0
@@ -106,8 +111,15 @@ const AnnouncementDismantlingList = () => {
             setRawFeeds([])
           }
           const found = data.some(item => item.feed_id === feedId)
-          if (alreadyInList ? polls >= 6 : found) {
-            stopPolling()
+          if (!alreadyInList) {
+            if (found) stopPolling()
+          } else {
+            const current = data.find(item => item.feed_id === feedId)
+            if (current && snapshot && itemChanged(snapshot, current)) {
+              stopPolling()
+            } else if (polls >= 6) {
+              stopPolling()
+            }
           }
         })
         .catch(() => {})
@@ -129,10 +141,11 @@ const AnnouncementDismantlingList = () => {
   }, [loading])
 
   const handleTrigger = (feedId) => {
-    const alreadyInList = list.some(item => item.feed_id === feedId)
+    const snapshot = list.find(item => item.feed_id === feedId) || null
+    const alreadyInList = snapshot !== null
     setTriggeringId(feedId)
     StockerAPI.triggerAnnouncementParsing(feedId)
-      .then(() => startPolling(date, feedId, alreadyInList))
+      .then(() => startPolling(date, feedId, alreadyInList, snapshot))
       .catch(() => {})
       .finally(() => setTriggeringId(null))
   }
