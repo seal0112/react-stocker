@@ -145,7 +145,10 @@ const AnnouncementDismantlingList = () => {
                 const isTriggering = triggeringId === feed.id
                 return (
                   <tr key={feed.id}>
-                    <td><strong>{feed.stock_id}</strong></td>
+                    <td>
+                      <strong>{feed.stock_id}</strong>
+                      {feed.company_name && <div className="text-muted" style={{ fontSize: '0.8rem' }}>{feed.company_name}</div>}
+                    </td>
                     <td>
                       {feed.link
                         ? <a href={feed.link} target="_blank" rel="noreferrer">{feed.title}</a>
@@ -196,7 +199,10 @@ const AnnouncementDismantlingList = () => {
             <tbody>
               {list.map(item => (
                 <tr key={item.feed_id}>
-                  <td><strong>{item.stock_id}</strong></td>
+                  <td>
+                    <strong>{item.stock_id}</strong>
+                    {item.company_name && <div className="text-muted" style={{ fontSize: '0.8rem' }}>{item.company_name}</div>}
+                  </td>
                   <td>
                     {item.feed?.link
                       ? <a href={item.feed.link} target="_blank" rel="noreferrer">{item.feed.title}</a>
