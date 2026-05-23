@@ -90,8 +90,12 @@ export const getAnnouncementDismantlingList = (updateDate) => {
     .then((res) => res.data)
 }
 
-export const triggerAnnouncementParsing = (date) =>
-  frontendDataRequest.post(`/announcement_income_sheet_analysis/trigger?date=${date}`)
+export const triggerAnnouncementParsing = (feedId) =>
+  frontendDataRequest.post(`/announcement_income_sheet_analysis/trigger?feed_id=${feedId}`)
+    .then((res) => res.data)
+
+export const getAnnouncementFeeds = (date) =>
+  frontendDataRequest.get(`/feed?starttime=${date}&endtime=${date}`)
     .then((res) => res.data)
 
 export const getStockOptions = (query) =>

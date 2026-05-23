@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import 'assets/css/StockerLayout.css'
 import * as StockerAPI from 'utils/StockerAPI'
-import { Container, Form, Col, Row, Table, Badge, Spinner, Button, Alert } from 'react-bootstrap'
+import { Container, Form, Col, Row, Table, Badge, Spinner, Button } from 'react-bootstrap'
 import dayjs from 'dayjs'
 
 const YoY = ({ value }) => {
@@ -29,9 +29,9 @@ const AnnouncementDismantlingList = () => {
   const [date, setDate] = useState(dayjs().format('YYYY-MM-DD'))
   const [list, setList] = useState([])
   const [loading, setLoading] = useState(false)
-  const [triggering, setTriggering] = useState(false)
-  const [polling, setPolling] = useState(false)
-  const [triggerMsg, setTriggerMsg] = useState(null)
+  const [rawFeeds, setRawFeeds] = useState([])
+  const [triggeringId, setTriggeringId] = useState(null)
+  const [pollingId, setPollingId] = useState(null)
   const pollRef = useRef(null)
   const pollStartRef = useRef(null)
 
@@ -40,7 +40,7 @@ const AnnouncementDismantlingList = () => {
       clearInterval(pollRef.current)
       pollRef.current = null
     }
-    setPolling(false)
+    setPollingId(null)
   }
 
   const fetchList = (targetDate) => {
@@ -51,26 +51,34 @@ const AnnouncementDismantlingList = () => {
       .finally(() => setLoading(false))
   }
 
+  const fetchRawFeeds = (targetDate) => {
+    StockerAPI.getAnnouncementFeeds(targetDate)
+      .then(data => {
+        const announcements = (data || []).filter(f => f.feedType === 'announcement' || f.feed_kind === 'announcement')
+        setRawFeeds(announcements)
+      })
+      .catch(() => setRawFeeds([]))
+  }
+
   useEffect(() => {
     fetchList(date)
     return () => stopPolling()
   }, [])
 
-  const startPolling = (targetDate) => {
-    setPolling(true)
+  const startPolling = (targetDate, feedId) => {
+    setPollingId(feedId)
     pollStartRef.current = Date.now()
     pollRef.current = setInterval(() => {
       if (Date.now() - pollStartRef.current > POLL_TIMEOUT_MS) {
         stopPolling()
-        setTriggerMsg({ variant: 'warning', text: '等待逾時，請手動重新整理' })
         return
       }
       StockerAPI.getAnnouncementDismantlingList(targetDate)
         .then(data => {
           if (data.length > 0) {
             setList(data)
+            setRawFeeds([])
             stopPolling()
-            setTriggerMsg(null)
           }
         })
         .catch(() => {})
@@ -81,24 +89,22 @@ const AnnouncementDismantlingList = () => {
     const newDate = e.target.value
     stopPolling()
     setDate(newDate)
-    setTriggerMsg(null)
-    fetchList(newDate)
+    setRawFeeds([])
+    fetchList(newDate).then(data => {
+      if (data.length === 0) fetchRawFeeds(newDate)
+    })
   }
 
-  const handleTrigger = () => {
-    setTriggering(true)
-    setTriggerMsg(null)
-    StockerAPI.triggerAnnouncementParsing(date)
-      .then(res => {
-        if (res.triggered === 0) {
-          setTriggerMsg({ variant: 'warning', text: `當日無可解析的公告 feed（${date}）` })
-        } else {
-          setTriggerMsg({ variant: 'info', text: `已觸發 ${res.triggered} 筆，等待解析結果...` })
-          startPolling(date)
-        }
-      })
-      .catch(() => setTriggerMsg({ variant: 'danger', text: '觸發失敗，請稍後再試' }))
-      .finally(() => setTriggering(false))
+  useEffect(() => {
+    if (!loading && list.length === 0) fetchRawFeeds(date)
+  }, [loading])
+
+  const handleTrigger = (feedId) => {
+    setTriggeringId(feedId)
+    StockerAPI.triggerAnnouncementParsing(feedId)
+      .then(() => startPolling(date, feedId))
+      .catch(() => {})
+      .finally(() => setTriggeringId(null))
   }
 
   return (
@@ -115,31 +121,58 @@ const AnnouncementDismantlingList = () => {
           <Col xs="auto" className="text-muted">
             {loading
               ? <Spinner animation="border" size="sm" />
-              : polling
-                ? <><Spinner animation="border" size="sm" className="me-1" />等待解析...</>
-                : `共 ${list.length} 筆`}
+              : `共 ${list.length} 筆`}
           </Col>
         </Row>
 
-        {!loading && list.length === 0 && (
-          <div className="text-center py-4">
-            <div className="text-muted mb-3">當日無公告財報資料</div>
-            <Button
-              variant="outline-primary"
-              size="sm"
-              onClick={handleTrigger}
-              disabled={triggering}
-            >
-              {triggering
-                ? <><Spinner animation="border" size="sm" className="me-1" />觸發中...</>
-                : '觸發重新解析'}
-            </Button>
-            {triggerMsg && (
-              <Alert variant={triggerMsg.variant} className="mt-3 mb-0 py-2 px-3 d-inline-block" style={{ fontSize: '0.875rem' }}>
-                {triggerMsg.text}
-              </Alert>
-            )}
-          </div>
+        {!loading && list.length === 0 && rawFeeds.length === 0 && (
+          <div className="text-muted text-center py-4">當日無公告財報資料</div>
+        )}
+
+        {!loading && list.length === 0 && rawFeeds.length > 0 && (
+          <Table bordered hover responsive size="sm">
+            <thead className="table-secondary">
+              <tr>
+                <th>股票</th>
+                <th>公告標題</th>
+                <th>時間</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {rawFeeds.map(feed => {
+                const isPolling = pollingId === feed.id
+                const isTriggering = triggeringId === feed.id
+                return (
+                  <tr key={feed.id}>
+                    <td><strong>{feed.stock_id}</strong></td>
+                    <td>
+                      {feed.link
+                        ? <a href={feed.link} target="_blank" rel="noreferrer">{feed.title}</a>
+                        : feed.title}
+                    </td>
+                    <td className="text-muted" style={{ whiteSpace: 'nowrap' }}>
+                      {dayjs(feed.releaseTime).format('HH:mm')}
+                    </td>
+                    <td>
+                      <Button
+                        size="sm"
+                        variant={isPolling ? 'outline-secondary' : 'outline-primary'}
+                        onClick={() => handleTrigger(feed.id)}
+                        disabled={isTriggering || isPolling}
+                      >
+                        {isTriggering
+                          ? <><Spinner animation="border" size="sm" className="me-1" />觸發中</>
+                          : isPolling
+                            ? <><Spinner animation="border" size="sm" className="me-1" />等待中</>
+                            : '觸發解析'}
+                      </Button>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </Table>
         )}
 
         {list.length > 0 && (
