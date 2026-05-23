@@ -25,6 +25,20 @@ Pct.propTypes = { value: PropTypes.oneOfType([PropTypes.string, PropTypes.number
 const POLL_INTERVAL_MS = 5000
 const POLL_TIMEOUT_MS = 120000
 
+const FILTER_KEYS = [
+  { key: '基本每股盈餘', label: 'EPS' },
+  { key: '基本每股盈餘年增率', label: 'EPS YoY' },
+  { key: '營業毛利率', label: '毛利率' },
+  { key: '營業毛利率年增率', label: '毛利率YoY' },
+  { key: '營業利益率', label: '營業利益率' },
+  { key: '營業利益率年增率', label: '營業利益率YoY' },
+  { key: '本期淨利率', label: '稅後淨利率' },
+  { key: '本期淨利率年增率', label: '稅後淨利率YoY' },
+  { key: '本業佔比', label: '本業佔比' },
+]
+
+const initFilters = () => Object.fromEntries(FILTER_KEYS.map(f => [f.key, '']))
+
 const AnnouncementDismantlingList = () => {
   const [date, setDate] = useState(dayjs().format('YYYY-MM-DD'))
   const [list, setList] = useState([])
@@ -32,6 +46,7 @@ const AnnouncementDismantlingList = () => {
   const [rawFeeds, setRawFeeds] = useState([])
   const [triggeringId, setTriggeringId] = useState(null)
   const [pollingId, setPollingId] = useState(null)
+  const [filters, setFilters] = useState(initFilters)
   const pollRef = useRef(null)
   const pollStartRef = useRef(null)
 
@@ -95,6 +110,7 @@ const AnnouncementDismantlingList = () => {
     stopPolling()
     setDate(newDate)
     setRawFeeds([])
+    setFilters(initFilters())
     fetchList(newDate).then(data => {
       if (data.length === 0) fetchRawFeeds(newDate)
     })
@@ -113,6 +129,41 @@ const AnnouncementDismantlingList = () => {
       .finally(() => setTriggeringId(null))
   }
 
+  const handleFilterChange = (key, value) => {
+    setFilters(prev => ({ ...prev, [key]: value }))
+  }
+
+  const filteredList = list.filter(item =>
+    FILTER_KEYS.every(({ key }) => {
+      const min = filters[key]
+      if (min === '') return true
+      const val = parseFloat(item[key])
+      return !isNaN(val) && val >= parseFloat(min)
+    })
+  )
+
+  const TriggerButton = ({ feedId }) => {
+    const isPolling = pollingId === feedId
+    const isTriggering = triggeringId === feedId
+    return (
+      <Button
+        size="sm"
+        variant={isPolling ? 'outline-secondary' : 'outline-primary'}
+        onClick={() => handleTrigger(feedId)}
+        disabled={isTriggering || isPolling}
+      >
+        {isTriggering
+          ? <><Spinner animation="border" size="sm" className="me-1" />觸發中</>
+          : isPolling
+            ? <><Spinner animation="border" size="sm" className="me-1" />等待中</>
+            : null}
+        {!isTriggering && !isPolling && '觸發解析'}
+      </Button>
+    )
+  }
+
+  TriggerButton.propTypes = { feedId: PropTypes.number.isRequired }
+
   return (
     <main>
       <Container>
@@ -127,7 +178,7 @@ const AnnouncementDismantlingList = () => {
           <Col xs="auto" className="text-muted">
             {loading
               ? <Spinner animation="border" size="sm" />
-              : `共 ${list.length} 筆`}
+              : `共 ${filteredList.length} / ${list.length} 筆`}
           </Col>
         </Row>
 
@@ -146,40 +197,23 @@ const AnnouncementDismantlingList = () => {
               </tr>
             </thead>
             <tbody>
-              {rawFeeds.map(feed => {
-                const isPolling = pollingId === feed.id
-                const isTriggering = triggeringId === feed.id
-                return (
-                  <tr key={feed.id}>
-                    <td>
-                      <strong>{feed.stock_id}</strong>
-                      {feed.company_name && <div className="text-muted" style={{ fontSize: '0.8rem' }}>{feed.company_name}</div>}
-                    </td>
-                    <td>
-                      {feed.link
-                        ? <a href={feed.link} target="_blank" rel="noreferrer">{feed.title}</a>
-                        : feed.title}
-                    </td>
-                    <td className="text-muted" style={{ whiteSpace: 'nowrap' }}>
-                      {dayjs(feed.releaseTime).format('HH:mm')}
-                    </td>
-                    <td>
-                      <Button
-                        size="sm"
-                        variant={isPolling ? 'outline-secondary' : 'outline-primary'}
-                        onClick={() => handleTrigger(feed.id)}
-                        disabled={isTriggering || isPolling}
-                      >
-                        {isTriggering
-                          ? <><Spinner animation="border" size="sm" className="me-1" />觸發中</>
-                          : isPolling
-                            ? <><Spinner animation="border" size="sm" className="me-1" />等待中</>
-                            : '觸發解析'}
-                      </Button>
-                    </td>
-                  </tr>
-                )
-              })}
+              {rawFeeds.map(feed => (
+                <tr key={feed.id}>
+                  <td>
+                    <strong>{feed.stock_id}</strong>
+                    {feed.company_name && <div className="text-muted" style={{ fontSize: '0.8rem' }}>{feed.company_name}</div>}
+                  </td>
+                  <td>
+                    {feed.link
+                      ? <a href={feed.link} target="_blank" rel="noreferrer">{feed.title}</a>
+                      : feed.title}
+                  </td>
+                  <td className="text-muted" style={{ whiteSpace: 'nowrap' }}>
+                    {dayjs(feed.releaseTime).format('HH:mm')}
+                  </td>
+                  <td><TriggerButton feedId={feed.id} /></td>
+                </tr>
+              ))}
             </tbody>
           </Table>
         )}
@@ -202,18 +236,37 @@ const AnnouncementDismantlingList = () => {
                 <th>本業佔比</th>
                 <th></th>
               </tr>
+              <tr className="table-secondary">
+                <td colSpan={3}></td>
+                {FILTER_KEYS.map(({ key, label }) => (
+                  <td key={key} style={{ minWidth: '70px' }}>
+                    <Form.Control
+                      size="sm"
+                      type="number"
+                      placeholder={`≥ ${label}`}
+                      value={filters[key]}
+                      onChange={e => handleFilterChange(key, e.target.value)}
+                      style={{ fontSize: '0.75rem' }}
+                    />
+                  </td>
+                ))}
+                <td></td>
+              </tr>
             </thead>
             <tbody>
-              {list.map(item => {
+              {filteredList.map(item => {
                 const isPolling = pollingId === item.feed_id
                 const isTriggering = triggeringId === item.feed_id
                 return (
-                  <tr key={item.feed_id}>
+                  <tr key={item.feed_id} className={item.processing_failed ? 'table-warning' : ''}>
                     <td>
                       <strong>{item.stock_id}</strong>
                       {item.company_name && <div className="text-muted" style={{ fontSize: '0.8rem' }}>{item.company_name}</div>}
                     </td>
                     <td>
+                      {item.processing_failed
+                        ? <Badge bg="danger" className="me-1">解析失敗</Badge>
+                        : null}
                       {item.feed?.link
                         ? <a href={item.feed.link} target="_blank" rel="noreferrer">{item.feed.title}</a>
                         : item.feed?.title ?? '-'
