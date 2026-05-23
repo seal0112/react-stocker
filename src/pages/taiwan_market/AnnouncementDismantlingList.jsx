@@ -34,7 +34,7 @@ const FILTER_KEYS = [
   { key: '營業利益率年增率', label: '營業利益率YoY' },
   { key: '本期淨利率', label: '稅後淨利率' },
   { key: '本期淨利率年增率', label: '稅後淨利率YoY' },
-  { key: '本業佔比', label: '本業佔比' },
+  { key: '本業佔比', label: '本業佔比' }
 ]
 
 const initFilters = () => Object.fromEntries(FILTER_KEYS.map(f => [f.key, '']))
