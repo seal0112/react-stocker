@@ -9,6 +9,7 @@ const PROVIDERS = [
     value: 'gemini',
     label: 'Gemini (Google)',
     models: [
+      { value: 'gemini-3.5-flash', label: 'Gemini 3.5 Flash', price: '$1.50 / $9.00' },
       { value: 'gemini-3.1-pro-preview', label: 'Gemini 3.1 Pro Preview', price: '$2.00 / $12.00' },
       { value: 'gemini-3-flash-preview', label: 'Gemini 3 Flash Preview', price: '$0.50 / $3.00' },
       { value: 'gemini-3.1-flash-lite', label: 'Gemini 3.1 Flash-Lite', price: '$0.25 / $1.50' },
