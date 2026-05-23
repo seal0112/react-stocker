@@ -5,7 +5,7 @@ import 'rc-slider/assets/index.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons'
 import { StockerChart } from 'components/charts'
-import { Row, Col, OverlayTrigger, Tooltip, ButtonGroup, ToggleButton } from 'react-bootstrap'
+import { Row, Col, OverlayTrigger, Tooltip, ButtonGroup, ToggleButton, Table } from 'react-bootstrap'
 import { useStock } from 'hooks/StockContext'
 import * as StockerAPI from 'utils/StockerAPI'
 import * as StockerTool from 'utils/StockerTool'
@@ -163,6 +163,31 @@ const MonthlyValuation = () => {
         height="450px"
         options={chartOptions}
       />
+
+      {rawData.length > 0 && (
+        <Table bordered hover size="sm" className="mt-4" style={{ fontSize: '0.875rem' }}>
+          <thead className="table-dark">
+            <tr>
+              <th>年/月</th>
+              <th>月均價</th>
+              <th>本益比</th>
+              <th>淨值比</th>
+              <th>殖利率 (%)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[...rawData].reverse().map(r => (
+              <tr key={r['Year/Month']}>
+                <td>{r['Year/Month']}</td>
+                <td>{r['均價'] ?? '-'}</td>
+                <td>{r['本益比'] ?? '-'}</td>
+                <td>{r['淨值比'] ?? '-'}</td>
+                <td>{r['殖利率'] ?? '-'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
     </div>
   )
 }
