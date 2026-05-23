@@ -24,6 +24,7 @@ Pct.propTypes = { value: PropTypes.oneOfType([PropTypes.string, PropTypes.number
 
 const POLL_INTERVAL_MS = 5000
 const POLL_TIMEOUT_MS = 120000
+const STORAGE_KEY = 'announcement_dismantling_filters'
 
 const FILTER_KEYS = [
   { key: '基本每股盈餘', label: 'EPS' },
@@ -37,7 +38,15 @@ const FILTER_KEYS = [
   { key: '本業佔比', label: '本業佔比' }
 ]
 
-const initFilters = () => Object.fromEntries(FILTER_KEYS.map(f => [f.key, '']))
+const emptyFilters = () => Object.fromEntries(FILTER_KEYS.map(f => [f.key, { min: '', max: '' }]))
+
+const loadFilters = () => {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY)
+    if (saved) return JSON.parse(saved)
+  } catch {}
+  return emptyFilters()
+}
 
 const AnnouncementDismantlingList = () => {
   const [date, setDate] = useState(dayjs().format('YYYY-MM-DD'))
@@ -46,7 +55,7 @@ const AnnouncementDismantlingList = () => {
   const [rawFeeds, setRawFeeds] = useState([])
   const [triggeringId, setTriggeringId] = useState(null)
   const [pollingId, setPollingId] = useState(null)
-  const [filters, setFilters] = useState(initFilters)
+  const [filters, setFilters] = useState(loadFilters)
   const pollRef = useRef(null)
   const pollStartRef = useRef(null)
 
@@ -110,7 +119,6 @@ const AnnouncementDismantlingList = () => {
     stopPolling()
     setDate(newDate)
     setRawFeeds([])
-    setFilters(initFilters())
     fetchList(newDate).then(data => {
       if (data.length === 0) fetchRawFeeds(newDate)
     })
@@ -129,40 +137,34 @@ const AnnouncementDismantlingList = () => {
       .finally(() => setTriggeringId(null))
   }
 
-  const handleFilterChange = (key, value) => {
-    setFilters(prev => ({ ...prev, [key]: value }))
+  const handleFilterChange = (key, type, value) => {
+    setFilters(prev => {
+      const next = { ...prev, [key]: { ...prev[key], [type]: value } }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+      return next
+    })
+  }
+
+  const handleClearFilters = () => {
+    const cleared = emptyFilters()
+    setFilters(cleared)
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cleared))
   }
 
   const filteredList = list.filter(item =>
     FILTER_KEYS.every(({ key }) => {
-      const min = filters[key]
-      if (min === '') return true
+      const { min, max } = filters[key] || {}
       const val = parseFloat(item[key])
-      return !isNaN(val) && val >= parseFloat(min)
+      if (min !== '' && min !== undefined && (isNaN(val) || val < parseFloat(min))) return false
+      if (max !== '' && max !== undefined && (isNaN(val) || val > parseFloat(max))) return false
+      return true
     })
   )
 
-  const TriggerButton = ({ feedId }) => {
-    const isPolling = pollingId === feedId
-    const isTriggering = triggeringId === feedId
-    return (
-      <Button
-        size="sm"
-        variant={isPolling ? 'outline-secondary' : 'outline-primary'}
-        onClick={() => handleTrigger(feedId)}
-        disabled={isTriggering || isPolling}
-      >
-        {isTriggering
-          ? <><Spinner animation="border" size="sm" className="me-1" />觸發中</>
-          : isPolling
-            ? <><Spinner animation="border" size="sm" className="me-1" />等待中</>
-            : null}
-        {!isTriggering && !isPolling && '觸發解析'}
-      </Button>
-    )
-  }
-
-  TriggerButton.propTypes = { feedId: PropTypes.number.isRequired }
+  const hasActiveFilter = FILTER_KEYS.some(({ key }) => {
+    const f = filters[key] || {}
+    return f.min !== '' || f.max !== ''
+  })
 
   return (
     <main>
@@ -180,6 +182,13 @@ const AnnouncementDismantlingList = () => {
               ? <Spinner animation="border" size="sm" />
               : `共 ${filteredList.length} / ${list.length} 筆`}
           </Col>
+          {hasActiveFilter && (
+            <Col xs="auto">
+              <Button size="sm" variant="outline-secondary" onClick={handleClearFilters}>
+                清除篩選
+              </Button>
+            </Col>
+          )}
         </Row>
 
         {!loading && list.length === 0 && rawFeeds.length === 0 && (
@@ -197,23 +206,40 @@ const AnnouncementDismantlingList = () => {
               </tr>
             </thead>
             <tbody>
-              {rawFeeds.map(feed => (
-                <tr key={feed.id}>
-                  <td>
-                    <strong>{feed.stock_id}</strong>
-                    {feed.company_name && <div className="text-muted" style={{ fontSize: '0.8rem' }}>{feed.company_name}</div>}
-                  </td>
-                  <td>
-                    {feed.link
-                      ? <a href={feed.link} target="_blank" rel="noreferrer">{feed.title}</a>
-                      : feed.title}
-                  </td>
-                  <td className="text-muted" style={{ whiteSpace: 'nowrap' }}>
-                    {dayjs(feed.releaseTime).format('HH:mm')}
-                  </td>
-                  <td><TriggerButton feedId={feed.id} /></td>
-                </tr>
-              ))}
+              {rawFeeds.map(feed => {
+                const isPolling = pollingId === feed.id
+                const isTriggering = triggeringId === feed.id
+                return (
+                  <tr key={feed.id}>
+                    <td>
+                      <strong>{feed.stock_id}</strong>
+                      {feed.company_name && <div className="text-muted" style={{ fontSize: '0.8rem' }}>{feed.company_name}</div>}
+                    </td>
+                    <td>
+                      {feed.link
+                        ? <a href={feed.link} target="_blank" rel="noreferrer">{feed.title}</a>
+                        : feed.title}
+                    </td>
+                    <td className="text-muted" style={{ whiteSpace: 'nowrap' }}>
+                      {dayjs(feed.releaseTime).format('HH:mm')}
+                    </td>
+                    <td>
+                      <Button
+                        size="sm"
+                        variant={isPolling ? 'outline-secondary' : 'outline-primary'}
+                        onClick={() => handleTrigger(feed.id)}
+                        disabled={isTriggering || isPolling}
+                      >
+                        {isTriggering
+                          ? <><Spinner animation="border" size="sm" className="me-1" />觸發中</>
+                          : isPolling
+                            ? <><Spinner animation="border" size="sm" className="me-1" />等待中</>
+                            : '觸發解析'}
+                      </Button>
+                    </td>
+                  </tr>
+                )
+              })}
             </tbody>
           </Table>
         )}
@@ -238,15 +264,23 @@ const AnnouncementDismantlingList = () => {
               </tr>
               <tr className="table-secondary">
                 <td colSpan={3}></td>
-                {FILTER_KEYS.map(({ key, label }) => (
-                  <td key={key} style={{ minWidth: '70px' }}>
+                {FILTER_KEYS.map(({ key }) => (
+                  <td key={key} style={{ minWidth: '75px' }}>
                     <Form.Control
                       size="sm"
                       type="number"
-                      placeholder={`≥ ${label}`}
-                      value={filters[key]}
-                      onChange={e => handleFilterChange(key, e.target.value)}
-                      style={{ fontSize: '0.75rem' }}
+                      placeholder="≥"
+                      value={(filters[key] || {}).min || ''}
+                      onChange={e => handleFilterChange(key, 'min', e.target.value)}
+                      style={{ fontSize: '0.72rem', marginBottom: '2px' }}
+                    />
+                    <Form.Control
+                      size="sm"
+                      type="number"
+                      placeholder="≤"
+                      value={(filters[key] || {}).max || ''}
+                      onChange={e => handleFilterChange(key, 'max', e.target.value)}
+                      style={{ fontSize: '0.72rem' }}
                     />
                   </td>
                 ))}
@@ -264,9 +298,7 @@ const AnnouncementDismantlingList = () => {
                       {item.company_name && <div className="text-muted" style={{ fontSize: '0.8rem' }}>{item.company_name}</div>}
                     </td>
                     <td>
-                      {item.processing_failed
-                        ? <Badge bg="danger" className="me-1">解析失敗</Badge>
-                        : null}
+                      {item.processing_failed && <Badge bg="danger" className="me-1">解析失敗</Badge>}
                       {item.feed?.link
                         ? <a href={item.feed.link} target="_blank" rel="noreferrer">{item.feed.title}</a>
                         : item.feed?.title ?? '-'
