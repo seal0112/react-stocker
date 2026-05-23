@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import 'assets/css/StockerLayout.css'
 import * as StockerAPI from 'utils/StockerAPI'
@@ -22,27 +22,64 @@ const Pct = ({ value }) => {
 
 Pct.propTypes = { value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]) }
 
+const POLL_INTERVAL_MS = 5000
+const POLL_TIMEOUT_MS = 120000
+
 const AnnouncementDismantlingList = () => {
   const [date, setDate] = useState(dayjs().format('YYYY-MM-DD'))
   const [list, setList] = useState([])
   const [loading, setLoading] = useState(false)
   const [triggering, setTriggering] = useState(false)
+  const [polling, setPolling] = useState(false)
   const [triggerMsg, setTriggerMsg] = useState(null)
+  const pollRef = useRef(null)
+  const pollStartRef = useRef(null)
+
+  const stopPolling = () => {
+    if (pollRef.current) {
+      clearInterval(pollRef.current)
+      pollRef.current = null
+    }
+    setPolling(false)
+  }
 
   const fetchList = (targetDate) => {
     setLoading(true)
-    StockerAPI.getAnnouncementDismantlingList(targetDate)
-      .then(data => setList(data))
-      .catch(() => setList([]))
+    return StockerAPI.getAnnouncementDismantlingList(targetDate)
+      .then(data => { setList(data); return data })
+      .catch(() => { setList([]); return [] })
       .finally(() => setLoading(false))
   }
 
   useEffect(() => {
     fetchList(date)
+    return () => stopPolling()
   }, [])
+
+  const startPolling = (targetDate) => {
+    setPolling(true)
+    pollStartRef.current = Date.now()
+    pollRef.current = setInterval(() => {
+      if (Date.now() - pollStartRef.current > POLL_TIMEOUT_MS) {
+        stopPolling()
+        setTriggerMsg({ variant: 'warning', text: '等待逾時，請手動重新整理' })
+        return
+      }
+      StockerAPI.getAnnouncementDismantlingList(targetDate)
+        .then(data => {
+          if (data.length > 0) {
+            setList(data)
+            stopPolling()
+            setTriggerMsg(null)
+          }
+        })
+        .catch(() => {})
+    }, POLL_INTERVAL_MS)
+  }
 
   const handleDateChange = (e) => {
     const newDate = e.target.value
+    stopPolling()
     setDate(newDate)
     setTriggerMsg(null)
     fetchList(newDate)
@@ -56,7 +93,8 @@ const AnnouncementDismantlingList = () => {
         if (res.triggered === 0) {
           setTriggerMsg({ variant: 'warning', text: `當日無可解析的公告 feed（${date}）` })
         } else {
-          setTriggerMsg({ variant: 'success', text: `已觸發 ${res.triggered} 筆公告解析，約 1–2 分鐘後重新載入` })
+          setTriggerMsg({ variant: 'info', text: `已觸發 ${res.triggered} 筆，等待解析結果...` })
+          startPolling(date)
         }
       })
       .catch(() => setTriggerMsg({ variant: 'danger', text: '觸發失敗，請稍後再試' }))
@@ -75,7 +113,11 @@ const AnnouncementDismantlingList = () => {
             />
           </Col>
           <Col xs="auto" className="text-muted">
-            {loading ? <Spinner animation="border" size="sm" /> : `共 ${list.length} 筆`}
+            {loading
+              ? <Spinner animation="border" size="sm" />
+              : polling
+                ? <><Spinner animation="border" size="sm" className="me-1" />等待解析...</>
+                : `共 ${list.length} 筆`}
           </Col>
         </Row>
 
