@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import 'assets/css/StockerLayout.css'
 import * as StockerAPI from 'utils/StockerAPI'
-import { Container, Form, Col, Row, Table, Badge, Spinner, Button } from 'react-bootstrap'
+import { Container, Form, Col, Row, Table, Badge, Spinner, Button, InputGroup } from 'react-bootstrap'
 import dayjs from 'dayjs'
 
 const YoY = ({ value }) => {
@@ -38,12 +38,27 @@ const FILTER_KEYS = [
   { key: '本業佔比', label: '本業佔比' }
 ]
 
-const emptyFilters = () => Object.fromEntries(FILTER_KEYS.map(f => [f.key, { min: '', max: '' }]))
+const emptyFilters = () => Object.fromEntries(FILTER_KEYS.map(f => [f.key, { value: '', op: '>=' }]))
 
 const loadFilters = () => {
   try {
     const saved = localStorage.getItem(STORAGE_KEY)
-    if (saved) return JSON.parse(saved)
+    if (saved) {
+      const parsed = JSON.parse(saved)
+      // migrate from old { min, max } format
+      const migrated = {}
+      for (const { key } of FILTER_KEYS) {
+        const f = parsed[key]
+        if (f && ('min' in f || 'max' in f)) {
+          const v = f.min !== '' ? f.min : f.max !== '' ? f.max : ''
+          const op = f.min !== '' ? '>=' : '<='
+          migrated[key] = { value: v, op }
+        } else {
+          migrated[key] = f || { value: '', op: '>=' }
+        }
+      }
+      return migrated
+    }
   } catch {}
   return emptyFilters()
 }
@@ -150,9 +165,18 @@ const AnnouncementDismantlingList = () => {
       .finally(() => setTriggeringId(null))
   }
 
-  const handleFilterChange = (key, type, value) => {
+  const handleFilterChange = (key, value) => {
     setFilters(prev => {
-      const next = { ...prev, [key]: { ...prev[key], [type]: value } }
+      const next = { ...prev, [key]: { ...prev[key], value } }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
+      return next
+    })
+  }
+
+  const handleToggleOp = (key) => {
+    setFilters(prev => {
+      const op = prev[key]?.op === '>=' ? '<=' : '>='
+      const next = { ...prev, [key]: { ...prev[key], op } }
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
       return next
     })
@@ -166,17 +190,17 @@ const AnnouncementDismantlingList = () => {
 
   const filteredList = list.filter(item =>
     FILTER_KEYS.every(({ key }) => {
-      const { min, max } = filters[key] || {}
+      const { value, op } = filters[key] || {}
+      if (value === '' || value === undefined) return true
       const val = parseFloat(item[key])
-      if (min !== '' && min !== undefined && (isNaN(val) || val < parseFloat(min))) return false
-      if (max !== '' && max !== undefined && (isNaN(val) || val > parseFloat(max))) return false
-      return true
+      if (isNaN(val)) return false
+      return op === '>=' ? val >= parseFloat(value) : val <= parseFloat(value)
     })
   )
 
   const hasActiveFilter = FILTER_KEYS.some(({ key }) => {
     const f = filters[key] || {}
-    return f.min !== '' || f.max !== ''
+    return f.value !== ''
   })
 
   return (
@@ -277,26 +301,30 @@ const AnnouncementDismantlingList = () => {
               </tr>
               <tr className="table-secondary">
                 <td colSpan={3}></td>
-                {FILTER_KEYS.map(({ key }) => (
-                  <td key={key} style={{ minWidth: '75px' }}>
-                    <Form.Control
-                      size="sm"
-                      type="number"
-                      placeholder="≥"
-                      value={(filters[key] || {}).min || ''}
-                      onChange={e => handleFilterChange(key, 'min', e.target.value)}
-                      style={{ fontSize: '0.72rem', marginBottom: '2px' }}
-                    />
-                    <Form.Control
-                      size="sm"
-                      type="number"
-                      placeholder="≤"
-                      value={(filters[key] || {}).max || ''}
-                      onChange={e => handleFilterChange(key, 'max', e.target.value)}
-                      style={{ fontSize: '0.72rem' }}
-                    />
-                  </td>
-                ))}
+                {FILTER_KEYS.map(({ key }) => {
+                  const f = filters[key] || { value: '', op: '>=' }
+                  return (
+                    <td key={key} style={{ minWidth: '90px' }}>
+                      <InputGroup size="sm">
+                        <Button
+                          variant="outline-secondary"
+                          size="sm"
+                          onClick={() => handleToggleOp(key)}
+                          style={{ fontSize: '0.72rem', padding: '0 4px', minWidth: '26px' }}
+                        >
+                          {f.op}
+                        </Button>
+                        <Form.Control
+                          size="sm"
+                          type="number"
+                          value={f.value}
+                          onChange={e => handleFilterChange(key, e.target.value)}
+                          style={{ fontSize: '0.72rem' }}
+                        />
+                      </InputGroup>
+                    </td>
+                  )
+                })}
                 <td></td>
               </tr>
             </thead>
