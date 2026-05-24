@@ -193,7 +193,7 @@ const AnnouncementDismantlingList = () => {
       const { value, op } = filters[key] || {}
       if (value === '' || value === undefined) return true
       const val = parseFloat(item[key])
-      if (isNaN(val)) return false
+      if (isNaN(val)) return true
       return op === '>=' ? val >= parseFloat(value) : val <= parseFloat(value)
     })
   )
