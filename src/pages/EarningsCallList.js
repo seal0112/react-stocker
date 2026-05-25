@@ -61,6 +61,7 @@ const SummaryDetail = ({ earningsCallId, processingStatus, isAdmin, meetingDate 
   const [error, setError] = useState(null)
   const [triggering, setTriggering] = useState(false)
   const [triggerMsg, setTriggerMsg] = useState(null)
+  const [boundFeeds, setBoundFeeds] = useState([])
 
   useEffect(() => {
     StockerAPI.getEarningsCallSummary(earningsCallId)
@@ -74,6 +75,9 @@ const SummaryDetail = ({ earningsCallId, processingStatus, isAdmin, meetingDate 
           setLoading(false)
         }
       })
+    StockerAPI.getEarningsCallBoundFeeds(earningsCallId)
+      .then(data => setBoundFeeds(data || []))
+      .catch(() => setBoundFeeds([]))
   }, [earningsCallId])
 
   const handleTrigger = () => {
@@ -139,17 +143,27 @@ const SummaryDetail = ({ earningsCallId, processingStatus, isAdmin, meetingDate 
             <div><small className="text-muted">影響時程</small><br />{summary.impact_duration || '—'}</div>
             <div><small className="text-muted">資料來源</small><br />{summary.source_reliability || '—'}</div>
           </div>
-          {summary.news_contributions?.length > 0 && (
+          {boundFeeds.length > 0 && (
             <div>
-              <strong>新聞貢獻</strong>
-              <ul className="mt-1 ps-3 mb-0">
-                {summary.news_contributions.map((nc, i) => (
-                  <li key={i} className="mb-1">
-                    <span className={`me-1 fw-bold ${nc.score_delta > 0 ? 'text-success' : nc.score_delta < 0 ? 'text-danger' : 'text-muted'}`}>
-                      {nc.score_delta > 0 ? `+${nc.score_delta}` : nc.score_delta}
-                    </span>
-                    {nc.title}
-                    {nc.key_insight && <div className="text-muted" style={{ fontSize: '0.8rem' }}>{nc.key_insight}</div>}
+              <strong>參考新聞</strong>
+              <ul className="mt-1 ps-0 mb-0" style={{ listStyle: 'none' }}>
+                {boundFeeds.map((feed) => (
+                  <li key={feed.feed_id} className="mb-2">
+                    <div className="d-flex align-items-start gap-2">
+                      <span className={`fw-bold flex-shrink-0 ${feed.score_delta > 0 ? 'text-success' : feed.score_delta < 0 ? 'text-danger' : 'text-muted'}`}
+                        style={{ minWidth: '2rem', textAlign: 'right' }}>
+                        {feed.score_delta > 0 ? `+${feed.score_delta}` : feed.score_delta ?? '—'}
+                      </span>
+                      <div>
+                        {feed.link
+                          ? <a href={feed.link} target="_blank" rel="noreferrer" style={{ fontSize: '0.85rem' }}>{feed.title}</a>
+                          : <span style={{ fontSize: '0.85rem' }}>{feed.title}</span>
+                        }
+                        {feed.key_insight && (
+                          <div className="text-muted" style={{ fontSize: '0.78rem' }}>{feed.key_insight}</div>
+                        )}
+                      </div>
+                    </div>
                   </li>
                 ))}
               </ul>

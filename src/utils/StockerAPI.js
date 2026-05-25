@@ -138,3 +138,7 @@ export const getEarningsCallSummary = (earningsCallId) =>
 export const triggerEarningsCallSummary = (earningsCallId) =>
   frontendDataRequest.post(`/earnings_call/${earningsCallId}/summary`)
     .then((res) => res.data)
+
+export const getEarningsCallBoundFeeds = (earningsCallId) =>
+  frontendDataRequest.get(`/earnings_call/${earningsCallId}/bound_feeds`)
+    .then((res) => res.data)
