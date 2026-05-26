@@ -5,7 +5,8 @@ import 'rc-slider/assets/index.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons'
 import { StockerChart } from 'components/charts'
-import { Row, Col, OverlayTrigger, Tooltip, ButtonGroup, ToggleButton, Table } from 'react-bootstrap'
+import CustomizedTable from 'components/CustomizedTable'
+import { Row, Col, OverlayTrigger, Tooltip, ButtonGroup, ToggleButton } from 'react-bootstrap'
 import { useStock } from 'hooks/StockContext'
 import * as StockerAPI from 'utils/StockerAPI'
 import * as StockerTool from 'utils/StockerTool'
@@ -89,6 +90,20 @@ const MonthlyValuation = () => {
     )
   }
 
+  const makeTableData = () => {
+    if (rawData.length === 0) return [['Year/Month', '月均價', '本益比', '淨值比', '殖利率(%)'], ['', null, null, null, null]]
+    return StockerTool.formatDataForGoogleChart(
+      [...rawData].reverse(),
+      [
+        { title: 'Year/Month', transferToFloat: false },
+        { title: '均價', transferToFloat: false },
+        { title: '本益比', transferToFloat: false },
+        { title: '淨值比', transferToFloat: false },
+        { title: '殖利率', transferToFloat: false }
+      ]
+    )
+  }
+
   const isBar = config.chartType === 'bar'
   const chartOptions = {
     title: config.title,
@@ -164,30 +179,7 @@ const MonthlyValuation = () => {
         options={chartOptions}
       />
 
-      {rawData.length > 0 && (
-        <Table bordered hover size="sm" className="mt-4" style={{ fontSize: '0.875rem' }}>
-          <thead className="table-dark">
-            <tr>
-              <th>年/月</th>
-              <th>月均價</th>
-              <th>本益比</th>
-              <th>淨值比</th>
-              <th>殖利率 (%)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {[...rawData].reverse().map(r => (
-              <tr key={r['Year/Month']}>
-                <td>{r['Year/Month']}</td>
-                <td>{r['均價'] ?? '-'}</td>
-                <td>{r['本益比'] ?? '-'}</td>
-                <td>{r['淨值比'] ?? '-'}</td>
-                <td>{r['殖利率'] ?? '-'}</td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      )}
+      <CustomizedTable data={makeTableData()} />
     </div>
   )
 }
