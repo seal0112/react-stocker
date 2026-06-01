@@ -12,6 +12,12 @@ const FollowStockList = () => {
       setFollowStocks(data)
     })
   }, [])
+
+  const handleRemove = async (followStockId) => {
+    await followStockApi.deleteFollowStock(followStockId)
+    setFollowStocks(prev => prev.filter(s => s.id !== followStockId))
+  }
+
   return (
     <Container>
       <h2>追蹤個股清單</h2>
@@ -25,8 +31,8 @@ const FollowStockList = () => {
               stock={followStock.stock}
               longOrShort={followStock.long_or_short}
               comment={followStock.comment}
+              onRemove={handleRemove}
             ></FollowStockCard>
-
           ))
         }
       </ul>
