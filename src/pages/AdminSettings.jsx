@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Card, Form, Button, Alert, Spinner, Badge } from 'react-bootstrap'
+import { Container, Card, Form, Button, Alert, Spinner, Badge, InputGroup } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from 'hooks/AuthContext'
-import { getAiSetting, updateAiSetting } from 'utils/AiSettingAPI'
+import { getAiSetting, updateAiSetting, updateAiToken } from 'utils/AiSettingAPI'
 
 const PROVIDERS = [
   {
@@ -42,6 +42,10 @@ const AdminSettings = () => {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [msg, setMsg] = useState(null)
+  const [token, setToken] = useState('')
+  const [showToken, setShowToken] = useState(false)
+  const [savingToken, setSavingToken] = useState(false)
+  const [tokenMsg, setTokenMsg] = useState(null)
 
   useEffect(() => {
     if (!hasRole('admin')) {
@@ -62,6 +66,22 @@ const AdminSettings = () => {
     setSelectedProvider(providerValue)
     setSelectedModel(defaultModel(providerValue))
     setMsg(null)
+    setToken('')
+    setTokenMsg(null)
+  }
+
+  const handleSaveToken = () => {
+    if (!token.trim()) return
+    setSavingToken(true)
+    setTokenMsg(null)
+    updateAiToken(selectedProvider, token.trim())
+      .then(() => {
+        setToken('')
+        setShowToken(false)
+        setTokenMsg({ variant: 'success', text: `${selectedProvider} API key 已更新` })
+      })
+      .catch(() => setTokenMsg({ variant: 'danger', text: '更新失敗，請稍後再試' }))
+      .finally(() => setSavingToken(false))
   }
 
   const isDirty = selectedProvider !== setting?.provider ||
@@ -167,6 +187,44 @@ const AdminSettings = () => {
                 {setting.updated_at ? `，${setting.updated_at.slice(0, 16).replace('T', ' ')}` : ''}
               </p>
             )}
+          </Card.Body>
+        </Card>
+        <Card className="mt-4">
+          <Card.Header><strong>API Key 設定</strong></Card.Header>
+          <Card.Body>
+            <p className="text-muted mb-3" style={{ fontSize: '0.9rem' }}>
+              設定目前選取 Provider（<strong>{selectedProvider}</strong>）的 API Key，儲存後直接更新 SSM。
+            </p>
+            <Form.Group className="mb-3">
+              <Form.Label><strong>{selectedProvider} API Key</strong></Form.Label>
+              <InputGroup>
+                <Form.Control
+                  type={showToken ? 'text' : 'password'}
+                  placeholder={`輸入新的 ${selectedProvider} API Key`}
+                  value={token}
+                  onChange={(e) => setToken(e.target.value)}
+                />
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => setShowToken(v => !v)}
+                  tabIndex={-1}
+                >
+                  {showToken ? '隱藏' : '顯示'}
+                </Button>
+              </InputGroup>
+            </Form.Group>
+            {tokenMsg && (
+              <Alert variant={tokenMsg.variant} className="py-2 mb-3">
+                {tokenMsg.text}
+              </Alert>
+            )}
+            <Button
+              variant="warning"
+              onClick={handleSaveToken}
+              disabled={savingToken || !token.trim()}
+            >
+              {savingToken ? <><Spinner animation="border" size="sm" className="me-1" />更新中...</> : '更新 API Key'}
+            </Button>
           </Card.Body>
         </Card>
       </Container>
