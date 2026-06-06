@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Container, Card, Form, Button, Alert, Spinner, Badge, InputGroup } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from 'hooks/AuthContext'
-import { getAiSetting, updateAiSetting, updateAiToken } from 'utils/AiSettingAPI'
+import { getAiSetting, updateAiSetting, updateAiToken, getAiTokens } from 'utils/AiSettingAPI'
 
 const PROVIDERS = [
   {
@@ -46,17 +46,19 @@ const AdminSettings = () => {
   const [showToken, setShowToken] = useState(false)
   const [savingToken, setSavingToken] = useState(false)
   const [tokenMsg, setTokenMsg] = useState(null)
+  const [tokenStatus, setTokenStatus] = useState({})
 
   useEffect(() => {
     if (!hasRole('admin')) {
       navigate('/')
       return
     }
-    getAiSetting()
-      .then(data => {
+    Promise.all([getAiSetting(), getAiTokens().catch(() => ({}))])
+      .then(([data, tokens]) => {
         setSetting(data)
         setSelectedProvider(data.provider)
         setSelectedModel(data.model || defaultModel(data.provider))
+        setTokenStatus(tokens)
       })
       .catch(() => setMsg({ variant: 'danger', text: '載入失敗' }))
       .finally(() => setLoading(false))
@@ -76,6 +78,8 @@ const AdminSettings = () => {
     setTokenMsg(null)
     updateAiToken(selectedProvider, token.trim())
       .then(() => {
+        const last4 = token.trim().slice(-4)
+        setTokenStatus(prev => ({ ...prev, [selectedProvider]: `****${last4}` }))
         setToken('')
         setShowToken(false)
         setTokenMsg({ variant: 'success', text: `${selectedProvider} API key 已更新` })
@@ -196,7 +200,13 @@ const AdminSettings = () => {
               設定目前選取 Provider（<strong>{selectedProvider}</strong>）的 API Key，儲存後直接更新 SSM。
             </p>
             <Form.Group className="mb-3">
-              <Form.Label><strong>{selectedProvider} API Key</strong></Form.Label>
+              <Form.Label>
+                <strong>{selectedProvider} API Key</strong>
+                {tokenStatus[selectedProvider]
+                  ? <Badge bg="secondary" className="ms-2" style={{ fontFamily: 'monospace' }}>{tokenStatus[selectedProvider]}</Badge>
+                  : <Badge bg="danger" className="ms-2">未設定</Badge>
+                }
+              </Form.Label>
               <InputGroup>
                 <Form.Control
                   type={showToken ? 'text' : 'password'}
