@@ -131,6 +131,10 @@ export const getEarningsCallList = (params = {}) => {
     .then((res) => res.data)
 }
 
+export const getStockEarningsCallList = (stockId, page = 1, pageSize = 15) =>
+  frontendDataRequest.get(`/earnings_call?stock=${stockId}&page=${page}&page_size=${pageSize}`)
+    .then((res) => res.data)
+
 export const getEarningsCallSummary = (earningsCallId) =>
   frontendDataRequest.get(`/earnings_call/${earningsCallId}/summary`)
     .then((res) => res.data)

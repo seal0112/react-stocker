@@ -99,6 +99,11 @@ const NaviBar = () => {
           title: '個人意見',
           href: '/comment',
           icon: faCommentAlt
+        },
+        {
+          title: '法說會',
+          href: '/earnings-call',
+          icon: faCommentAlt
         }
       ]
     }, {

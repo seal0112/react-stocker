@@ -23,6 +23,7 @@ import FollowStockList from 'pages/FollowStockList'
 import AdminUserManagement from 'pages/AdminUserManagement'
 import AiPromptManager from 'pages/AiPromptManager'
 import AdminSettings from 'pages/AdminSettings'
+import StockEarningsCall from 'pages/StockEarningsCall'
 import RequireAuth from 'components/RequireAuth'
 
 export default function App () {
@@ -63,6 +64,11 @@ export default function App () {
                 key="comment"
                 path="/basic-info/comment/:stockNum"
                 element={<p>comment</p>}
+              />
+              <Route
+                key="earnings-call"
+                path="/basic-info/earnings-call/:stockNum"
+                element={<StockEarningsCall />}
               />
               <Route
                 key="revenue"
