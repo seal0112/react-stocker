@@ -146,7 +146,7 @@ const SummaryDetail = ({ earningsCallId, processingStatus, isAdmin, meetingDate 
       <div className="p-3">
         <p className="text-muted mb-2">尚無 AI 分析資料</p>
         {canTrigger && (
-          <Button size="sm" variant="outline-primary" onClick={handleTrigger} disabled={triggering}>
+          <Button size="sm" variant="outline-primary" onClick={handleTrigger} disabled={triggering || !!pollingCountdown}>
             {triggering ? <><Spinner animation="border" size="sm" className="me-1" />觸發中...</> : '觸發 AI 分析'}
           </Button>
         )}
@@ -172,7 +172,7 @@ const SummaryDetail = ({ earningsCallId, processingStatus, isAdmin, meetingDate 
           <strong>分析失敗：</strong>{displayMsg}
         </Alert>
         {canTrigger && (
-          <Button size="sm" variant="outline-primary" onClick={handleTrigger} disabled={triggering}>
+          <Button size="sm" variant="outline-primary" onClick={handleTrigger} disabled={triggering || !!pollingCountdown}>
             {triggering ? <><Spinner animation="border" size="sm" className="me-1" />觸發中...</> : '重新觸發 AI 分析'}
           </Button>
         )}
@@ -250,7 +250,7 @@ const SummaryDetail = ({ earningsCallId, processingStatus, isAdmin, meetingDate 
           )}
           {canTrigger && processingStatus === 'completed' && (
             <div className="mt-3">
-              <Button size="sm" variant="outline-secondary" onClick={handleTrigger} disabled={triggering}>
+              <Button size="sm" variant="outline-secondary" onClick={handleTrigger} disabled={triggering || !!pollingCountdown}>
                 {triggering ? <><Spinner animation="border" size="sm" className="me-1" />觸發中...</> : '重新觸發 AI 分析'}
               </Button>
               {triggerMsg && <Alert variant={triggerMsg.variant} className="mt-2 mb-0 py-1 px-2" style={{ fontSize: '0.85rem' }}>{triggerMsg.text}</Alert>}
