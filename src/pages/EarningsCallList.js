@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import PropTypes from 'prop-types'
 import {
   Container, Table, Spinner, Form, Row, Col, Button, Badge, Collapse, Alert
@@ -55,6 +55,9 @@ const StatusBadge = ({ status }) => {
 }
 StatusBadge.propTypes = { status: PropTypes.string }
 
+const POLL_INTERVAL_MS = 60_000
+const POLL_MAX_MS = 5 * 60_000
+
 const SummaryDetail = ({ earningsCallId, processingStatus, isAdmin, meetingDate }) => {
   const [summary, setSummary] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -62,10 +65,13 @@ const SummaryDetail = ({ earningsCallId, processingStatus, isAdmin, meetingDate 
   const [triggering, setTriggering] = useState(false)
   const [triggerMsg, setTriggerMsg] = useState(null)
   const [boundFeeds, setBoundFeeds] = useState([])
+  const [pollingCountdown, setPollingCountdown] = useState(null)
+  const pollRef = useRef(null)
+  const pollStartRef = useRef(null)
 
-  useEffect(() => {
-    StockerAPI.getEarningsCallSummary(earningsCallId)
-      .then(data => { setSummary(data); setLoading(false) })
+  const fetchSummary = useCallback(() => {
+    return StockerAPI.getEarningsCallSummary(earningsCallId)
+      .then(data => { setSummary(data); setLoading(false); return data })
       .catch(err => {
         if (err.response?.status === 404) {
           setSummary(null)
@@ -74,17 +80,58 @@ const SummaryDetail = ({ earningsCallId, processingStatus, isAdmin, meetingDate 
           setError('載入失敗')
           setLoading(false)
         }
+        return null
       })
+  }, [earningsCallId])
+
+  const stopPolling = useCallback(() => {
+    if (pollRef.current) {
+      clearInterval(pollRef.current)
+      pollRef.current = null
+    }
+    setPollingCountdown(null)
+  }, [])
+
+  const startPolling = useCallback(() => {
+    pollStartRef.current = Date.now()
+    setPollingCountdown(5)
+    pollRef.current = setInterval(() => {
+      const elapsed = Date.now() - pollStartRef.current
+      if (elapsed >= POLL_MAX_MS) {
+        stopPolling()
+        return
+      }
+      const remaining = Math.ceil((POLL_MAX_MS - elapsed) / 60_000)
+      setPollingCountdown(remaining)
+      fetchSummary().then(data => {
+        if (data && data.processing_status === 'completed') {
+          stopPolling()
+          StockerAPI.getEarningsCallBoundFeeds(earningsCallId)
+            .then(feeds => setBoundFeeds(feeds || []))
+            .catch(() => {})
+        } else if (data && data.processing_status === 'failed') {
+          stopPolling()
+        }
+      })
+    }, POLL_INTERVAL_MS)
+  }, [earningsCallId, fetchSummary, stopPolling])
+
+  useEffect(() => {
+    fetchSummary()
     StockerAPI.getEarningsCallBoundFeeds(earningsCallId)
       .then(data => setBoundFeeds(data || []))
       .catch(() => setBoundFeeds([]))
-  }, [earningsCallId])
+    return () => stopPolling()
+  }, [earningsCallId, fetchSummary, stopPolling])
 
   const handleTrigger = () => {
     setTriggering(true)
     setTriggerMsg(null)
     StockerAPI.triggerEarningsCallSummary(earningsCallId)
-      .then(() => setTriggerMsg({ variant: 'success', text: '已送出分析請求，約 1 分鐘後完成' }))
+      .then(() => {
+        setTriggerMsg({ variant: 'success', text: '已送出分析請求，每分鐘自動更新（最多 5 分鐘）' })
+        startPolling()
+      })
       .catch(() => setTriggerMsg({ variant: 'danger', text: '觸發失敗，請稍後再試' }))
       .finally(() => setTriggering(false))
   }
@@ -103,7 +150,12 @@ const SummaryDetail = ({ earningsCallId, processingStatus, isAdmin, meetingDate 
             {triggering ? <><Spinner animation="border" size="sm" className="me-1" />觸發中...</> : '觸發 AI 分析'}
           </Button>
         )}
-        {triggerMsg && <Alert variant={triggerMsg.variant} className="mt-2 mb-0 py-1 px-2" style={{ fontSize: '0.85rem' }}>{triggerMsg.text}</Alert>}
+        {triggerMsg && (
+          <Alert variant={triggerMsg.variant} className="mt-2 mb-0 py-1 px-2" style={{ fontSize: '0.85rem' }}>
+            {triggerMsg.text}
+            {pollingCountdown && <span className="ms-2 text-muted">（自動更新中，剩約 {pollingCountdown} 分鐘）</span>}
+          </Alert>
+        )}
       </div>
     )
   }
