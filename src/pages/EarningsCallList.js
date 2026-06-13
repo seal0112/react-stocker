@@ -108,6 +108,27 @@ const SummaryDetail = ({ earningsCallId, processingStatus, isAdmin, meetingDate 
     )
   }
 
+  const ERROR_MESSAGES = {
+    'No related feeds found': '找不到相關新聞，無法產生 AI 摘要'
+  }
+
+  if (summary.processing_status === 'failed') {
+    const displayMsg = ERROR_MESSAGES[summary.error_message] || summary.error_message || '分析失敗'
+    return (
+      <div className="p-3">
+        <Alert variant="warning" className="mb-2 py-2">
+          <strong>分析失敗：</strong>{displayMsg}
+        </Alert>
+        {canTrigger && (
+          <Button size="sm" variant="outline-primary" onClick={handleTrigger} disabled={triggering}>
+            {triggering ? <><Spinner animation="border" size="sm" className="me-1" />觸發中...</> : '重新觸發 AI 分析'}
+          </Button>
+        )}
+        {triggerMsg && <Alert variant={triggerMsg.variant} className="mt-2 mb-0 py-1 px-2" style={{ fontSize: '0.85rem' }}>{triggerMsg.text}</Alert>}
+      </div>
+    )
+  }
+
   return (
     <div className="p-3" style={{ background: '#f8f9fa', fontSize: '0.9rem' }}>
       <Row>
@@ -169,7 +190,13 @@ const SummaryDetail = ({ earningsCallId, processingStatus, isAdmin, meetingDate 
               </ul>
             </div>
           )}
-          {canTrigger && (
+          {(summary.total_tokens > 0 || summary.cost_twd > 0) && (
+            <div className="mt-3 pt-2 border-top text-muted" style={{ fontSize: '0.78rem' }}>
+              <span className="me-3">Token：{summary.input_tokens?.toLocaleString()} in / {summary.output_tokens?.toLocaleString()} out</span>
+              <span>費用：NT${Number(summary.cost_twd).toFixed(2)}（USD ${Number(summary.cost_usd).toFixed(4)}）</span>
+            </div>
+          )}
+          {canTrigger && processingStatus === 'completed' && (
             <div className="mt-3">
               <Button size="sm" variant="outline-secondary" onClick={handleTrigger} disabled={triggering}>
                 {triggering ? <><Spinner animation="border" size="sm" className="me-1" />觸發中...</> : '重新觸發 AI 分析'}
