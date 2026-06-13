@@ -58,7 +58,7 @@ StatusBadge.propTypes = { status: PropTypes.string }
 const POLL_INTERVAL_MS = 60_000
 const POLL_MAX_MS = 5 * 60_000
 
-const SummaryDetail = ({ earningsCallId, processingStatus, isAdmin, meetingDate }) => {
+const SummaryDetail = ({ earningsCallId, processingStatus, isAdmin, meetingDate, onSummaryUpdated }) => {
   const [summary, setSummary] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -106,11 +106,13 @@ const SummaryDetail = ({ earningsCallId, processingStatus, isAdmin, meetingDate 
       fetchSummary().then(data => {
         if (data && data.processing_status === 'completed') {
           stopPolling()
+          onSummaryUpdated?.(earningsCallId, data)
           StockerAPI.getEarningsCallBoundFeeds(earningsCallId)
             .then(feeds => setBoundFeeds(feeds || []))
             .catch(() => {})
         } else if (data && data.processing_status === 'failed') {
           stopPolling()
+          onSummaryUpdated?.(earningsCallId, data)
         }
       })
     }, POLL_INTERVAL_MS)
@@ -266,7 +268,8 @@ SummaryDetail.propTypes = {
   earningsCallId: PropTypes.number.isRequired,
   processingStatus: PropTypes.string,
   isAdmin: PropTypes.bool,
-  meetingDate: PropTypes.string
+  meetingDate: PropTypes.string,
+  onSummaryUpdated: PropTypes.func
 }
 
 const EarningsCallList = () => {
@@ -280,6 +283,12 @@ const EarningsCallList = () => {
   const [stock, setStock] = useState('')
   const [meetingDate, setMeetingDate] = useState(dayjs().format('YYYY-MM-DD'))
   const [scoreFilterIdx, setScoreFilterIdx] = useState(0)
+
+  const handleSummaryUpdated = useCallback((earningsCallId, summary) => {
+    setEarningsCalls(prev => prev.map(ec =>
+      ec.id === earningsCallId ? { ...ec, summary } : ec
+    ))
+  }, [])
 
   const fetchEarningsCalls = useCallback((params = {}) => {
     setLoading(true)
@@ -426,6 +435,7 @@ const EarningsCallList = () => {
                                   processingStatus={ec.summary?.processing_status}
                                   isAdmin={isAdmin}
                                   meetingDate={ec.meeting_date}
+                                  onSummaryUpdated={handleSummaryUpdated}
                                 />
                               )}
                             </div>
