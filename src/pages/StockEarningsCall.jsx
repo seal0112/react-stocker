@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
+import PropTypes from 'prop-types'
 import { Spinner, Badge, Collapse } from 'react-bootstrap'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import dayjs from 'dayjs'
@@ -35,6 +36,22 @@ const SentimentBadge = ({ sentiment, score }) => {
     </span>
   )
 }
+SentimentBadge.propTypes = {
+  sentiment: PropTypes.string,
+  score: PropTypes.number
+}
+
+const earningsCallShape = PropTypes.shape({
+  id: PropTypes.number,
+  meeting_date: PropTypes.string,
+  location: PropTypes.string,
+  description: PropTypes.string,
+  summary: PropTypes.shape({
+    processing_status: PropTypes.string,
+    sentiment: PropTypes.string,
+    score: PropTypes.number
+  })
+})
 
 const EarningsCallCard = ({ ec }) => {
   const [open, setOpen] = useState(false)
@@ -59,7 +76,7 @@ const EarningsCallCard = ({ ec }) => {
       style={{
         borderBottom: '1px solid #e9ecef',
         padding: '12px 0',
-        cursor: 'pointer',
+        cursor: 'pointer'
       }}
     >
       <div
@@ -129,6 +146,9 @@ const EarningsCallCard = ({ ec }) => {
       </Collapse>
     </div>
   )
+}
+EarningsCallCard.propTypes = {
+  ec: earningsCallShape
 }
 
 const StockEarningsCall = () => {
