@@ -278,7 +278,7 @@ const EarningsCallList = () => {
   const [expandedId, setExpandedId] = useState(null)
 
   const [stock, setStock] = useState('')
-  const [meetingDate, setMeetingDate] = useState('')
+  const [meetingDate, setMeetingDate] = useState(dayjs().format('YYYY-MM-DD'))
   const [scoreFilterIdx, setScoreFilterIdx] = useState(0)
 
   const fetchEarningsCalls = useCallback((params = {}) => {
@@ -291,7 +291,7 @@ const EarningsCallList = () => {
   }, [])
 
   useEffect(() => {
-    fetchEarningsCalls()
+    fetchEarningsCalls({ meeting_date: dayjs().format('YYYY-MM-DD') })
   }, [fetchEarningsCalls])
 
   const handleSearch = (e) => {
