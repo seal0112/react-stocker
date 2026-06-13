@@ -235,6 +235,7 @@ export const SummaryDetail = ({ earningsCallId, processingStatus, isAdmin, meeti
           )}
           {(summary.total_tokens > 0 || summary.cost_twd > 0) && (
             <div className="mt-3 pt-2 border-top text-muted" style={{ fontSize: '0.78rem' }}>
+              {summary.model_name && <span className="me-3">模型：{summary.model_name}</span>}
               <span className="me-3">Token：{summary.input_tokens?.toLocaleString()} in / {summary.output_tokens?.toLocaleString()} out</span>
               <span>費用：NT${Number(summary.cost_twd).toFixed(2)}（USD ${Number(summary.cost_usd).toFixed(4)}）</span>
             </div>
