@@ -20,7 +20,7 @@ const PROMPT_TYPES = {
   }
 }
 
-const EMPTY_FORM = { name: '', provider: 'gemini', content: '', description: '', is_active: true }
+const EMPTY_FORM = { name: '', nameType: '', provider: 'gemini', content: '', description: '', is_active: true }
 
 const AiPromptManager = () => {
   const navigate = useNavigate()
@@ -74,6 +74,7 @@ const AiPromptManager = () => {
     setEditingPrompt(prompt)
     setForm({
       name: prompt.name,
+      nameType: prompt.name,
       provider: prompt.provider || '',
       content: prompt.content,
       description: prompt.description || '',
@@ -232,33 +233,57 @@ const AiPromptManager = () => {
           {saveError && <Alert variant="danger">{saveError}</Alert>}
           <Form>
             <Form.Group className="mb-3">
-              <Form.Label>名稱 <span className="text-danger">*</span></Form.Label>
+              <Form.Label>用途 <span className="text-danger">*</span></Form.Label>
               {editingPrompt
-                ? <Form.Control value={form.name} disabled />
+                ? (
+                  <Form.Control
+                    value={PROMPT_TYPES[form.name] ? PROMPT_TYPES[form.name].label : form.name}
+                    disabled
+                  />
+                )
                 : (
-                  <>
-                    <datalist id="prompt-name-list">
-                      {Object.entries(PROMPT_TYPES).map(([key, info]) => (
-                        <option key={key} value={key}>{info.label}</option>
-                      ))}
-                    </datalist>
-                    <Form.Control
-                      value={form.name}
-                      onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))}
-                      placeholder="選擇或輸入名稱，例：earnings-call-summary"
-                      list="prompt-name-list"
-                    />
-                  </>
-                  )}
-              <Form.Text className="text-muted">
-                {editingPrompt
-                  ? '建立後無法修改名稱'
-                  : PROMPT_TYPES[form.name]
-                    ? `用途：${PROMPT_TYPES[form.name].description}`
-                    : '建立後無法修改名稱'
-                }
-              </Form.Text>
+                  <Form.Select
+                    value={form.nameType}
+                    onChange={(e) => {
+                      const val = e.target.value
+                      setForm(f => ({
+                        ...f,
+                        nameType: val,
+                        name: val === '__custom__' ? '' : val,
+                        description: val !== '__custom__' && PROMPT_TYPES[val]
+                          ? PROMPT_TYPES[val].description
+                          : f.description
+                      }))
+                    }}
+                  >
+                    <option value="">請選擇用途</option>
+                    {Object.entries(PROMPT_TYPES).map(([key, info]) => (
+                      <option key={key} value={key}>{info.label}</option>
+                    ))}
+                    <option value="__custom__">自訂</option>
+                  </Form.Select>
+                )}
             </Form.Group>
+
+            {!editingPrompt && form.nameType === '__custom__' && (
+              <Form.Group className="mb-3">
+                <Form.Label>名稱 <span className="text-danger">*</span></Form.Label>
+                <Form.Control
+                  value={form.name}
+                  onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))}
+                  placeholder="例：stock-news-summary"
+                />
+                <Form.Text className="text-muted">建立後無法修改名稱</Form.Text>
+              </Form.Group>
+            )}
+
+            {editingPrompt && (
+              <Form.Group className="mb-3">
+                <Form.Label>名稱</Form.Label>
+                <Form.Control value={form.name} disabled />
+                <Form.Text className="text-muted">建立後無法修改名稱</Form.Text>
+              </Form.Group>
+            )}
 
             <Form.Group className="mb-3">
               <Form.Label>Provider</Form.Label>
