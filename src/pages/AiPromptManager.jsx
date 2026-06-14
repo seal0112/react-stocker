@@ -12,7 +12,13 @@ const PROVIDER_LABELS = {
   claude: 'Claude'
 }
 
-const PLACEHOLDER_HINT = '可用 placeholder：{stock_id}、{meeting_date}、{feeds_content}'
+const PROMPT_TYPES = {
+  'earnings-call-summary': {
+    label: '法說會摘要',
+    placeholders: ['{stock_id}', '{meeting_date}', '{feeds_content}'],
+    description: '分析法說會相關新聞，產生 AI 摘要與評分'
+  }
+}
 
 const EMPTY_FORM = { name: '', provider: 'gemini', content: '', description: '', is_active: true }
 
@@ -156,6 +162,7 @@ const AiPromptManager = () => {
       <Table striped bordered hover responsive>
         <thead>
           <tr>
+            <th>用途</th>
             <th>名稱</th>
             <th>Provider</th>
             <th>說明</th>
@@ -165,44 +172,52 @@ const AiPromptManager = () => {
           </tr>
         </thead>
         <tbody>
-          {prompts.map((prompt) => (
-            <tr key={prompt.id}>
-              <td><code>{prompt.name}</code></td>
-              <td>
-                {prompt.provider
-                  ? <Badge bg="info">{PROVIDER_LABELS[prompt.provider] || prompt.provider}</Badge>
-                  : <Badge bg="secondary">通用</Badge>}
-              </td>
-              <td className="text-muted small">{prompt.description || '-'}</td>
-              <td>
-                <Badge bg={prompt.is_active ? 'success' : 'secondary'}>
-                  {prompt.is_active ? '啟用' : '停用'}
-                </Badge>
-              </td>
-              <td className="small">{formatDate(prompt.updated_at || prompt.created_at)}</td>
-              <td>
-                <Button
-                  variant="outline-primary"
-                  size="sm"
-                  className="me-1"
-                  onClick={() => openEdit(prompt)}
-                >
-                  編輯
-                </Button>
-                <Button
-                  variant="outline-danger"
-                  size="sm"
-                  onClick={() => handleDelete(prompt)}
-                  disabled={deletingId === prompt.id}
-                >
-                  {deletingId === prompt.id ? <Spinner animation="border" size="sm" /> : '刪除'}
-                </Button>
-              </td>
-            </tr>
-          ))}
+          {prompts.map((prompt) => {
+            const typeInfo = PROMPT_TYPES[prompt.name]
+            return (
+              <tr key={prompt.id}>
+                <td>
+                  {typeInfo
+                    ? <span className="fw-bold">{typeInfo.label}</span>
+                    : <span className="text-muted">—</span>}
+                </td>
+                <td><code style={{ fontSize: '0.82rem' }}>{prompt.name}</code></td>
+                <td>
+                  {prompt.provider
+                    ? <Badge bg="info">{PROVIDER_LABELS[prompt.provider] || prompt.provider}</Badge>
+                    : <Badge bg="secondary">通用</Badge>}
+                </td>
+                <td className="text-muted small">{prompt.description || '-'}</td>
+                <td>
+                  <Badge bg={prompt.is_active ? 'success' : 'secondary'}>
+                    {prompt.is_active ? '啟用' : '停用'}
+                  </Badge>
+                </td>
+                <td className="small">{formatDate(prompt.updated_at || prompt.created_at)}</td>
+                <td>
+                  <Button
+                    variant="outline-primary"
+                    size="sm"
+                    className="me-1"
+                    onClick={() => openEdit(prompt)}
+                  >
+                    編輯
+                  </Button>
+                  <Button
+                    variant="outline-danger"
+                    size="sm"
+                    onClick={() => handleDelete(prompt)}
+                    disabled={deletingId === prompt.id}
+                  >
+                    {deletingId === prompt.id ? <Spinner animation="border" size="sm" /> : '刪除'}
+                  </Button>
+                </td>
+              </tr>
+            )
+          })}
           {prompts.length === 0 && (
             <tr>
-              <td colSpan={6} className="text-center text-muted py-4">尚無 Prompt</td>
+              <td colSpan={7} className="text-center text-muted py-4">尚無 Prompt</td>
             </tr>
           )}
         </tbody>
@@ -218,13 +233,30 @@ const AiPromptManager = () => {
           <Form>
             <Form.Group className="mb-3">
               <Form.Label>名稱 <span className="text-danger">*</span></Form.Label>
-              <Form.Control
-                value={form.name}
-                onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))}
-                placeholder="例：earnings-call-summary"
-                disabled={!!editingPrompt}
-              />
-              <Form.Text className="text-muted">建立後無法修改名稱</Form.Text>
+              {editingPrompt
+                ? <Form.Control value={form.name} disabled />
+                : (
+                  <>
+                    <datalist id="prompt-name-list">
+                      {Object.entries(PROMPT_TYPES).map(([key, info]) => (
+                        <option key={key} value={key}>{info.label}</option>
+                      ))}
+                    </datalist>
+                    <Form.Control
+                      value={form.name}
+                      onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))}
+                      placeholder="選擇或輸入名稱，例：earnings-call-summary"
+                      list="prompt-name-list"
+                    />
+                  </>
+                )}
+              <Form.Text className="text-muted">
+                {editingPrompt ? '建立後無法修改名稱' : (
+                  PROMPT_TYPES[form.name]
+                    ? `用途：${PROMPT_TYPES[form.name].description}`
+                    : '建立後無法修改名稱'
+                )}
+              </Form.Text>
             </Form.Group>
 
             <Form.Group className="mb-3">
@@ -251,7 +283,19 @@ const AiPromptManager = () => {
 
             <Form.Group className="mb-3">
               <Form.Label>Prompt 內容 <span className="text-danger">*</span></Form.Label>
-              <Form.Text className="text-muted d-block mb-1">{PLACEHOLDER_HINT}</Form.Text>
+              {(() => {
+                const typeInfo = PROMPT_TYPES[form.name]
+                return (
+                  <Form.Text className="text-muted d-block mb-1">
+                    {typeInfo
+                      ? <>可用 placeholder：{typeInfo.placeholders.map((p, i) => (
+                        <code key={i} className="me-1">{p}</code>
+                      ))}</>
+                      : '可在 Prompt 中使用 {placeholder} 格式插入動態內容'
+                    }
+                  </Form.Text>
+                )
+              })()}
               <Form.Control
                 as="textarea"
                 rows={14}
