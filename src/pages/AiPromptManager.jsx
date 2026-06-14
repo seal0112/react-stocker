@@ -236,33 +236,33 @@ const AiPromptManager = () => {
               <Form.Label>用途 <span className="text-danger">*</span></Form.Label>
               {editingPrompt
                 ? (
-                  <Form.Control
-                    value={PROMPT_TYPES[form.name] ? PROMPT_TYPES[form.name].label : form.name}
-                    disabled
-                  />
-                )
+                    <Form.Control
+                      value={PROMPT_TYPES[form.name] ? PROMPT_TYPES[form.name].label : form.name}
+                      disabled
+                    />
+                  )
                 : (
-                  <Form.Select
-                    value={form.nameType}
-                    onChange={(e) => {
-                      const val = e.target.value
-                      setForm(f => ({
-                        ...f,
-                        nameType: val,
-                        name: val === '__custom__' ? '' : val,
-                        description: val !== '__custom__' && PROMPT_TYPES[val]
-                          ? PROMPT_TYPES[val].description
-                          : f.description
-                      }))
-                    }}
-                  >
-                    <option value="">請選擇用途</option>
-                    {Object.entries(PROMPT_TYPES).map(([key, info]) => (
-                      <option key={key} value={key}>{info.label}</option>
-                    ))}
-                    <option value="__custom__">自訂</option>
-                  </Form.Select>
-                )}
+                    <Form.Select
+                      value={form.nameType}
+                      onChange={(e) => {
+                        const val = e.target.value
+                        setForm(f => ({
+                          ...f,
+                          nameType: val,
+                          name: val === '__custom__' ? '' : val,
+                          description: val !== '__custom__' && PROMPT_TYPES[val]
+                            ? PROMPT_TYPES[val].description
+                            : f.description
+                        }))
+                      }}
+                    >
+                      <option value="">請選擇用途</option>
+                      {Object.entries(PROMPT_TYPES).map(([key, info]) => (
+                        <option key={key} value={key}>{info.label}</option>
+                      ))}
+                      <option value="__custom__">自訂</option>
+                    </Form.Select>
+                  )}
             </Form.Group>
 
             {!editingPrompt && form.nameType === '__custom__' && (
