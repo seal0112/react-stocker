@@ -16,7 +16,8 @@ const PushNotification = () => {
     notify_income_sheet: false,
     notify_news: false,
     notify_announcement: false,
-    notify_earnings_call: false
+    notify_earnings_call: false,
+    notify_earnings_call_summary: false
   })
 
   const changeFormValue = (event) => {
@@ -157,6 +158,14 @@ const PushNotification = () => {
                   label="個股法說會通知"
                   name="notify_earnings_call"
                   checked={pushNotification.notify_earnings_call}
+                  onChange={toggleFormCheckbox}
+                />
+                <Form.Check
+                  type="switch"
+                  id="notify-earnings-call-summary-switch"
+                  label="法說會 AI 摘要通知（每日晚間統一發送）"
+                  name="notify_earnings_call_summary"
+                  checked={pushNotification.notify_earnings_call_summary}
                   onChange={toggleFormCheckbox}
                 />
               </Col>
