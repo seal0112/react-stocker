@@ -10,6 +10,13 @@ yarn build        # 生產版本建置
 yarn lint         # ESLint 檢查（push 前必跑）
 ```
 
+## Task 完成流程
+
+每次完成任何程式碼修改後，必須依序執行：
+1. `yarn lint` — 確認無錯誤
+2. `git add <files> && git commit` — commit 變更
+3. `git push origin master` — 推上 GitHub
+
 ## Architecture
 
 - `src/pages/` - 頁面元件
