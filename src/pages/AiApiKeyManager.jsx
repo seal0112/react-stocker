@@ -11,7 +11,7 @@ const PROVIDER_LABELS = { gemini: 'Gemini', claude: 'Claude' }
 const PROVIDER_BADGE = { gemini: 'info', claude: 'secondary' }
 
 const EMPTY_FORM = {
-  name: '', provider: 'gemini', owner: '', key_value: '', is_active: true
+  name: '', provider: 'gemini', key_value: '', is_active: true
 }
 
 const AiApiKeyManager = () => {
@@ -59,7 +59,6 @@ const AiApiKeyManager = () => {
     setForm({
       name: key.name,
       provider: key.provider,
-      owner: key.owner || '',
       key_value: '',
       is_active: key.is_active
     })
@@ -76,7 +75,7 @@ const AiApiKeyManager = () => {
       setSaving(true)
       setSaveError(null)
       if (editingKey) {
-        const payload = { owner: form.owner, is_active: form.is_active }
+        const payload = { is_active: form.is_active }
         if (form.key_value.trim()) payload.key_value = form.key_value
         const updated = await updateAiApiKey(editingKey.id, payload)
         setKeys(prev => prev.map(k => k.id === updated.id ? updated : k))
@@ -222,15 +221,6 @@ const AiApiKeyManager = () => {
                 <option value="gemini">Gemini</option>
                 <option value="claude">Claude</option>
               </Form.Select>
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>擁有者</Form.Label>
-              <Form.Control
-                value={form.owner}
-                onChange={(e) => setForm(f => ({ ...f, owner: e.target.value }))}
-                placeholder="例：User B"
-              />
             </Form.Group>
 
             <Form.Group className="mb-3">
