@@ -10,8 +10,25 @@ import { useAuth } from 'hooks/AuthContext'
 const PROVIDER_LABELS = { gemini: 'Gemini', claude: 'Claude' }
 const PROVIDER_BADGE = { gemini: 'info', claude: 'secondary' }
 
+const PROVIDER_MODELS = {
+  gemini: [
+    { value: 'gemini-2.5-pro', label: 'Gemini 2.5 Pro' },
+    { value: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash' },
+    { value: 'gemini-2.5-flash-lite', label: 'Gemini 2.5 Flash-Lite' },
+    { value: 'gemini-3.5-flash', label: 'Gemini 3.5 Flash' },
+    { value: 'gemini-3-flash-preview', label: 'Gemini 3 Flash Preview' },
+    { value: 'gemini-3.1-flash-lite', label: 'Gemini 3.1 Flash-Lite' },
+    { value: 'gemini-3.1-pro-preview', label: 'Gemini 3.1 Pro Preview' }
+  ],
+  claude: [
+    { value: 'claude-opus-4-7', label: 'Claude Opus 4.7' },
+    { value: 'claude-sonnet-4-6', label: 'Claude Sonnet 4.6' },
+    { value: 'claude-haiku-4-5-20251001', label: 'Claude Haiku 4.5' }
+  ]
+}
+
 const EMPTY_FORM = {
-  name: '', provider: 'gemini', key_value: '', is_active: true
+  name: '', provider: 'gemini', model: '', key_value: '', is_active: true
 }
 
 const AiApiKeyManager = () => {
@@ -59,6 +76,7 @@ const AiApiKeyManager = () => {
     setForm({
       name: key.name,
       provider: key.provider,
+      model: key.model || '',
       key_value: '',
       is_active: key.is_active
     })
@@ -75,7 +93,7 @@ const AiApiKeyManager = () => {
       setSaving(true)
       setSaveError(null)
       if (editingKey) {
-        const payload = { is_active: form.is_active }
+        const payload = { is_active: form.is_active, model: form.model || null }
         if (form.key_value.trim()) payload.key_value = form.key_value
         const updated = await updateAiApiKey(editingKey.id, payload)
         setKeys(prev => prev.map(k => k.id === updated.id ? updated : k))
@@ -137,6 +155,7 @@ const AiApiKeyManager = () => {
           <tr>
             <th>名稱</th>
             <th>Provider</th>
+            <th>模型</th>
             <th>擁有者</th>
             <th>SSM 路徑</th>
             <th>狀態</th>
@@ -152,6 +171,9 @@ const AiApiKeyManager = () => {
                 <Badge bg={PROVIDER_BADGE[key.provider] || 'secondary'}>
                   {PROVIDER_LABELS[key.provider] || key.provider}
                 </Badge>
+              </td>
+              <td className="small text-muted">
+                {key.model ? <code style={{ fontSize: '0.8rem' }}>{key.model}</code> : <span>預設</span>}
               </td>
               <td className="text-muted">{key.owner || '-'}</td>
               <td><code style={{ fontSize: '0.8rem' }}>{key.ssm_path}</code></td>
@@ -183,7 +205,7 @@ const AiApiKeyManager = () => {
           ))}
           {keys.length === 0 && (
             <tr>
-              <td colSpan={7} className="text-center text-muted py-4">尚無 API Key</td>
+              <td colSpan={8} className="text-center text-muted py-4">尚無 API Key</td>
             </tr>
           )}
         </tbody>
@@ -221,6 +243,20 @@ const AiApiKeyManager = () => {
                 <option value="gemini">Gemini</option>
                 <option value="claude">Claude</option>
               </Form.Select>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>模型</Form.Label>
+              <Form.Select
+                value={form.model}
+                onChange={(e) => setForm(f => ({ ...f, model: e.target.value }))}
+              >
+                <option value="">不指定（使用系統預設）</option>
+                {(PROVIDER_MODELS[form.provider] || []).map(m => (
+                  <option key={m.value} value={m.value}>{m.label}</option>
+                ))}
+              </Form.Select>
+              <Form.Text className="text-muted">指定此 Key 使用的模型，優先於系統設定</Form.Text>
             </Form.Group>
 
             <Form.Group className="mb-3">
