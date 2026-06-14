@@ -9,7 +9,7 @@ import {
   faInfoCircle, faNewspaper, faCommentAlt, faAngleDoubleDown,
   faCoins, faHandHoldingUsd, faFileInvoiceDollar, faFunnelDollar,
   faSearchDollar, faToolbox, faUser, faCircleInfo, faList, faStar,
-  faCalendarAlt, faUsersCog, faCogs, faChartLine, faRobot
+  faCalendarAlt, faUsersCog, faCogs, faChartLine, faRobot, faKey, faChartPie
 } from '@fortawesome/free-solid-svg-icons'
 import { useStock } from 'hooks/StockContext'
 import { useAuth } from 'hooks/AuthContext'
@@ -200,6 +200,16 @@ const NaviBar = () => {
               title: 'AI Prompt 管理',
               href: '/ai-prompts',
               icon: faRobot
+            },
+            {
+              title: 'API Key 管理',
+              href: '/ai-api-keys',
+              icon: faKey
+            },
+            {
+              title: 'AI 費用報表',
+              href: '/ai-usage-report',
+              icon: faChartPie
             },
             {
               title: '系統設定',

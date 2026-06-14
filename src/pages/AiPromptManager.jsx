@@ -5,6 +5,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 
 import { listAiPrompts, createAiPrompt, updateAiPrompt, deleteAiPrompt } from 'utils/AiPromptAPI'
+import { listAiApiKeys } from 'utils/AiApiKeyAPI'
 import { useAuth } from 'hooks/AuthContext'
 
 const PROVIDER_LABELS = {
@@ -20,13 +21,14 @@ const PROMPT_TYPES = {
   }
 }
 
-const EMPTY_FORM = { name: '', nameType: '', provider: 'gemini', content: '', description: '', is_active: true }
+const EMPTY_FORM = { name: '', nameType: '', provider: 'gemini', content: '', description: '', is_active: true, api_key_id: '' }
 
 const AiPromptManager = () => {
   const navigate = useNavigate()
   const { hasRole } = useAuth()
 
   const [prompts, setPrompts] = useState([])
+  const [apiKeys, setApiKeys] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
@@ -41,8 +43,9 @@ const AiPromptManager = () => {
   const fetchPrompts = useCallback(async () => {
     try {
       setLoading(true)
-      const data = await listAiPrompts()
-      setPrompts(Array.isArray(data) ? data : [])
+      const [promptData, keyData] = await Promise.all([listAiPrompts(), listAiApiKeys()])
+      setPrompts(Array.isArray(promptData) ? promptData : [])
+      setApiKeys(Array.isArray(keyData) ? keyData.filter(k => k.is_active) : [])
       setError(null)
     } catch (err) {
       if (err.response?.status === 403) {
@@ -78,7 +81,8 @@ const AiPromptManager = () => {
       provider: prompt.provider || '',
       content: prompt.content,
       description: prompt.description || '',
-      is_active: prompt.is_active
+      is_active: prompt.is_active,
+      api_key_id: prompt.api_key_id || ''
     })
     setSaveError(null)
     setShowModal(true)
@@ -100,11 +104,15 @@ const AiPromptManager = () => {
         const updated = await updateAiPrompt(editingPrompt.id, {
           content: payload.content,
           description: payload.description,
-          is_active: payload.is_active
+          is_active: payload.is_active,
+          api_key_id: payload.api_key_id || null
         })
         setPrompts(prev => prev.map(p => p.id === updated.id ? updated : p))
       } else {
-        const created = await createAiPrompt(payload)
+        const created = await createAiPrompt({
+          ...payload,
+          api_key_id: payload.api_key_id || null
+        })
         setPrompts(prev => [...prev, created])
       }
       setShowModal(false)
@@ -166,6 +174,7 @@ const AiPromptManager = () => {
             <th>用途</th>
             <th>名稱</th>
             <th>Provider</th>
+            <th>API Key</th>
             <th>說明</th>
             <th>狀態</th>
             <th>最後更新</th>
@@ -187,6 +196,11 @@ const AiPromptManager = () => {
                   {prompt.provider
                     ? <Badge bg="info">{PROVIDER_LABELS[prompt.provider] || prompt.provider}</Badge>
                     : <Badge bg="secondary">通用</Badge>}
+                </td>
+                <td className="small text-muted">
+                  {prompt.api_key_name
+                    ? <code style={{ fontSize: '0.8rem' }}>{prompt.api_key_name}</code>
+                    : '—'}
                 </td>
                 <td className="text-muted small">{prompt.description || '-'}</td>
                 <td>
@@ -218,7 +232,7 @@ const AiPromptManager = () => {
           })}
           {prompts.length === 0 && (
             <tr>
-              <td colSpan={7} className="text-center text-muted py-4">尚無 Prompt</td>
+              <td colSpan={8} className="text-center text-muted py-4">尚無 Prompt</td>
             </tr>
           )}
         </tbody>
@@ -296,6 +310,22 @@ const AiPromptManager = () => {
                 <option value="claude">Claude</option>
                 <option value="">通用（不指定）</option>
               </Form.Select>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>API Key</Form.Label>
+              <Form.Select
+                value={form.api_key_id}
+                onChange={(e) => setForm(f => ({ ...f, api_key_id: e.target.value }))}
+              >
+                <option value="">不指定（使用預設）</option>
+                {apiKeys.map(k => (
+                  <option key={k.id} value={k.id}>
+                    {k.name}{k.owner ? ` (${k.owner})` : ''}
+                  </option>
+                ))}
+              </Form.Select>
+              <Form.Text className="text-muted">指定此 Prompt 使用的 API Key，留空使用 Lambda 預設</Form.Text>
             </Form.Group>
 
             <Form.Group className="mb-3">

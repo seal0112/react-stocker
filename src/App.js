@@ -22,6 +22,8 @@ import UserInfo from 'pages/UserInfo'
 import FollowStockList from 'pages/FollowStockList'
 import AdminUserManagement from 'pages/AdminUserManagement'
 import AiPromptManager from 'pages/AiPromptManager'
+import AiApiKeyManager from 'pages/AiApiKeyManager'
+import AiUsageReport from 'pages/AiUsageReport'
 import AdminSettings from 'pages/AdminSettings'
 import StockEarningsCall from 'pages/StockEarningsCall'
 import RequireAuth from 'components/RequireAuth'
@@ -159,6 +161,16 @@ export default function App () {
                 key="admin-ai-prompts"
                 path="/admin/ai-prompts"
                 element={<AiPromptManager />}
+              />
+              <Route
+                key="admin-ai-api-keys"
+                path="/admin/ai-api-keys"
+                element={<AiApiKeyManager />}
+              />
+              <Route
+                key="admin-ai-usage-report"
+                path="/admin/ai-usage-report"
+                element={<AiUsageReport />}
               />
               <Route
                 key="admin-settings"

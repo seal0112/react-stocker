@@ -146,3 +146,11 @@ export const triggerEarningsCallSummary = (earningsCallId) =>
 export const getEarningsCallBoundFeeds = (earningsCallId) =>
   frontendDataRequest.get(`/earnings_call/${earningsCallId}/bound_feeds`)
     .then((res) => res.data)
+
+export const getAiUsageReport = (dateFrom, dateTo) => {
+  const params = new URLSearchParams()
+  if (dateFrom) params.append('date_from', dateFrom)
+  if (dateTo) params.append('date_to', dateTo)
+  return frontendDataRequest.get(`/ai_usage_report?${params.toString()}`)
+    .then((res) => res.data)
+}
