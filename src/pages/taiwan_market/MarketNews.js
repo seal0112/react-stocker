@@ -139,6 +139,8 @@ const MarketNews = () => {
                   title={news.title}
                   releaseTime={news.releaseTime}
                   link={news.link}
+                  stock_id={news.stock_id}
+                  company_name={news.company_name}
               />)
           }
         </InfiniteScroll>

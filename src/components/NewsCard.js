@@ -47,6 +47,11 @@ const NewsCard = (props) => {
         >
           {feedSource[props.source].text}
         </Badge>
+        {props.stock_id && (
+          <Badge pill bg="light" text="dark" className="me-1 border">
+            {props.stock_id}{props.company_name ? ` ${props.company_name}` : ''}
+          </Badge>
+        )}
         <h5 className="news-card-title">{props.title}</h5>
         <p>
           { dayjs.tz(props.releaseTime, 'utc').tz('Asia/Taipei').format('YYYY/MM/DD HH:mm') } 台灣時間
@@ -61,7 +66,9 @@ NewsCard.propTypes = {
   source: PropTypes.string,
   title: PropTypes.string,
   releaseTime: PropTypes.string,
-  link: PropTypes.string
+  link: PropTypes.string,
+  stock_id: PropTypes.string,
+  company_name: PropTypes.string
 }
 
 export default NewsCard
