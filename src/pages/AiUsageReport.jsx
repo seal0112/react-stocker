@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
+import PropTypes from 'prop-types'
 import {
   Container, Row, Col, Form, Button, Table, Spinner, Alert, Card
 } from 'react-bootstrap'
@@ -14,7 +15,7 @@ ChartJS.register(ArcElement, Tooltip, Legend)
 
 const PIE_COLORS = [
   '#4e79a7', '#f28e2b', '#e15759', '#76b7b2',
-  '#59a14f', '#edc948', '#b07aa1', '#ff9da7',
+  '#59a14f', '#edc948', '#b07aa1', '#ff9da7'
 ]
 
 const PIE_OPTIONS = {
@@ -34,7 +35,7 @@ const buildPieData = (rows, labelKey) => ({
   datasets: [{
     data: rows.map(r => Number(r.cost_twd || 0)),
     backgroundColor: rows.map((_, i) => PIE_COLORS[i % PIE_COLORS.length]),
-    borderWidth: 1,
+    borderWidth: 1
   }]
 })
 
@@ -47,6 +48,16 @@ const SummaryCard = ({ title, value, sub }) => (
     </Card.Body>
   </Card>
 )
+
+SummaryCard.propTypes = {
+  title: PropTypes.string.isRequired,
+  value: PropTypes.node.isRequired,
+  sub: PropTypes.string
+}
+
+SummaryCard.defaultProps = {
+  sub: null
+}
 
 const AiUsageReport = () => {
   const navigate = useNavigate()
@@ -191,7 +202,7 @@ const AiUsageReport = () => {
                       </Card>
                     </Col>
                   </Row>
-                )
+                  )
                 : <Alert variant="secondary">此日期範圍無資料</Alert>
               }
 
@@ -294,7 +305,7 @@ const AiUsageReport = () => {
                 </Card>
               )}
             </>
-          )
+            )
       }
     </Container>
   )

@@ -207,7 +207,7 @@ const AiApiKeyManager = () => {
               />
               {!editingKey && (
                 <Form.Text className="text-muted">
-                  SSM 路徑將自動設為 /stocker/ai_key/{'{'名稱{'}'}
+                  SSM 路徑將自動設為 /stocker/ai_key/{'{'}名稱{'}'}
                 </Form.Text>
               )}
             </Form.Group>
