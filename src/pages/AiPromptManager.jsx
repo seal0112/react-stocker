@@ -249,13 +249,14 @@ const AiPromptManager = () => {
                       list="prompt-name-list"
                     />
                   </>
-                )}
+                  )}
               <Form.Text className="text-muted">
-                {editingPrompt ? '建立後無法修改名稱' : (
-                  PROMPT_TYPES[form.name]
+                {editingPrompt
+                  ? '建立後無法修改名稱'
+                  : PROMPT_TYPES[form.name]
                     ? `用途：${PROMPT_TYPES[form.name].description}`
                     : '建立後無法修改名稱'
-                )}
+                }
               </Form.Text>
             </Form.Group>
 
