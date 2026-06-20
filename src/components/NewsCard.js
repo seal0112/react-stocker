@@ -33,6 +33,10 @@ const NewsCard = (props) => {
       text: 'Yahoo',
       badgeColor: 'secondary',
       className: 'yahoo-icon'
+    },
+    trendforce: {
+      text: '集邦',
+      badgeColor: 'primary'
     }
   }
 
@@ -41,11 +45,11 @@ const NewsCard = (props) => {
       <li className="news-card" id={props.id}>
         <Badge
           pill
-          bg={feedSource[props.source].badgeColor}
+          bg={(feedSource[props.source] || { badgeColor: 'secondary' }).badgeColor}
           text="light"
-          className={feedSource[props.source].className}
+          className={(feedSource[props.source] || {}).className}
         >
-          {feedSource[props.source].text}
+          {(feedSource[props.source] || { text: props.source }).text}
         </Badge>
         {props.stock_id && (
           <Badge pill bg="light" text="dark" className="me-1 border">

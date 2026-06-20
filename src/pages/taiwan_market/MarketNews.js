@@ -34,6 +34,9 @@ const MarketNews = () => {
   }, {
     value: 'yahoo',
     text: 'Yahoo'
+  }, {
+    value: 'trendforce',
+    text: '集邦'
   }]
 
   const getFeedData = () => {

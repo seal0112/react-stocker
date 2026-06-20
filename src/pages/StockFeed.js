@@ -14,7 +14,8 @@ const FEED_SOURCE_OPTIONS = [
   { value: 'cnyes', text: '鉅亨網' },
   { value: 'ctee', text: '工商時報' },
   { value: 'money', text: '經濟日報' },
-  { value: 'yahoo', text: 'Yahoo' }
+  { value: 'yahoo', text: 'Yahoo' },
+  { value: 'trendforce', text: '集邦' }
 ]
 
 const getInitialSources = () => {
