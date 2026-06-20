@@ -5,3 +5,7 @@ li .yahoo-icon {
 li .ctee-icon {
     background-color: #152f4d !important;
 }
+
+li .trendforce-badge {
+    background: linear-gradient(to right, #1a1a1a 50%, #84C100 50%) !important;
+}

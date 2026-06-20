@@ -36,7 +36,8 @@ const NewsCard = (props) => {
     },
     trendforce: {
       text: '集邦',
-      badgeColor: 'primary'
+      badgeColor: 'secondary',
+      className: 'trendforce-badge'
     }
   }
 
