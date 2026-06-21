@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
+import PropTypes from 'prop-types'
 import {
   Container, Table, Badge, Spinner, Alert, Form, Row, Col, Button, Collapse
 } from 'react-bootstrap'
@@ -60,7 +61,6 @@ const AiReportDetail = ({ report }) => {
       </div>
     )
   }
-  // news type
   return (
     <div className="p-3" style={{ background: '#f8f9fa', fontSize: '0.9rem' }}>
       {report.summary && <p className="mb-2">{report.summary}</p>}
@@ -85,6 +85,20 @@ const AiReportDetail = ({ report }) => {
   )
 }
 
+AiReportDetail.propTypes = {
+  report: PropTypes.shape({
+    report_type: PropTypes.string,
+    summary: PropTypes.string,
+    key_points: PropTypes.object,
+    total_tokens: PropTypes.number,
+    cost_twd: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    cost_usd: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    model_name: PropTypes.string,
+    input_tokens: PropTypes.number,
+    output_tokens: PropTypes.number
+  }).isRequired
+}
+
 const AiReportList = () => {
   const [reports, setReports] = useState([])
   const [loading, setLoading] = useState(false)
@@ -106,8 +120,8 @@ const AiReportList = () => {
   }, [])
 
   useEffect(() => {
-    fetchReports(filters)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    fetchReports(DEFAULT_FILTERS)
+  }, [fetchReports])
 
   const handleSearch = () => fetchReports(filters)
 
@@ -164,55 +178,55 @@ const AiReportList = () => {
       {loading
         ? <div className="text-center py-5"><Spinner animation="border" /></div>
         : (
-          <Table bordered hover responsive size="sm">
-            <thead>
-              <tr>
-                <th>類型</th>
-                <th>對象</th>
-                <th>期間</th>
-                <th>情緒</th>
-                <th>狀態</th>
-                <th>費用（TWD）</th>
-                <th>建立時間</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {reports.map(r => (
-                <React.Fragment key={r.id}>
-                  <tr style={{ cursor: 'pointer' }} onClick={() => toggleExpand(r.id)}>
-                    <td><Badge bg="info" style={{ fontSize: '0.75rem' }}>{REPORT_TYPE_LABELS[r.report_type] || r.report_type}</Badge></td>
-                    <td>{r.subject}</td>
-                    <td style={{ whiteSpace: 'nowrap' }}>
-                      {r.period_start === r.period_end
-                        ? r.period_start
-                        : `${r.period_start} ~ ${r.period_end}`}
-                    </td>
-                    <td>
-                      {r.report_type === 'earnings_call'
-                        ? <SentimentBadge sentiment={r.sentiment} score={r.score} />
-                        : <span className="text-muted">—</span>}
-                    </td>
-                    <td><StatusBadge status={r.processing_status} /></td>
-                    <td>{r.cost_twd ? `NT$${Number(r.cost_twd).toFixed(2)}` : '—'}</td>
-                    <td style={{ whiteSpace: 'nowrap' }}>{dayjs(r.created_at).format('MM/DD HH:mm')}</td>
-                    <td className="text-center"><small className="text-muted">{expandedId === r.id ? '▲' : '▼'}</small></td>
-                  </tr>
-                  <tr style={{ display: expandedId === r.id ? '' : 'none' }}>
-                    <td colSpan={8} style={{ padding: 0, borderTop: 'none' }}>
-                      <Collapse in={expandedId === r.id}>
-                        <div>{expandedId === r.id && <AiReportDetail report={r} />}</div>
-                      </Collapse>
-                    </td>
-                  </tr>
-                </React.Fragment>
-              ))}
-              {reports.length === 0 && (
-                <tr><td colSpan={8} className="text-center text-muted py-4">無資料</td></tr>
-              )}
-            </tbody>
-          </Table>
-        )}
+            <Table bordered hover responsive size="sm">
+              <thead>
+                <tr>
+                  <th>類型</th>
+                  <th>對象</th>
+                  <th>期間</th>
+                  <th>情緒</th>
+                  <th>狀態</th>
+                  <th>費用（TWD）</th>
+                  <th>建立時間</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {reports.map(r => (
+                  <React.Fragment key={r.id}>
+                    <tr style={{ cursor: 'pointer' }} onClick={() => toggleExpand(r.id)}>
+                      <td><Badge bg="info" style={{ fontSize: '0.75rem' }}>{REPORT_TYPE_LABELS[r.report_type] || r.report_type}</Badge></td>
+                      <td>{r.subject}</td>
+                      <td style={{ whiteSpace: 'nowrap' }}>
+                        {r.period_start === r.period_end
+                          ? r.period_start
+                          : `${r.period_start} ~ ${r.period_end}`}
+                      </td>
+                      <td>
+                        {r.report_type === 'earnings_call'
+                          ? <SentimentBadge sentiment={r.sentiment} score={r.score} />
+                          : <span className="text-muted">—</span>}
+                      </td>
+                      <td><StatusBadge status={r.processing_status} /></td>
+                      <td>{r.cost_twd ? `NT$${Number(r.cost_twd).toFixed(2)}` : '—'}</td>
+                      <td style={{ whiteSpace: 'nowrap' }}>{dayjs(r.created_at).format('MM/DD HH:mm')}</td>
+                      <td className="text-center"><small className="text-muted">{expandedId === r.id ? '▲' : '▼'}</small></td>
+                    </tr>
+                    <tr style={{ display: expandedId === r.id ? '' : 'none' }}>
+                      <td colSpan={8} style={{ padding: 0, borderTop: 'none' }}>
+                        <Collapse in={expandedId === r.id}>
+                          <div>{expandedId === r.id && <AiReportDetail report={r} />}</div>
+                        </Collapse>
+                      </td>
+                    </tr>
+                  </React.Fragment>
+                ))}
+                {reports.length === 0 && (
+                  <tr><td colSpan={8} className="text-center text-muted py-4">無資料</td></tr>
+                )}
+              </tbody>
+            </Table>
+          )}
     </Container>
   )
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import {
-  Container, Table, Button, Modal, Form, Badge, Alert, Spinner
+  Container, Table, Button, Modal, Form, Badge, Alert, Spinner, Row, Col
 } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 
@@ -36,9 +36,19 @@ const NEWS_SOURCES = [
 const WEEKDAYS = ['週一', '週二', '週三', '週四', '週五', '週六', '週日']
 
 const EMPTY_FORM = {
-  name: '', nameType: '', provider: 'gemini', content: '', description: '', is_active: true, api_key_id: '',
-  report_source: '', schedule_enabled: false, schedule_frequency: 'weekly',
-  schedule_day: 0, schedule_hour: 8, schedule_days_back: 7
+  name: '',
+  nameType: '',
+  provider: 'gemini',
+  content: '',
+  description: '',
+  is_active: true,
+  api_key_id: '',
+  report_source: '',
+  schedule_enabled: false,
+  schedule_frequency: 'weekly',
+  schedule_day: 0,
+  schedule_hour: 8,
+  schedule_days_back: 7
 }
 
 const AiPromptManager = () => {
