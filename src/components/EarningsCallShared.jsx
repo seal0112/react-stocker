@@ -174,36 +174,36 @@ export const SummaryDetail = ({ earningsCallId, processingStatus, isAdmin, meeti
     <div className="p-3" style={{ background: '#f8f9fa', fontSize: '0.9rem' }}>
       <Row>
         <Col md={6}>
-          {summary.outlook && (
+          {summary.key_points?.outlook && (
             <div className="mb-2">
               <strong>前景展望</strong>
-              <p className="mb-1 mt-1">{summary.outlook}</p>
+              <p className="mb-1 mt-1">{summary.key_points.outlook}</p>
             </div>
           )}
-          {summary.capex && (
+          {summary.key_points?.capex && (
             <div className="mb-2">
               <strong>資本支出</strong>
-              <p className="mb-1 mt-1">{summary.capex}</p>
-              {summary.capex_industry && (
-                <small className="text-muted">產業：{summary.capex_industry}</small>
+              <p className="mb-1 mt-1">{summary.key_points.capex}</p>
+              {summary.key_points?.capex_industry && (
+                <small className="text-muted">產業：{summary.key_points.capex_industry}</small>
               )}
             </div>
           )}
-          {summary.concerns_and_risks && (
+          {summary.key_points?.concerns_and_risks && (
             <div className="mb-2">
               <strong>隱憂與風險</strong>
-              <p className="mb-1 mt-1">{summary.concerns_and_risks}</p>
+              <p className="mb-1 mt-1">{summary.key_points.concerns_and_risks}</p>
             </div>
           )}
         </Col>
         <Col md={6}>
           <div className="mb-2">
             <strong>評分依據</strong>
-            <p className="mb-1 mt-1">{summary.reasoning || '—'}</p>
+            <p className="mb-1 mt-1">{summary.summary || '—'}</p>
           </div>
           <div className="d-flex gap-3 mb-2 flex-wrap">
-            <div><small className="text-muted">影響時程</small><br />{summary.impact_duration || '—'}</div>
-            <div><small className="text-muted">資料來源</small><br />{summary.source_reliability || '—'}</div>
+            <div><small className="text-muted">影響時程</small><br />{summary.key_points?.impact_duration || '—'}</div>
+            <div><small className="text-muted">資料來源</small><br />{summary.key_points?.source_reliability || '—'}</div>
           </div>
           {boundFeeds.length > 0 && (
             <div>

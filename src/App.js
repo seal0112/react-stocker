@@ -24,6 +24,7 @@ import AdminUserManagement from 'pages/AdminUserManagement'
 import AiPromptManager from 'pages/AiPromptManager'
 import AiApiKeyManager from 'pages/AiApiKeyManager'
 import AiUsageReport from 'pages/AiUsageReport'
+import AiReportList from 'pages/AiReportList'
 import AdminSettings from 'pages/AdminSettings'
 import StockEarningsCall from 'pages/StockEarningsCall'
 import RequireAuth from 'components/RequireAuth'
@@ -166,6 +167,11 @@ export default function App () {
                 key="admin-ai-api-keys"
                 path="/admin/ai-api-keys"
                 element={<AiApiKeyManager />}
+              />
+              <Route
+                key="admin-ai-report"
+                path="/admin/ai-report"
+                element={<AiReportList />}
               />
               <Route
                 key="admin-ai-usage-report"

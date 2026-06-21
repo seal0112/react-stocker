@@ -17,11 +17,29 @@ const PROMPT_TYPES = {
   'earnings-call-summary': {
     label: '法說會摘要',
     placeholders: ['{stock_id}', '{meeting_date}', '{feeds_content}'],
-    description: '分析法說會相關新聞，產生 AI 摘要與評分'
+    description: '分析法說會相關新聞，產生 AI 摘要與評分',
+    hasSchedule: false
+  },
+  'news-report': {
+    label: '新聞摘要報告',
+    placeholders: ['{source}', '{period_start}', '{period_end}', '{feeds_content}'],
+    description: '定期彙整特定來源新聞，產生 AI 摘要報告',
+    hasSchedule: true
   }
 }
 
-const EMPTY_FORM = { name: '', nameType: '', provider: 'gemini', content: '', description: '', is_active: true, api_key_id: '' }
+const NEWS_SOURCES = [
+  { value: 'trendforce', label: '集邦科技 (TrendForce)' },
+  { value: 'cnyes', label: '鉅亨網' }
+]
+
+const WEEKDAYS = ['週一', '週二', '週三', '週四', '週五', '週六', '週日']
+
+const EMPTY_FORM = {
+  name: '', nameType: '', provider: 'gemini', content: '', description: '', is_active: true, api_key_id: '',
+  report_source: '', schedule_enabled: false, schedule_frequency: 'weekly',
+  schedule_day: 0, schedule_hour: 8, schedule_days_back: 7
+}
 
 const AiPromptManager = () => {
   const navigate = useNavigate()
@@ -82,7 +100,13 @@ const AiPromptManager = () => {
       content: prompt.content,
       description: prompt.description || '',
       is_active: prompt.is_active,
-      api_key_id: prompt.api_key_id || ''
+      api_key_id: prompt.api_key_id || '',
+      report_source: prompt.report_source || '',
+      schedule_enabled: prompt.schedule_enabled || false,
+      schedule_frequency: prompt.schedule_frequency || 'weekly',
+      schedule_day: prompt.schedule_day ?? 0,
+      schedule_hour: prompt.schedule_hour ?? 8,
+      schedule_days_back: prompt.schedule_days_back ?? 7
     })
     setSaveError(null)
     setShowModal(true)
@@ -100,18 +124,30 @@ const AiPromptManager = () => {
         ...form,
         provider: form.provider || null
       }
+      const schedulePayload = PROMPT_TYPES[payload.name]?.hasSchedule
+        ? {
+            report_source: payload.report_source || null,
+            schedule_enabled: payload.schedule_enabled,
+            schedule_frequency: payload.schedule_frequency,
+            schedule_day: parseInt(payload.schedule_day, 10),
+            schedule_hour: parseInt(payload.schedule_hour, 10),
+            schedule_days_back: parseInt(payload.schedule_days_back, 10)
+          }
+        : {}
       if (editingPrompt) {
         const updated = await updateAiPrompt(editingPrompt.id, {
           content: payload.content,
           description: payload.description,
           is_active: payload.is_active,
-          api_key_id: payload.api_key_id || null
+          api_key_id: payload.api_key_id || null,
+          ...schedulePayload
         })
         setPrompts(prev => prev.map(p => p.id === updated.id ? updated : p))
       } else {
         const created = await createAiPrompt({
           ...payload,
-          api_key_id: payload.api_key_id || null
+          api_key_id: payload.api_key_id || null,
+          ...schedulePayload
         })
         setPrompts(prev => [...prev, created])
       }
@@ -188,7 +224,18 @@ const AiPromptManager = () => {
               <tr key={prompt.id}>
                 <td>
                   {typeInfo
-                    ? <span className="fw-bold">{typeInfo.label}</span>
+                    ? (
+                      <span>
+                        <span className="fw-bold me-1">{typeInfo.label}</span>
+                        {typeInfo.hasSchedule && prompt.schedule_enabled && (
+                          <Badge bg="info" style={{ fontSize: '0.7rem' }}>
+                            {prompt.schedule_frequency === 'weekly'
+                              ? `${WEEKDAYS[prompt.schedule_day]} ${String(prompt.schedule_hour).padStart(2, '0')}:00`
+                              : `每月${prompt.schedule_day}日 ${String(prompt.schedule_hour).padStart(2, '0')}:00`}
+                          </Badge>
+                        )}
+                      </span>
+                      )
                     : <span className="text-muted">—</span>}
                 </td>
                 <td><code style={{ fontSize: '0.82rem' }}>{prompt.name}</code></td>
@@ -361,7 +408,7 @@ const AiPromptManager = () => {
               />
             </Form.Group>
 
-            <Form.Group>
+            <Form.Group className="mb-3">
               <Form.Check
                 type="switch"
                 id="is-active-switch"
@@ -370,6 +417,86 @@ const AiPromptManager = () => {
                 onChange={(e) => setForm(f => ({ ...f, is_active: e.target.checked }))}
               />
             </Form.Group>
+
+            {PROMPT_TYPES[form.name]?.hasSchedule && (
+              <div className="border rounded p-3 mb-2" style={{ background: '#f8f9fa' }}>
+                <div className="fw-bold mb-3">排程設定</div>
+                <Form.Group className="mb-3">
+                  <Form.Label>新聞來源</Form.Label>
+                  <Form.Select
+                    value={form.report_source}
+                    onChange={(e) => setForm(f => ({ ...f, report_source: e.target.value }))}
+                  >
+                    <option value="">請選擇</option>
+                    {NEWS_SOURCES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+                  </Form.Select>
+                </Form.Group>
+                <Form.Group className="mb-2">
+                  <Form.Check
+                    type="switch"
+                    id="schedule-enabled-switch"
+                    label="啟用排程"
+                    checked={form.schedule_enabled}
+                    onChange={(e) => setForm(f => ({ ...f, schedule_enabled: e.target.checked }))}
+                  />
+                </Form.Group>
+                {form.schedule_enabled && (
+                  <Row className="g-2 mt-1">
+                    <Col sm={4}>
+                      <Form.Label className="small">頻率</Form.Label>
+                      <Form.Select
+                        size="sm"
+                        value={form.schedule_frequency}
+                        onChange={(e) => setForm(f => ({ ...f, schedule_frequency: e.target.value, schedule_day: 0 }))}
+                      >
+                        <option value="weekly">每週</option>
+                        <option value="monthly">每月</option>
+                      </Form.Select>
+                    </Col>
+                    <Col sm={4}>
+                      <Form.Label className="small">
+                        {form.schedule_frequency === 'weekly' ? '星期' : '日期（號）'}
+                      </Form.Label>
+                      {form.schedule_frequency === 'weekly'
+                        ? (
+                          <Form.Select size="sm" value={form.schedule_day} onChange={(e) => setForm(f => ({ ...f, schedule_day: e.target.value }))}>
+                            {WEEKDAYS.map((d, i) => <option key={i} value={i}>{d}</option>)}
+                          </Form.Select>
+                          )
+                        : (
+                          <Form.Control
+                            size="sm"
+                            type="number"
+                            min={1}
+                            max={28}
+                            value={form.schedule_day}
+                            onChange={(e) => setForm(f => ({ ...f, schedule_day: e.target.value }))}
+                          />
+                          )}
+                    </Col>
+                    <Col sm={4}>
+                      <Form.Label className="small">時間（台灣時間）</Form.Label>
+                      <Form.Select size="sm" value={form.schedule_hour} onChange={(e) => setForm(f => ({ ...f, schedule_hour: e.target.value }))}>
+                        {Array.from({ length: 24 }, (_, i) => (
+                          <option key={i} value={i}>{String(i).padStart(2, '0')}:00</option>
+                        ))}
+                      </Form.Select>
+                    </Col>
+                    <Col sm={4}>
+                      <Form.Label className="small">使用過去幾天新聞</Form.Label>
+                      <Form.Control
+                        size="sm"
+                        type="number"
+                        min={1}
+                        max={90}
+                        value={form.schedule_days_back}
+                        onChange={(e) => setForm(f => ({ ...f, schedule_days_back: e.target.value }))}
+                      />
+                    </Col>
+                  </Row>
+                )}
+              </div>
+            )}
           </Form>
         </Modal.Body>
         <Modal.Footer>

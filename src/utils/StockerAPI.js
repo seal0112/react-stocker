@@ -136,11 +136,11 @@ export const getStockEarningsCallList = (stockId, page = 1, pageSize = 15) =>
     .then((res) => res.data)
 
 export const getEarningsCallSummary = (earningsCallId) =>
-  frontendDataRequest.get(`/earnings_call/${earningsCallId}/summary`)
-    .then((res) => res.data)
+  frontendDataRequest.get(`/ai_report?report_type=earnings_call&ref_id=${earningsCallId}`)
+    .then((res) => (Array.isArray(res.data) ? res.data[0] : null))
 
 export const triggerEarningsCallSummary = (earningsCallId) =>
-  frontendDataRequest.post(`/earnings_call/${earningsCallId}/summary`)
+  frontendDataRequest.post('/ai_report', { report_type: 'earnings_call', ref_id: earningsCallId })
     .then((res) => res.data)
 
 export const getEarningsCallBoundFeeds = (earningsCallId) =>

@@ -207,6 +207,11 @@ const NaviBar = () => {
               icon: faKey
             },
             {
+              title: 'AI 報告',
+              href: '/ai-report',
+              icon: faList
+            },
+            {
               title: 'AI 費用報表',
               href: '/ai-usage-report',
               icon: faChartPie
