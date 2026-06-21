@@ -134,7 +134,8 @@ const AiPromptManager = () => {
         ...form,
         provider: form.provider || null
       }
-      const schedulePayload = PROMPT_TYPES[payload.name]?.hasSchedule
+      const hasSchedule = PROMPT_TYPES[payload.name]?.hasSchedule || !PROMPT_TYPES[payload.name]
+      const schedulePayload = hasSchedule
         ? {
             report_source: payload.report_source || null,
             schedule_enabled: payload.schedule_enabled,
@@ -233,20 +234,18 @@ const AiPromptManager = () => {
             return (
               <tr key={prompt.id}>
                 <td>
-                  {typeInfo
-                    ? (
-                      <span>
-                        <span className="fw-bold me-1">{typeInfo.label}</span>
-                        {typeInfo.hasSchedule && prompt.schedule_enabled && (
-                          <Badge bg="info" style={{ fontSize: '0.7rem' }}>
-                            {prompt.schedule_frequency === 'weekly'
-                              ? `${WEEKDAYS[prompt.schedule_day]} ${String(prompt.schedule_hour).padStart(2, '0')}:00`
-                              : `每月${prompt.schedule_day}日 ${String(prompt.schedule_hour).padStart(2, '0')}:00`}
-                          </Badge>
-                        )}
-                      </span>
-                      )
-                    : <span className="text-muted">—</span>}
+                  <span>
+                    {typeInfo
+                      ? <span className="fw-bold me-1">{typeInfo.label}</span>
+                      : <span className="text-muted me-1">—</span>}
+                    {(typeInfo?.hasSchedule || !PROMPT_TYPES[prompt.name]) && prompt.schedule_enabled && (
+                      <Badge bg="info" style={{ fontSize: '0.7rem' }}>
+                        {prompt.schedule_frequency === 'weekly'
+                          ? `${WEEKDAYS[prompt.schedule_day]} ${String(prompt.schedule_hour).padStart(2, '0')}:00`
+                          : `每月${prompt.schedule_day}日 ${String(prompt.schedule_hour).padStart(2, '0')}:00`}
+                      </Badge>
+                    )}
+                  </span>
                 </td>
                 <td><code style={{ fontSize: '0.82rem' }}>{prompt.name}</code></td>
                 <td>
@@ -428,7 +427,7 @@ const AiPromptManager = () => {
               />
             </Form.Group>
 
-            {PROMPT_TYPES[form.name]?.hasSchedule && (
+            {(PROMPT_TYPES[form.name]?.hasSchedule || (form.name && !PROMPT_TYPES[form.name])) && (
               <div className="border rounded p-3 mb-2" style={{ background: '#f8f9fa' }}>
                 <div className="fw-bold mb-3">排程設定</div>
                 <Form.Group className="mb-3">
