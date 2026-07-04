@@ -31,6 +31,7 @@ const FollowStockList = () => {
               stock={followStock.stock}
               longOrShort={followStock.long_or_short}
               comment={followStock.comment}
+              createTime={followStock.create_time}
               onRemove={handleRemove}
             ></FollowStockCard>
           ))

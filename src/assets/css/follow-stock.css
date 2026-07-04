@@ -57,6 +57,12 @@
     max-width: 280px;
 }
 
+.follow-stock-create-time {
+    font-size: 12px;
+    color: #aaa;
+    margin-top: 2px;
+}
+
 .follow-stock-update-dates {
     display: flex;
     gap: 0.5rem;

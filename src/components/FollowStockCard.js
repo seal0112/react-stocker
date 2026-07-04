@@ -11,7 +11,7 @@ const UPDATE_FIELDS = [
   { label: '新聞', key: 'news_last_update' }
 ]
 
-const FollowStockCard = ({ id, stock, longOrShort, comment, onRemove }) => {
+const FollowStockCard = ({ id, stock, longOrShort, comment, createTime, onRemove }) => {
   const [removing, setRemoving] = useState(false)
   const today = dayjs().format('YYYY-MM-DD')
   const dataUpdateDate = stock?.data_update_date || {}
@@ -43,6 +43,11 @@ const FollowStockCard = ({ id, stock, longOrShort, comment, onRemove }) => {
           </a>
           {comment && (
             <span className="follow-stock-comment">{comment}</span>
+          )}
+          {createTime && (
+            <span className="follow-stock-create-time">
+              加入追蹤：{dayjs(createTime).format('YYYY-MM-DD')}
+            </span>
           )}
         </div>
         <Button
@@ -76,6 +81,7 @@ FollowStockCard.propTypes = {
   stock: PropTypes.object,
   longOrShort: PropTypes.string,
   comment: PropTypes.string,
+  createTime: PropTypes.string,
   onRemove: PropTypes.func
 }
 
