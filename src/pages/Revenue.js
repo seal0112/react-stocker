@@ -8,6 +8,15 @@ import useYearRange from 'hooks/useYearRange'
 import * as StockerAPI from 'utils/StockerAPI'
 import * as StockerTool from 'utils/StockerTool'
 
+const revenueKeysOrder = [
+  { title: 'Year/Month', transferToFloat: false },
+  { title: '當月營收', transferToFloat: false },
+  { title: '去年同月增減', transferToFloat: false },
+  { title: '上月比較增減', transferToFloat: false },
+  { title: '備註', transferToFloat: false },
+  { title: '均價', transferToFloat: true }
+]
+
 const Revenue = () => {
   const [revenueData, setRevenueData] = useState([
     ['Year/Month', '當月營收', '去年同月增減', '上月比較增減', '備註', '均價'],
@@ -15,15 +24,6 @@ const Revenue = () => {
   ])
   const [yearRange, setYearRange] = useYearRange()
   const stock = useStock()
-
-  const revenueKeysOrder = [
-    { title: 'Year/Month', transferToFloat: false },
-    { title: '當月營收', transferToFloat: false },
-    { title: '去年同月增減', transferToFloat: false },
-    { title: '上月比較增減', transferToFloat: false },
-    { title: '備註', transferToFloat: false },
-    { title: '均價', transferToFloat: true }
-  ]
 
   const handleRevenueData = (revenueData) => {
     setRevenueData(revenueData)

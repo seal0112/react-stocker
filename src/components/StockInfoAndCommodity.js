@@ -40,6 +40,7 @@ const StockInfoAndCommodity = () => {
 
   useEffect(() => {
     getStockInfoAndCommodity()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stock.stockNum])
 
   const stockInfoAndCommodity = [exchangeType, industryCategory]

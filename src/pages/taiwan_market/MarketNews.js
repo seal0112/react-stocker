@@ -74,6 +74,7 @@ const MarketNews = () => {
     if (!getFeeds) {
       getFeedData()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getFeeds])
 
   useEffect(() => {
@@ -83,6 +84,7 @@ const MarketNews = () => {
       localStorage.setItem('feedSource', storageFeedSource)
     }
     setFeedSource(storageFeedSource.split(',') || [])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

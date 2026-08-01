@@ -19,6 +19,7 @@ const StockerLayout = () => {
 
   useLayoutEffect(() => {
     stock.handleStockNum(stockNum || '2330')
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stockNum])
 
   return (

@@ -15,6 +15,45 @@ import * as StockerTool from 'utils/StockerTool'
  *     ["2017Q1", 11.18, 0.64, 2.24, 8.3, 26156483, 1496487, 5247603, 19412393]
  * ]
  */
+const operatingExpensesKeysOrder = [
+  {
+    title: 'Year/Season',
+    transferToFloat: false
+  },
+  {
+    title: '營業費用率',
+    transferToFloat: true
+  },
+  {
+    title: '推銷費用率',
+    transferToFloat: true
+  },
+  {
+    title: '管理費用率',
+    transferToFloat: true
+  },
+  {
+    title: '研究發展費用率',
+    transferToFloat: true
+  },
+  {
+    title: '營業費用',
+    transferToFloat: false
+  },
+  {
+    title: '推銷費用',
+    transferToFloat: false
+  },
+  {
+    title: '管理費用',
+    transferToFloat: false
+  },
+  {
+    title: '研究發展費用',
+    transferToFloat: false
+  }
+]
+
 const OperatingExpensesAnalysis = () => {
   const [operatingExpensesData, setOperatingExpensesData] = useState([
     [
@@ -25,45 +64,6 @@ const OperatingExpensesAnalysis = () => {
   ])
   const [yearRange, setYearRange] = useYearRange()
   const stock = useStock()
-
-  const operatingExpensesKeysOrder = [
-    {
-      title: 'Year/Season',
-      transferToFloat: false
-    },
-    {
-      title: '營業費用率',
-      transferToFloat: true
-    },
-    {
-      title: '推銷費用率',
-      transferToFloat: true
-    },
-    {
-      title: '管理費用率',
-      transferToFloat: true
-    },
-    {
-      title: '研究發展費用率',
-      transferToFloat: true
-    },
-    {
-      title: '營業費用',
-      transferToFloat: false
-    },
-    {
-      title: '推銷費用',
-      transferToFloat: false
-    },
-    {
-      title: '管理費用',
-      transferToFloat: false
-    },
-    {
-      title: '研究發展費用',
-      transferToFloat: false
-    }
-  ]
 
   const handleOperatingExpensesState = operatingExpensesData => {
     setOperatingExpensesData(operatingExpensesData)

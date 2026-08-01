@@ -52,6 +52,7 @@ const StockFeed = () => {
 
   useEffect(() => {
     reset(startDate, feedSource)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stockNum])
 
   const fetchMore = () => {

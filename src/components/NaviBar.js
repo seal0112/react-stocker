@@ -248,6 +248,7 @@ const NaviBar = () => {
 
   useEffect(() => {
     handleNaviParentType(pathname.split('/')[1])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

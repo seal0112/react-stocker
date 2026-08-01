@@ -30,6 +30,7 @@ const Header = () => {
     setStockInputValue(value)
   }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debounceHandleStockInputValue = useCallback(debounce(handleStockInputValue, 500), [])
 
   useEffect(() => {

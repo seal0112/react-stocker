@@ -50,6 +50,7 @@ const AnnouncementDismantling = () => {
       setYear(year - 1)
     }
     setSeason(currentSeason)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

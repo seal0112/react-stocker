@@ -13,6 +13,16 @@ import * as StockerTool from 'utils/StockerTool'
  *     ['2017Q4', 2.1]
  * ]
  */
+const epsKeysOrder = [
+  {
+    title: 'Year/Season',
+    transferToFloat: false
+  }, {
+    title: '基本每股盈餘',
+    transferToFloat: true
+  }
+]
+
 const Eps = () => {
   const [epsData, setEpsdata] = useState([
     ['Year/Season', '基本每股盈餘'],
@@ -20,16 +30,6 @@ const Eps = () => {
   ])
   const [yearRange, setYearRange] = useYearRange()
   const stock = useStock()
-
-  const epsKeysOrder = [
-    {
-      title: 'Year/Season',
-      transferToFloat: false
-    }, {
-      title: '基本每股盈餘',
-      transferToFloat: true
-    }
-  ]
 
   const handleEpsState = (epsData) => {
     setEpsdata(epsData)

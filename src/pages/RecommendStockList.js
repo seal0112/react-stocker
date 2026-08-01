@@ -23,6 +23,7 @@ const RecommendStockList = () => {
   useEffect(() => {
     fetchRecommendStocks()
     fetchStatistics()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDate, selectedFilterModel])
 
   const fetchRecommendStocks = () => {

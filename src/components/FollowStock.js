@@ -87,6 +87,7 @@ const FollowStock = () => {
         setFollowStockExist(false)
         setFollowStock(defaultFollowStock)
       })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stock])
 
   return (

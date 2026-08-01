@@ -102,6 +102,7 @@ const AnnouncementDismantlingList = () => {
   useEffect(() => {
     fetchList(date)
     return () => stopPolling()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const SNAPSHOT_KEYS = ['processing_failed', '基本每股盈餘', '營業毛利率', '營業利益率', '本期淨利率']
@@ -153,6 +154,7 @@ const AnnouncementDismantlingList = () => {
 
   useEffect(() => {
     if (!loading && list.length === 0) fetchRawFeeds(date)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading])
 
   const handleTrigger = (feedId) => {
