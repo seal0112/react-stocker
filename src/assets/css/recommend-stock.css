@@ -74,6 +74,47 @@
     color: #6c757d;
 }
 
+/* Stock analysis modal */
+.analysis-signal-badge {
+    display: inline-block;
+    padding: 0.35rem 1.1rem;
+    border-radius: 1rem;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.signal-strong-buy { background-color: #198754; color: white; }
+.signal-buy        { background-color: #20c997; color: white; }
+.signal-neutral    { background-color: #6c757d; color: white; }
+.signal-sell       { background-color: #fd7e14; color: white; }
+.signal-strong-sell{ background-color: #dc3545; color: white; }
+
+.analysis-section-title {
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+
+.analysis-summary {
+    line-height: 1.7;
+    color: #333;
+}
+
+.analysis-list {
+    padding-left: 1.2rem;
+    margin-bottom: 0;
+}
+
+.analysis-list li {
+    margin-bottom: 0.3rem;
+    line-height: 1.6;
+}
+
+.analysis-footer {
+    border-top: 1px solid #dee2e6;
+    padding-top: 0.75rem;
+    margin-top: 0.5rem;
+}
+
 @media screen and (max-width: 576px) {
     .recommend-stock-filters {
         flex-direction: column;
